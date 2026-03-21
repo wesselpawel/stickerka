@@ -239,6 +239,9 @@ async function registerCustomStickerUpload({
   return docRef.id;
 }
 async function updateOrder(keys, values, id) {
+  if (id == null || id === "") {
+    throw new Error("updateOrder: missing order id");
+  }
   const docRef = doc(db, "orders", id);
   const docSnapshot = await getDoc(docRef);
 

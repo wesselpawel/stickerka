@@ -236,7 +236,7 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
                   <button
                     type="button"
                     onClick={goCheckout}
-                    className="min-h-[48px] w-full rounded-lg bg-neutral-900 py-3 text-center text-base font-semibold text-white hover:bg-neutral-800"
+                    className="min-h-[48px] w-full rounded-lg bg-blue-600 py-3 text-center text-base font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
                   >
                     Przejdź do płatności
                   </button>

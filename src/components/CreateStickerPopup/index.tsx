@@ -184,7 +184,7 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
                 ref={closeBtnRef}
                 type="button"
                 onClick={() => dialogRef.current?.close()}
-                className="min-h-[40px] shrink-0 rounded-lg border border-chill-line bg-white px-3 text-sm font-medium text-chill-ink hover:bg-chill-sand"
+                className="min-h-[40px] shrink-0 rounded-lg border border-chill-line bg-black px-3 text-sm font-medium text-chill-ink hover:bg-chill-sand"
                 aria-label="Zamknij"
               >
                 Zamknij
@@ -284,7 +284,7 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
                   const v = parseInt(e.target.value, 10);
                   if (!Number.isNaN(v) && v >= 1) setQuantity(v);
                 }}
-                className="min-h-[36px] w-14 rounded-lg border border-chill-line px-2 text-center text-base font-semibold"
+                className="bg-black min-h-[36px] w-14 rounded-lg border border-chill-line px-2 text-center text-base font-semibold"
                 aria-label="Ilość sztuk"
               />
               <button

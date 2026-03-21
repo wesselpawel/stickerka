@@ -112,13 +112,13 @@ export default function CheckoutSummary() {
     return (
       <div className="mx-auto max-w-lg px-4 py-8 text-center">
         <div className="rounded-3xl border border-chill-line bg-white p-10 shadow-sm">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-chill-sand/60 text-3xl">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-zinc-100 text-3xl">
             🛒
           </div>
-          <h1 className="font-display text-2xl font-semibold text-chill-ink">
+          <h1 className="font-display text-2xl font-semibold text-zinc-900">
             Koszyk jest pusty
           </h1>
-          <p className="mt-2 text-sm text-chill-muted">
+          <p className="mt-2 text-sm text-zinc-600">
             Dodaj naklejki w sklepie, a potem wróć tutaj, żeby dokończyć zamówienie.
           </p>
           <Link
@@ -153,17 +153,17 @@ export default function CheckoutSummary() {
         {/* Order recap */}
         <div className="space-y-6 lg:col-span-5">
           <section className="rounded-3xl border border-chill-line bg-white p-6 shadow-sm md:p-8">
-            <p className="text-xs font-semibold uppercase tracking-wide text-chill-muted">
+            <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
               Do zapłaty
             </p>
 
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               {promotion !== -1 && message === "Kod aktywny" && (
-                <span className="text-2xl font-semibold text-chill-muted line-through decoration-chill-line md:text-3xl">
+                <span className="text-2xl font-semibold text-zinc-400 line-through decoration-zinc-400 md:text-3xl">
                   {getPolishCurrency(beforeDiscount)}
                 </span>
               )}
-              <span className="font-display text-3xl font-semibold text-chill-ink md:text-4xl">
+              <span className="font-display text-3xl font-semibold text-zinc-900 md:text-4xl">
                 {getPolishCurrency(totalWithShipping)}
               </span>
             </div>
@@ -185,7 +185,7 @@ export default function CheckoutSummary() {
                 >
                   {message === "Kod aktywny" ? message : "Kod"}
                 </p>
-                <p className="mt-1 text-sm text-chill-ink">
+                <p className="mt-1 text-sm text-zinc-800">
                   <span className="font-medium">{prizeTitle}</span>
                   {message === "Kod aktywny" && (
                     <span className="ml-2 font-semibold text-chill-sage-dark">
@@ -193,7 +193,7 @@ export default function CheckoutSummary() {
                     </span>
                   )}
                   {message !== "Kod aktywny" && (
-                    <span className="mt-2 block text-sm font-normal text-chill-muted">
+                    <span className="mt-2 block text-sm font-normal text-zinc-600">
                       {message}
                     </span>
                   )}
@@ -201,13 +201,13 @@ export default function CheckoutSummary() {
               </div>
             )}
 
-            <div className="mt-8 space-y-0 divide-y divide-chill-line/80">
+            <div className="mt-8 space-y-0 divide-y divide-zinc-200">
               {cart.map((item: any, i: number) => (
                 <div
                   key={i}
                   className="flex gap-3 py-4 first:pt-0 last:pb-0 sm:gap-4"
                 >
-                  <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-xl border border-chill-line bg-chill-sand/40 sm:h-[88px] sm:w-[88px]">
+                  <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 sm:h-[88px] sm:w-[88px]">
                     {item?.image_thumbnail || item?.image_source ? (
                       <Image
                         width={120}
@@ -217,25 +217,25 @@ export default function CheckoutSummary() {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <span className="flex h-full items-center justify-center text-xs text-chill-muted">
+                      <span className="flex h-full items-center justify-center text-xs text-zinc-400">
                         —
                       </span>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
                     {item.isCustomSticker ? (
-                      <p className="font-semibold text-chill-ink">
+                      <p className="font-semibold text-zinc-900">
                         {removeNumbersFromString(item.title)}
                       </p>
                     ) : (
                       <Link
                         href={`/sklep/${item.categories?.[0] ?? "wszystkie"}/${polishToEnglish(item.title)}`}
-                        className="font-semibold text-chill-ink underline decoration-chill-line decoration-1 underline-offset-2 hover:text-chill-sage-dark"
+                        className="font-semibold text-zinc-900 underline decoration-zinc-300 decoration-1 underline-offset-2 hover:text-chill-sage-dark"
                       >
                         {removeNumbersFromString(item.title)}
                       </Link>
                     )}
-                    <p className="mt-1 text-sm text-chill-muted">
+                    <p className="mt-1 text-sm text-zinc-600">
                       {item.quantity}×{" "}
                       {item.isCustomSticker
                         ? "własna grafika · 20 zł/szt."
@@ -243,7 +243,7 @@ export default function CheckoutSummary() {
                     </p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <p className="font-semibold tabular-nums text-chill-ink">
+                    <p className="font-semibold tabular-nums text-zinc-900">
                       {getPolishCurrency(item.price)}
                     </p>
                   </div>
@@ -251,16 +251,16 @@ export default function CheckoutSummary() {
               ))}
             </div>
 
-            <div className="mt-6 space-y-3 border-t border-chill-line pt-6 text-sm">
-              <div className="flex justify-between gap-4 text-chill-muted">
+            <div className="mt-6 space-y-3 border-t border-zinc-200 pt-6 text-sm">
+              <div className="flex justify-between gap-4 text-zinc-600">
                 <span>Wartość produktów</span>
-                <span className="tabular-nums text-chill-ink">
+                <span className="tabular-nums text-zinc-900">
                   {getPolishCurrency(finalPrice)}
                 </span>
               </div>
-              <div className="flex justify-between gap-4 text-chill-muted">
+              <div className="flex justify-between gap-4 text-zinc-600">
                 <span>Wysyłka</span>
-                <span className="tabular-nums font-medium text-chill-ink">
+                <span className="tabular-nums font-medium text-zinc-900">
                   {freeShipping ? (
                     <span className="text-chill-sage-dark">Darmowa</span>
                   ) : (
@@ -268,7 +268,7 @@ export default function CheckoutSummary() {
                   )}
                 </span>
               </div>
-              <div className="flex justify-between gap-4 border-t border-chill-line/80 pt-3 font-semibold text-chill-ink">
+              <div className="flex justify-between gap-4 border-t border-zinc-200 pt-3 font-semibold text-zinc-900">
                 <span>Razem</span>
                 <span className="tabular-nums">
                   {getPolishCurrency(totalWithShipping)}
@@ -281,10 +281,10 @@ export default function CheckoutSummary() {
         {/* Form + pay */}
         <div className="lg:col-span-7">
           <section className="rounded-3xl border border-chill-line bg-white p-6 shadow-sm md:p-8">
-            <h2 className="font-display text-xl font-semibold text-chill-ink">
+            <h2 className="font-display text-xl font-semibold text-zinc-900">
               Dane do zamówienia
             </h2>
-            <p className="mt-1 text-sm text-chill-muted">
+            <p className="mt-1 text-sm text-zinc-600">
               Użyjemy ich do wysyłki i kontaktu w razie pytań.
             </p>
             <div className="mt-8">

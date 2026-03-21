@@ -1,9 +1,10 @@
 import Link from "next/link";
 
 const inputClass =
-  "w-full rounded-xl border border-chill-line bg-white px-3 py-2.5 text-sm text-chill-ink shadow-inner shadow-chill-ink/5 placeholder:text-chill-muted/60 focus:border-chill-sage focus:outline-none focus:ring-2 focus:ring-chill-sage/30";
+  "w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 shadow-inner shadow-zinc-900/5 placeholder:text-zinc-400 focus:border-chill-sage focus:outline-none focus:ring-2 focus:ring-chill-sage/30";
 
-const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-chill-muted";
+const labelClass =
+  "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-zinc-600";
 
 export default function OrderForm({
   formErrors,
@@ -23,7 +24,7 @@ export default function OrderForm({
         className="grid grid-cols-1 gap-8 lg:grid-cols-2"
       >
         <div>
-          <h2 className="font-display text-lg font-semibold text-chill-ink">
+          <h2 className="font-display text-lg font-semibold text-zinc-900">
             Dane do wysyłki
           </h2>
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -110,7 +111,7 @@ export default function OrderForm({
         </div>
 
         <div>
-          <h2 className="font-display text-lg font-semibold text-chill-ink">
+          <h2 className="font-display text-lg font-semibold text-zinc-900">
             Dane kontaktowe
           </h2>
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -178,7 +179,7 @@ export default function OrderForm({
         </div>
       </form>
 
-      <div className="mt-8 rounded-xl border border-chill-line bg-chill-sand/40 p-4">
+      <div className="mt-8 rounded-xl border border-zinc-200 bg-zinc-50 p-4">
         <label className="flex cursor-pointer items-start gap-3">
           <input
             type="checkbox"
@@ -189,17 +190,17 @@ export default function OrderForm({
                 acceptedTerms: !customerInfo.acceptedTerms,
               })
             }
-            className="mt-1 h-4 w-4 shrink-0 rounded border-chill-line text-chill-sage-dark focus:ring-chill-sage"
+            className="mt-1 h-4 w-4 shrink-0 rounded border-zinc-300 text-chill-sage-dark focus:ring-chill-sage"
           />
-          <span className="text-sm leading-relaxed text-chill-ink">
+          <span className="text-sm leading-relaxed text-zinc-800">
             Kupując akceptuję{" "}
             <Link
               target="_blank"
               rel="noopener noreferrer"
               href="https://policies.google.com/terms?hl=pl"
-              className="font-semibold text-chill-sage-dark underline decoration-chill-sage underline-offset-2 hover:text-chill-ink"
+              className="font-semibold text-chill-sage-dark underline decoration-chill-sage underline-offset-2 hover:text-chill-sage"
             >
-              regulamin sklepu
+              regulamin
             </Link>
             .
             {formErrors?.acceptedTerms && (
