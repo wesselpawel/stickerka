@@ -1,6 +1,7 @@
 "use server";
 
 import { getProducts } from "@/firebase";
+import { filterUniqueProductsByFilename } from "@/lib/filterUniqueProductsByFilename";
 import { polishToEnglish } from "@/lib/polishToEnglish";
 
 function sanitizeProduct(p: any) {
@@ -10,6 +11,7 @@ function sanitizeProduct(p: any) {
     categories: Array.isArray(p?.categories)
       ? p.categories.filter((c: unknown): c is string => typeof c === "string")
       : undefined,
+    filename: typeof p?.filename === "string" ? p.filename : undefined,
     image_thumbnail:
       typeof p?.image_thumbnail === "string" ? p.image_thumbnail : undefined,
     image_source:
@@ -27,13 +29,13 @@ export async function getShopProduct(slug?: string) {
   const { products } = await getProducts();
 
   if (!slug) {
-    const sorted = (products ?? []).slice().sort((a: any, b: any) =>
+    const sorted = filterUniqueProductsByFilename(products ?? []).slice().sort((a: any, b: any) =>
       String(a?.title ?? "").localeCompare(String(b?.title ?? ""))
     );
     return { products: sorted.map(sanitizeProduct) };
   }
 
-  const product = (products ?? []).find(
+  const product = filterUniqueProductsByFilename(products ?? []).find(
     (p: any) => slug === polishToEnglish(p?.title ?? "")
   );
 

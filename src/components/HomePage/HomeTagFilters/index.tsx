@@ -27,7 +27,6 @@ function toStickerTileProps(p: Record<string, unknown>): HomeSticker {
 
 export default function HomeTagFilters({
   products,
-  maxItems = 20,
   maxTags = 14,
 }: {
   products: ReadonlyArray<{
@@ -37,7 +36,6 @@ export default function HomeTagFilters({
     image_thumbnail?: string;
     image_source?: string;
   }>;
-  maxItems?: number;
   maxTags?: number;
 }) {
   const tiles = useMemo(() => products.map(toStickerTileProps), [products]);
@@ -66,19 +64,16 @@ export default function HomeTagFilters({
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const filteredItems = useMemo(() => {
-    const base =
-      activeTag == null
-        ? tiles
-        : tiles.filter((t) => (t.categories ?? []).includes(activeTag));
+    if (activeTag == null) return tiles;
 
-    return base.slice(0, maxItems);
-  }, [activeTag, tiles, maxItems]);
+    return tiles.filter((t) => (t.categories ?? []).includes(activeTag));
+  }, [activeTag, tiles]);
 
   const visibleTags = sortedTags.slice(0, maxTags);
 
   return (
     <section className="w-full bg-black/50 text-neutral-100">
-      <h1 className="text-4xl text-center pt-6">Gotowe na dziś</h1>
+      <h1 className="text-4xl text-center pt-6">Wydrukujemy od zaraz i wyślemy Twoje zamówienie w ciągu 24 godzin</h1>
       <div className="mx-auto w-full px-3 py-8 md:px-8 md:py-10">
 
         <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2 px-2">

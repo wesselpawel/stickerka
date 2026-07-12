@@ -1,6 +1,7 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import ImageThumbnail from "./ImageThumbnail";
+import { filterUniqueProductsByFilename } from "@/lib/filterUniqueProductsByFilename";
 import debounce from "lodash/debounce";
 import Masonry from "react-masonry-css";
 import { polishToEnglish } from "@/lib/polishToEnglish";
@@ -21,16 +22,24 @@ export default function ShopProducts({
   categories: any[];
 }) {
   const inputRef = useRef<any>(null);
+  const uniqueProducts = useMemo(
+    () => filterUniqueProductsByFilename(products ?? []),
+    [products]
+  );
   const [categoriesList, setCategoriesList] = useState<any[]>([]);
   const [searchInput, setSearchInput] = useState("");
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [selectedStickers, setSelectedStickers] = useState(
-    products?.slice(0, 30)
+    uniqueProducts.slice(0, 30)
   );
   const [currentlyEditing, setCurrentlyEditing] = useState({
     title: "",
     i: -1,
   });
+
+  useEffect(() => {
+    setSelectedStickers(uniqueProducts.slice(0, 30));
+  }, [uniqueProducts]);
 
   const shuffleList = () =>
     setTimeout(() => {
@@ -48,7 +57,7 @@ export default function ShopProducts({
       // Load more stickers when the user is close to the bottom
       if (scrollY + windowHeight >= totalHeight - 1200) {
         // Load and append the next set of stickers
-        const nextStickers = products?.slice(
+        const nextStickers = uniqueProducts.slice(
           selectedStickers?.length,
           selectedStickers?.length + 12
         );
@@ -66,7 +75,7 @@ export default function ShopProducts({
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [selectedStickers]);
+  }, [selectedStickers, uniqueProducts]);
   const breakpointColumnsObj = {
     default: 6,
     1366: 5,

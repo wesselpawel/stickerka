@@ -228,7 +228,7 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="rounded-lg border border-chill-line bg-white px-3 py-2 text-sm font-medium text-chill-ink hover:bg-chill-sand"
+                    className="rounded-lg border border-chill-line bg-white px-3 py-2 text-sm font-medium text-black hover:text-chill-ink hover:bg-chill-sand"
                   >
                     Zmień plik
                   </button>

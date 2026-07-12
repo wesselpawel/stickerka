@@ -1,4 +1,5 @@
 import HomeTagFilters from "@/components/HomePage/HomeTagFilters";
+import HomeStickerTypes from "@/components/HomePage/HomeStickerTypes";
 import LotteryWheel from "@/components/HomePage/LotteryWheel";
 import { listOfPrizes } from "@/components/listOfPrizes";
 import { getProducts, incrementGoogleCounter } from "@/firebase";
@@ -6,7 +7,6 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { FaHandScissors, FaShippingFast } from "react-icons/fa";
-import { FaStar } from "react-icons/fa6";
 export const metadata: Metadata = {
   title: "Stickerka.pl - Jedyny taki sklep z naklejkami",
   description:
@@ -57,38 +57,7 @@ export default async function Page({
        <h2 className="text-center mx-auto text-xl font-bold mt-6">
        OD 100ZŁ WYSYŁKA ZA DARMO!
        </h2>
-       <ul className="lg:sticky mt-6 z-50 text-center flex items-center justify-center flex-wrap">
-        <li className="text-3xl flex items-center bg-blue-600 w-max max-w-full p-4">
-          <div className="text-[22px] h-[36px] font-extrabold bg-white px-2 text-black/60 mr-2">
-          LOGO
-          </div>
-          <h2>
-
-       Naklejka z logo
-          </h2>
-       </li>
-        <li className="text-3xl flex items-center bg-yellow-500 relative w-max max-w-full p-4">
-          <div className="absolute right-6 top-[1px] bg-red-500 rounded-sm text-white text-xs animate-bounce z-[100]">HIT!</div>
-          <div className="flex items-center h-[36px] gap-1 text-[15px] font-extrabold bg-white px-2 text-black/60 mr-2">
-          ABC
-          </div>
-          <h2>
-
-       Naklejka napis
-          </h2>
-       </li>
-        <li className="text-3xl flex items-center bg-black/50 max-w-full p-4">
-          <div className="flex items-center h-[36px] gap-1 text-[15px] font-extrabold bg-white px-2 text-black/60 mr-2">
-          <FaStar className="text-black"/>
-          <FaStar className="text-black"/>
-          <FaStar className="text-black"/>
-          </div>
-          <h2>
-
-       Naklejka symbol
-          </h2>
-       </li>
-       </ul>
+       <HomeStickerTypes />
       <div className="">
       
         <div className="relative mt-[7.5rem] w-full md:mt-[8.5rem] lg:mt-6">
