@@ -8,7 +8,6 @@ import Toast from "@/components/Toast";
 import PrepareCart from "./sklep/components/PrepareCart";
 import Footer from "@/components/Footer";
 import Script from "next/script";
-import LayoutPadding from "@/components/LayoutPadding";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin", "latin-ext"],
@@ -38,7 +37,7 @@ export default async function RootLayout({
           <Header />
           <PrepareCart />
           <SessionHandler />
-          <LayoutPadding>{children}</LayoutPadding>
+         {children}
           <Footer />
         </StoreProvider>
         <Script

@@ -173,10 +173,7 @@ export default function Cart({
                   <p className="font-display text-lg font-medium text-chill-ink">
                     Koszyk jest pusty
                   </p>
-                  <p className="mt-2 max-w-xs text-sm leading-relaxed text-chill-muted">
-                    Dodaj naklejki ze sklepu, siatki na stronie głównej albo
-                    „Stwórz naklejkę” — zawsze 20 zł za sztukę.
-                  </p>
+                  
                 </div>
               )}
 

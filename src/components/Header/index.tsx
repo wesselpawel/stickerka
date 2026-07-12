@@ -9,12 +9,27 @@ import { FaCartShopping } from "react-icons/fa6";
 import Cart from "../Cart";
 import CreateStickerPopup from "../CreateStickerPopup";
 
+const PROMO_MESSAGES = [
+  "Darmowa wysyłka od 100zł",
+  "Wycinamy ręcznie",
+  "Autorski design",
+  "Stwórz własną",
+] as const;
+
 export default function Header() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [isMenuShow, setMenuShow] = useState(false);
   const [isCartOpen, setCartOpen] = useState(false);
   const [createStickerOpen, setCreateStickerOpen] = useState(false);
+  const [promoIndex, setPromoIndex] = useState(0);
   const aboutWrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setPromoIndex((i) => (i + 1) % PROMO_MESSAGES.length);
+    }, 5000);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     if (!aboutOpen) return;
@@ -65,34 +80,16 @@ export default function Header() {
                 width={600}
                 height={600}
                 alt="Stickerka"
-                className="h-9 w-auto md:h-11"
+                className="h-9 w-full md:h-11"
               />
             </Link>
-
-            <nav className="hidden md:flex md:items-center" aria-label="Główne">
-              <div className="relative" ref={aboutWrapRef}>
-                <button
-                  type="button"
-                  className="group flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-chill-muted transition-colors hover:bg-chill-sand hover:text-chill-ink"
-                  aria-expanded={aboutOpen}
-                  aria-controls="about-mega"
-                  aria-haspopup="true"
-                  id="about-mega-trigger"
-                  onClick={() => setAboutOpen((o) => !o)}
-                >
-                  O nas
-                  <IoChevronDownOutline
-                    className={`h-4 w-4 transition-transform duration-200 ${
-                      aboutOpen ? "rotate-180" : ""
-                    }`}
-                    aria-hidden
-                  />
-                </button>
-                {aboutOpen && <About onClose={() => setAboutOpen(false)} />}
-              </div>
-            </nav>
           </div>
-
+          <pre
+            key={promoIndex}
+            className="text-center text-wrap max-w-[150px] lg:max-w-full text-sm lg:text-lg font-bold text-green-600 animate-pulse"
+          >
+            {PROMO_MESSAGES[promoIndex]}
+          </pre>
           <div className="flex flex-row items-center gap-2 sm:gap-3">
             <button
               type="button"
@@ -203,7 +200,7 @@ export default function Header() {
               Współpraca
             </Link>
             <Link
-              href="/about/kontakt-z-zaklejkami"
+              href="/kontakt"
               onClick={() => setMenuShow(false)}
               className="rounded-xl bg-chill-ink/0 px-3 py-2 text-base font-medium text-chill-sand/95 hover:bg-chill-sage-dark/15 hover:text-chill-cream"
             >

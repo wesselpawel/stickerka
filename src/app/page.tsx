@@ -6,8 +6,9 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { FaHandScissors, FaShippingFast } from "react-icons/fa";
+import { FaStar } from "react-icons/fa6";
 export const metadata: Metadata = {
-  title: "Sklep z naklejkami | Stwórz swoją naklejkę | Naklejki na ścianę",
+  title: "Stickerka.pl - Jedyny taki sklep z naklejkami",
   description:
     "Ręcznie wycinane naklejki. Kup jedną z naszych naklejek i twórz własne. Naklejki złote, srebrne, holo. Naklejki na każdą okazję. Sklep z największą kolekcja naklejek ozdobnych.",
   authors: [
@@ -50,39 +51,73 @@ export default async function Page({
   }));
 
   return (
-    <div className="">
+    <div className="relative bg-black/80 px-4 lg:px-6 pt-[20vh]">
       <LotteryWheel listOfPrizes={listOfPrizes} />
+      
+       <h2 className="text-center mx-auto text-xl font-bold mt-6">
+       OD 100ZŁ WYSYŁKA ZA DARMO!
+       </h2>
+       <ul className="lg:sticky mt-6 z-50 text-center flex items-center justify-center flex-wrap">
+        <li className="text-3xl flex items-center bg-blue-600 w-max max-w-full p-4">
+          <div className="text-[22px] h-[36px] font-extrabold bg-white px-2 text-black/60 mr-2">
+          LOGO
+          </div>
+          <h2>
+
+       Naklejka z logo
+          </h2>
+       </li>
+        <li className="text-3xl flex items-center bg-yellow-500 relative w-max max-w-full p-4">
+          <div className="absolute right-6 top-[1px] bg-red-500 rounded-sm text-white text-xs animate-bounce z-[100]">HIT!</div>
+          <div className="flex items-center h-[36px] gap-1 text-[15px] font-extrabold bg-white px-2 text-black/60 mr-2">
+          ABC
+          </div>
+          <h2>
+
+       Naklejka napis
+          </h2>
+       </li>
+        <li className="text-3xl flex items-center bg-black/50 max-w-full p-4">
+          <div className="flex items-center h-[36px] gap-1 text-[15px] font-extrabold bg-white px-2 text-black/60 mr-2">
+          <FaStar className="text-black"/>
+          <FaStar className="text-black"/>
+          <FaStar className="text-black"/>
+          </div>
+          <h2>
+
+       Naklejka symbol
+          </h2>
+       </li>
+       </ul>
       <div className="">
-        <div className="relative mt-[7.5rem] w-full md:mt-[8.5rem] lg:mt-32">
+      
+        <div className="relative mt-[7.5rem] w-full md:mt-[8.5rem] lg:mt-6">
           <HomeTagFilters products={safeHomeStickers} />
         </div>
         
         <div className="mt-12 lg:mt-24 h-max relative">
           <div className="flex flex-col-reverse lg:flex-row h-full w-full relative">
-            <div className="min-h-full rounded-3xl rounded-tl-[64px] bg-white md:bg-chill-cream lg:w-[60vw] xl:w-[50vw]">
+            <div className="min-h-full bg-white md:bg-chill-cream lg:w-[60vw] xl:w-[50vw]">
               <Image
                 src="/home-images/stickers.webp"
                 width={1024}
                 height={1024}
                 alt="Nasze naklejki wieloryb"
-                className="w-full h-full object-cover rounded-t-2xl rounded-b-2xl rounded-tl-[80px]"
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="mb-12 flex min-h-full flex-col py-6 text-chill-ink lg:mb-0 lg:pl-4 xl:pl-12">
               <h2 className="mb-6 mt-6 font-display text-2xl font-semibold sm:text-3xl md:mt-0 lg:text-4xl xl:text-5xl">
-                Odkryj nasze naklejki
+                Unikalny sklep z naklejkami
               </h2>
               <div className="flex flex-row">
                 <FaHandScissors className="h-10 w-10 font-bold" />
                 <div className="ml-3 flex flex-col mt-1">
                   <h3 className="font-bold text-lg sm:text-xl xl:text-2xl ">
-                    <Link href="/about/o-naszych-naklejkach">
-                      Ręcznie wycinane
-                    </Link>
+                      Spersonalizuj swoją naklejkę
                   </h3>
                   <p className="text-sm text-chill-muted 2xl:text-lg">
-                    Dzięki czemu nasi klienci mogą zamawiać swoje ulubione
-                    naklejki już od 1 sztuki!
+                    Zamów naklejkę ze swoją marką lub logo
                   </p>
                 </div>
               </div>
@@ -90,11 +125,10 @@ export default async function Page({
                 <FaShippingFast className="h-10 w-10 font-bold" />
                 <div className="ml-3 flex flex-col mt-1">
                   <h3 className="font-bold text-lg sm:text-xl xl:text-2xl ">
-                    Szybka i dostawa
+                    Dostawa w ciągu 24 godzin
                   </h3>
                   <p className="text-sm text-chill-muted 2xl:text-lg">
-                    Każde zamówienie traktujemy poważnie. Dbamy zarówno o jakość
-                    jak i wydajność naszych usług.
+                    Wysyłka w ciągu 24 godzin, zarówno w Polsce, jak i w Europie. W przypadku zamówień o wartości 100 zł lub więcej, dostawa jest darmowa.
                   </p>
                 </div>
               </div>
@@ -122,15 +156,14 @@ export default async function Page({
             </div>
           </div>
         </div>
-        <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 text-chill-muted md:px-8 lg:px-12 xl:px-16 2xl:px-20">
+        <div className="mx-auto w-full py-8 text-chill-muted">
           <section aria-label="Naklejki na każdą okazję - opis">
             <h2 className="font-display text-lg font-semibold text-chill-ink sm:text-xl">
-              Naklejki na każdą okazję – Stickerka.pl
+              A może stickerka?
             </h2>
 
             <p className="mt-3 text-sm leading-relaxed">
-              <strong className="text-chill-ink">Stickerka.pl</strong> to miejsce
-              stworzone z myślą o kreatywnych rozwiązaniach,
+              <strong className="text-chill-ink">Stickerka.pl</strong> to miejsce z naklejkami na każdą okazję,
               <strong className="text-chill-ink"> personalizacji</strong> oraz
               wyjątkowym <strong className="text-chill-ink">designie</strong>.
               Nasz sklep z naklejkami to <strong className="text-chill-ink">szeroki wybór</strong>{" "}

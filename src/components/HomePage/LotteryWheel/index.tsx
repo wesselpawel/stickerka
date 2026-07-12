@@ -112,26 +112,20 @@ export default function LotteryWheel({
             </div>
           )}
           <div className="overflow-x-hidden h-full md:py-12 overflow-y-scroll w-full flex flex-col items-center justify-center">
-            <div className="sm:bg-white flex-col flex rounded-3xl p-6 md:p-6 justify-center -translate-x-[23%] sm:-translate-x-0">
+            <div className="bg-slate-800/80 backdrop-blur-sm flex-col flex rounded-xl p-6 md:p-6 justify-center -translate-x-[23%] sm:-translate-x-0">
               <div className="flex flex-row w-full justify-between mb-3 ">
-                <h2 className="flex text-2xl font-bold flex-row items-center text-zinc-800">
+                <h2 className="flex text-2xl font-bold flex-row items-center text-white">
                   Wylosuj promocję
                 </h2>
                 <button
                   onClick={() => setPrizeListOpen(!prizeListOpen)}
-                  className={`${
-                    prizeListOpen && "bg-chill-sage-dark"
-                  } group hidden flex-row items-center justify-between overflow-hidden rounded-2xl border border-chill-line duration-300 hover:bg-chill-sage sm:flex`}
+                  className={`group hidden flex-row items-center justify-between overflow-hidden rounded-lg border duration-300 bg-chill-sage-dark sm:flex`}
                 >
-                  <div className="flex h-12 w-12 items-center justify-center bg-chill-sage text-white group-hover:bg-chill-sage-dark">
+                  <div className="flex h-12 w-12 items-center justify-center ">
                     <FaGift className="w-6 h-6 text-white" />
                   </div>
                   <span
-                    className={`${
-                      prizeListOpen
-                        ? "text-white"
-                        : "text-chill-ink group-hover:text-white"
-                    } relative z-10 px-4 text-sm font-semibold duration-300`}
+                    className={`relative z-10 pr-4 text-sm font-semibold duration-300`}
                   >
                     Lista nagród
                   </span>
@@ -234,15 +228,15 @@ export default function LotteryWheel({
               </div>
             )}
             {prizeListOpen && (
-              <div className="fixed left-1/2 top-1/2 z-[4950] flex h-max w-max max-w-[min(90vw,420px)] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-start rounded-3xl bg-white font-sans shadow-xl">
-                <h2 className="w-full rounded-t-3xl bg-chill-sage p-6 text-center font-display text-2xl font-semibold text-white">
-                  Pełna lista nagród
+              <div className="fixed left-1/2 top-1/2 z-[4950] flex h-max w-max max-w-[min(90vw,420px)] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-start rounded-xl bg-white font-sans shadow-xl">
+                <h2 className="w-full rounded-t-xl bg-chill-sage-dark p-6 text-center font-display text-2xl font-semibold text-white">
+                 Promocje
                 </h2>
                 <div className="flex flex-col w-full p-6">
                   {listOfPrizes.map((item: any, i: any) => (
                     <div
                       key={i}
-                      className="flex flex-row items-center justify-between font-sans text-sm font-semibold text-chill-ink"
+                      className="flex flex-row items-center justify-between font-sans text-sm font-semibold text-black"
                     >
                       <FaStar className="text-xl -mt-[1px] text-yellow-500 animate-pulse" />
                       <span className="px-6">{item.title}</span>
@@ -252,7 +246,7 @@ export default function LotteryWheel({
                 </div>
                 <button
                   onClick={() => setPrizeListOpen(false)}
-                  className="bg-green-500 p-3 hover:bg-green-400 duration-200 w-full  text-white font-bold rounded-b-3xl"
+                  className="bg-green-500 p-3 hover:bg-green-400 duration-200 w-full  text-white font-bold rounded-b-xl"
                 >
                   Zamknij
                 </button>

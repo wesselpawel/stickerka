@@ -77,15 +77,9 @@ export default function HomeTagFilters({
   const visibleTags = sortedTags.slice(0, maxTags);
 
   return (
-    <section className="border-b border-neutral-800 bg-black/40 text-neutral-100">
-      <div className="mx-auto max-w-[1600px] px-3 py-8 md:px-8 md:py-10">
-        <Image
-          src={logo}
-          alt="Stickerka"
-          width={200}
-          height={200}
-          className="mx-auto mb-4 w-[200px]"
-        />
+    <section className="w-full bg-black/50 text-neutral-100">
+      <h1 className="text-4xl text-center pt-6">Gotowe na dziś</h1>
+      <div className="mx-auto w-full px-3 py-8 md:px-8 md:py-10">
 
         <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2 px-2">
           <button

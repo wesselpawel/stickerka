@@ -69,22 +69,6 @@ export default function ImageThumbnail({
             {product?.title ? product?.title : ""}
           </div>
         )}
-        {/* {user?.email === "wesiu@wesiu.pl" && (
-          <div className="absolute group-hover:scale-100 scale-0 top-0 left-0 py-0.5 px-2 rounded-t-xl w-full bg-black bg-opacity-50 text-gray-300 font-bold flex flex-col space-y-3">
-            <button
-              onClick={(e: any) => {
-                e.preventDefault(),
-                  setCurrentlyEditing({
-                    title: "",
-                    i: productIndex,
-                  });
-              }}
-              className=""
-            >
-              {product?.title ? product?.title : `Naklejka ${productIndex + 1}`}
-            </button>
-          </div>
-        )} */}
         <div className="z-[25] group-hover:opacity-100 opacity-0 duration-500 absolute left-0 top-0 w-full h-auto overflow-hidden rounded-lg">
           <div className="relative w-full h-full group-hover:scale-[2] duration-500">
             <Image

@@ -115,7 +115,7 @@ export default function About({ onClose }: { onClose: () => void }) {
           </div>
         </Link>
         <Link
-          href="/about/kontakt-z-zaklejkami"
+          href="/kontakt"
           title="Skontaktuj się"
           className="group flex overflow-hidden rounded-2xl border border-chill-line bg-white transition-shadow hover:shadow-md"
           onClick={() => onClose()}

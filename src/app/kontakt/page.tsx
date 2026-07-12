@@ -1,5 +1,5 @@
 import Link from "next/link";
-import HeroAbout from "../HeroAbout";
+import HeroAbout from "../about/HeroAbout";
 import { FaEnvelope, FaPhone, FaShoppingCart } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import type { Metadata } from "next";
@@ -41,33 +41,15 @@ export default function Page() {
           alt: "Naklejka/Wlepa Lecący Smok",
         }}
         contactInfo={
-          <>
-            <h1 className="text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl text-zinc-800 drop-shadow-xl shadow-black font-druk mt-12 mb-6">
-              DANE KONTAKTOWE
-            </h1>
-            <div className="flex flex-col items-center justify-center text-center font-druk space-y-3">
-              <div className="flex flex-row items-center">
-                <FaPhone className="mr-2 w-8 h-8" />
-                <Link href="tel:+48 721 417 154">+48 721 417 154</Link>
-              </div>
-              <div className="flex flex-row items-center">
-                <FaEnvelope className="mr-2 w-8 h-8" />
-                <Link href="mailto:zaklejkishop@gmail.com">
-                  zaklejkishop@gmail.com
-                </Link>
-              </div>
-              <div className="flex flex-col">
-                <h2 className="font-bold text-xl"> GODZINY PRACY</h2>
-                <p className="">Poniedziałek - Piątek, 9:00 - 17:00</p>
-              </div>
-            </div>
-          </>
+          <div >
+            
+          </div>
         }
       />
 
       <Link
         href="/about"
-        className="p-4 font-bold text-4xl flex flex-row items-center justify-center w-full bg-[#F7A4F2] rounded-3xl text-white text-center mb-6 hover:bg-[#f7a4f2b4] duration-300 mt-12"
+        className="p-4 font-bold text-4xl flex flex-row items-center justify-center w-full bg-[#F7A4F2] rounded-3xl text-center mb-6 hover:bg-[#f7a4f2b4] duration-300 mt-12"
         title="Dowiedz się więcej"
       >
         Czytaj o naszej działalności
@@ -75,7 +57,7 @@ export default function Page() {
       </Link>
       <Link
         href="/sklep"
-        className="p-4 font-bold text-4xl flex flex-row items-center justify-center w-full bg-[#F7A4F2] rounded-3xl text-white text-center mb-12 hover:bg-[#f7a4f2b4] duration-300"
+        className="p-4 font-bold text-4xl flex flex-row items-center justify-center w-full bg-[#F7A4F2] rounded-3xl text-center mb-12 hover:bg-[#f7a4f2b4] duration-300"
         title="Wszystkie nasze naklejki"
       >
         Zajrzyj do sklepu

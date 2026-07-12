@@ -8,12 +8,8 @@
   }
   body {
     @apply antialiased;
-    background-color: #070A10;
-    background-image: linear-gradient(
-        rgba(7, 10, 16, 0.78),
-        rgba(7, 10, 16, 0.78)
-      ),
-      url("/tlo.jpg");
+    background-color: white;
+    
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;

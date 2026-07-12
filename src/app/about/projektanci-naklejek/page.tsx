@@ -79,7 +79,7 @@ export default function Page() {
       </ul>
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-12 my-12">
         <Link
-          href="/about/kontakt-z-zaklejkami"
+          href="/kontakt"
           className="p-4 font-bold text-4xl flex flex-row items-center justify-center w-full bg-[#F7A4F2] rounded-3xl text-white text-center hover:bg-[#f7a4f2b4] duration-300"
           title="Skontaktuj się"
         >
