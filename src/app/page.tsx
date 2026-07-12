@@ -2,7 +2,7 @@ import HomeTagFilters from "@/components/HomePage/HomeTagFilters";
 import HomeStickerTypes from "@/components/HomePage/HomeStickerTypes";
 import LotteryWheel from "@/components/HomePage/LotteryWheel";
 import { listOfPrizes } from "@/components/listOfPrizes";
-import { getProducts, incrementGoogleCounter } from "@/firebase";
+import { getProducts } from "@/firebase";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,10 +12,10 @@ export const metadata: Metadata = {
   description:
     "Ręcznie wycinane naklejki. Kup jedną z naszych naklejek i twórz własne. Naklejki złote, srebrne, holo. Naklejki na każdą okazję. Sklep z największą kolekcja naklejek ozdobnych.",
   authors: [
-    { name: "wesiu.dev", url: "https://wesiu.dev" },
-    { name: "blackbell", url: "https://blackbellart.com/" },
+    { name: "Paweł Wessel", url: "https://wesselpawel.com" },
+    { name: "Eliza Czerwińska", url: "https://blackbellart.com/" },
   ],
-  publisher: "wesiu.dev",
+  publisher: "Stickerka.pl",
   keywords: [
     "naklejki ręcznie wycinane, naklejki na każdą okazję, naklejki na ścianę, naklejki dla dzieci, naklejki, naklejki bajkowe, naklejki złote, naklejki holograficzne, naklejki srebrne, drukowanie naklejek, naklejki z anime, naklejki na ścianę do kuchni, naklejki na ścianę nowoczesne, naklejki na ścianę dinozaury, naklejki na ścianę kwiaty, nalepki na ścianę",
   ],
@@ -32,10 +32,7 @@ export default async function Page({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const google = searchParams?.destination;
-  if (google) {
-    await incrementGoogleCounter();
-  }
+  
   const productData = await getProducts();
   const homeStickers = productData?.products ?? [];
   const safeHomeStickers = homeStickers.map((p: any) => ({

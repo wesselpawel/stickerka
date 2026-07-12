@@ -1,17 +1,23 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../../../public/stickerkalogo.png";
-import { FaEnvelope, FaInstagram, FaPhone } from "react-icons/fa";
-import { categoriesArray } from "@/components/categories";
-import { polishToEnglish } from "@/lib/polishToEnglish";
+import {  FaInstagram, FaPhone } from "react-icons/fa";
+import { useState } from "react";
+import dynamic from "next/dynamic";
 
-const popularCategories = categoriesArray.slice(0, 6);
 
-const helpLinks = [
-  { label: "Kontakt", href: "/kontakt" },
-];
+const helpLinks = [{ label: "Kontakt", href: "/kontakt" }];
+
+// Dynamic import for the upload popup (CreateStickerPopup)
+const CreateStickerPopup = dynamic(() => import("../CreateStickerPopup"), {
+  ssr: false,
+});
 
 export default function Footer() {
+  // Control the visibility of the upload popup
+  const [uploadOpen, setUploadOpen] = useState(false);
+
   return (
     <footer className="border-t border-chill-line/80 bg-chill-cream/90">
       <div className="mx-auto grid w-full grid-cols-1 gap-10 px-4 lg:px-6 py-12 md:grid-cols-2 xl:grid-cols-4">
@@ -50,12 +56,18 @@ export default function Footer() {
           </div>
         </div>
 
-            <Link
-              href="/about/tworzenie-wlasnych-naklejek"
-              className="text-chill-sage-dark font-medium transition-colors hover:text-chill-sage/90"
-            >
-              Stwórz własną naklejkę
-            </Link>
+        {/* Upload popup trigger */}
+        <button
+          type="button"
+          className="text-chill-sage-dark font-medium transition-colors hover:text-chill-sage/90 text-left"
+          style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+          onClick={() => setUploadOpen(true)}
+        >
+          Stwórz własną naklejkę
+        </button>
+        {uploadOpen && (
+          <CreateStickerPopup open={uploadOpen} onOpenChange={setUploadOpen} />
+        )}
 
         <div className="flex flex-col p-1">
           <h2 className="font-display text-xl font-semibold text-chill-ink">
@@ -109,8 +121,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
-      
     </footer>
   );
 }
