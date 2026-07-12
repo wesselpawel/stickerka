@@ -53,8 +53,8 @@ export default function ProductsInputs({ files }: { files: any[] }) {
           title: input.title,
           categories: input.categories,
           image_source: url,
+          filename:file.name,
         };
-
         localImagesArray.push(imageData);
       } catch (error) {
         console.error("Error uploading file:", error);

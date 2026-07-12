@@ -8,13 +8,6 @@ import { polishToEnglish } from "@/lib/polishToEnglish";
 const popularCategories = categoriesArray.slice(0, 6);
 
 const helpLinks = [
-  { label: "O naszych naklejkach", href: "/about/o-naszych-naklejkach" },
-  { label: "Inspiracja naklejkami", href: "/about/inspiracja-naklejkami" },
-  {
-    label: "Tworzenie własnych naklejek",
-    href: "/about/tworzenie-wlasnych-naklejek",
-  },
-  { label: "Współpraca (projektanci)", href: "/about/projektanci-naklejek" },
   { label: "Kontakt", href: "/kontakt" },
 ];
 
