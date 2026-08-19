@@ -2,8 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../../../public/stickerkalogo.png";
-import { IoChevronDownOutline } from "react-icons/io5";
-import About from "./About";
 import { useEffect, useRef, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import Cart from "../Cart";
@@ -66,7 +64,7 @@ export default function Header() {
         open={createStickerOpen}
         onOpenChange={setCreateStickerOpen}
       />
-      <header className="fixed left-0 top-0 z-header w-full border-b border-chill-line/80 bg-chill-cream/90 backdrop-blur-md supports-[backdrop-filter]:bg-chill-cream/75">
+      <header className="fixed left-0 top-0 z-header w-full border-b border-chill-line/80 bg-black backdrop-blur-md">
         <div className="mx-auto flex max-w-[1600px] flex-row items-center justify-between px-4 h-14 md:px-8 md:h-auto md:py-4 lg:px-12 xl:px-16 2xl:px-20">
           <div className="flex flex-row items-center gap-6 lg:gap-10">
             <Link

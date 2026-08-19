@@ -25,7 +25,7 @@ export async function POST(request: Request) {
         <h2 style="font-size: 24px; margin-bottom: 20px;">Dziękujemy za zakupy w naszym sklepie!</h2>
         <p style="margin-bottom: 20px;">Twoje naklejki dotrą do Ciebie bezpiecznie w przeciągu 2-3 dni roboczych!</p>
         <p style="margin-bottom: 20px;">Numer zamówienia: ${cartId}</p>
-        <p style="margin-bottom: 20px;">W razie jakichkolwiek pytań prosimy o kontakt na adres mailowy <a href="mailto:zaklejkishop@gmail.com">zaklejkishop@gmail.com</a> z numerem zamówienia w tytule.</p>
+        <p style="margin-bottom: 20px;">W razie jakichkolwiek pytań prosimy o <a href="https://stickerka.pl/kontakt">kontakt</a> z numerem zamówienia w tytule.</p>
       </div>
     `,
   });

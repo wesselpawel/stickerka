@@ -86,19 +86,19 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
     1366: 4,
     1100: 3,
     800: 2,
-    500: 1,
+    500: 2,
   };
 
   return (
     <>
-      <div className="mt-10">
+      <div>
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
         >
           {items.map((p, i) => (
-            <div key={p.id} className="mt-[22px] sm:mt-[30px]">
+            <div key={p.id} className="">
               <StickerTile
                 sticker={p}
                 onOpen={() => openModal(p)}
@@ -118,7 +118,7 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
         {selected && (
           <div className="flex max-h-[min(92dvh,42rem)] flex-col overflow-y-auto">
             {/* Top (sticky) */}
-            <div className="sticky top-0 z-10 border-b border-neutral-700 bg-neutral-900/60 backdrop-blur px-4 py-4 sm:px-6">
+            <div className="sticky top-0 z-10 bg-neutral-900/60 backdrop-blur px-4 py-4 sm:px-6">
               <div className="flex items-start justify-between gap-3">
                 <h2
                   id="sticker-popup-title"
@@ -164,11 +164,10 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
               </p>
             </div>
 
-            {/* Middle */}
-            <div className="flex-1 px-4 py-3 sm:px-6" />
+
 
             {/* Bottom (sticky) */}
-            <div className="sticky bottom-0 z-10 border-t border-neutral-700 bg-neutral-900/60 backdrop-blur px-4 py-2.5 sm:px-6">
+            <div className="sticky bottom-0 z-10 bg-neutral-900/60 backdrop-blur px-4 py-2.5 sm:px-6">
               {!justAdded && (
                 <>
                   <label htmlFor="sticker-qty" className="sr-only">

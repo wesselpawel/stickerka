@@ -65,7 +65,7 @@ export default function LotteryWheel({
       <button
         onClick={() => setLotteryWheelOpen(!lotteryWheelOpen)}
         // Keep the "Wylosuj promocję" bar above the fixed header.
-        className="fixed left-0 top-[56px] md:top-[76px] z-[4950] h-max w-full border-b border-chill-line/60 bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea py-2.5 text-chill-ink shadow-sm md:top-[4.75rem] md:py-3"
+        className="fixed left-0 top-[56px] md:top-[76px] z-[4950] h-max w-full bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea py-2.5 text-chill-ink shadow-sm md:top-[4.75rem] md:py-3"
       >
         <div className="mx-auto flex flex-row items-center justify-center gap-2 md:gap-3">
           <Image

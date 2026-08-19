@@ -55,11 +55,13 @@ export default function StickerTile({
           {getPolishCurrency(20)}
         </span>
       </div>
+      {title && title.length > 0 && (
       <div className="group-hover:opacity-100 opacity-0 hover:opacity-100 absolute bottom-3 left-3">
-        <span className="min-w-0 bg-black/50 p-1 block truncate text-left text-sm font-semibold leading-tight text-neutral-100/90">
-          { title  || "Naklejka"}
+        <span className="min-w-0 max-w-full bg-black/50 p-1 block truncate text-left text-sm font-semibold leading-tight text-neutral-100/90">
+          { sticker.title  || "Naklejka"}
         </span>
       </div>
+      )}
     </div>
   );
 }

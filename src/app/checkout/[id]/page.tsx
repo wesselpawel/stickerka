@@ -108,12 +108,12 @@ export default async function Checkout({
                 </p>
               </div>
               <p className="mt-8 text-sm text-chill-muted">
-                W razie pytań napisz na{" "}
+                W razie pytań przejdź do{" "}
                 <Link
-                  href="mailto:zaklejkishop@gmail.com"
+                  href="/kontakt"
                   className="font-medium text-chill-sage underline decoration-chill-sage/40 underline-offset-4 transition hover:text-chill-ink hover:decoration-chill-sage"
                 >
-                  zaklejkishop@gmail.com
+                  kontaktu
                 </Link>
                 .
               </p>
@@ -149,12 +149,12 @@ export default async function Checkout({
                 Przejdź do płatności
               </Link>
               <p className="mt-8 text-sm text-chill-muted">
-                W razie pytań napisz na{" "}
+                W razie pytań przejdź do{" "}
                 <Link
-                  href="mailto:zaklejkishop@gmail.com"
+                  href="/kontakt"
                   className="font-medium text-chill-sage underline decoration-chill-sage/40 underline-offset-4 transition hover:text-chill-ink hover:decoration-chill-sage"
                 >
-                  zaklejkishop@gmail.com
+                  kontaktu
                 </Link>
                 .
               </p>

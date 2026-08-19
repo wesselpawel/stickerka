@@ -48,16 +48,11 @@ export default async function Page({
   }));
 
   return (
-    <div className="relative bg-black/80 px-4 lg:px-6 pt-[20vh]">
+    <div className="relative bg-black/80 pt-24">
       <LotteryWheel listOfPrizes={listOfPrizes} />
-      
-       <h2 className="text-center mx-auto text-xl font-bold mt-6">
-       OD 100ZŁ WYSYŁKA ZA DARMO!
-       </h2>
        <HomeStickerTypes />
       <div className="">
-      
-        <div className="relative mt-[7.5rem] w-full md:mt-[8.5rem] lg:mt-6">
+        <div className="relative mt-12 w-full">
           <HomeTagFilters products={safeHomeStickers} />
         </div>
         
@@ -68,7 +63,7 @@ export default async function Page({
                 src="/home-images/stickers.webp"
                 width={1024}
                 height={1024}
-                alt="Nasze naklejki wieloryb"
+                alt="Nasze naklejki"
                 className="w-full h-full object-cover"
               />
             </div>
