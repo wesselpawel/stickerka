@@ -1,271 +1,161 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa";
-import { FaRightLong } from "react-icons/fa6";
+import { useCallback, useEffect, useState } from "react";
+import { FaArrowLeft, FaArrowRight, FaPause, FaPlay } from "react-icons/fa";
+
+type HeroSlide = {
+  id: number;
+  eyebrow: string;
+  title: string;
+  description: string;
+  imageAlt: string;
+  link?: { href: string; title: string };
+  sizes?: string[];
+};
+
+const heroSlides: HeroSlide[] = [
+  {
+    id: 0,
+    eyebrow: "Kolekcja Stickerka",
+    title: "Znajdź wzór, który pasuje do Ciebie",
+    description: "Ponad 2000 autorskich naklejek do kolekcjonowania od jednej sztuki.",
+    imageAlt: "Kolekcja kolorowych naklejek Stickerka",
+    link: { href: "/sklep", title: "Przejdź do sklepu" },
+  },
+  {
+    id: 1,
+    eyebrow: "Trzy rozmiary",
+    title: "Mała, średnia czy duża?",
+    description: "Wybierz format dopasowany do laptopa, telefonu, mebla albo ściany.",
+    imageAlt: "Naklejka Stickerka w różnych rozmiarach",
+    sizes: ["Mała · 6 cm", "Średnia · 8 cm", "Duża · 14 cm"],
+  },
+  {
+    id: 2,
+    eyebrow: "Twój pomysł",
+    title: "Pobudź kreatywność",
+    description: "Masz własny projekt? Opowiedz nam o nim, a wspólnie zamienimy go w naklejkę.",
+    imageAlt: "Kreatywna ilustracja na naklejce",
+    link: { href: "/kontakt", title: "Opowiedz o projekcie" },
+  },
+  {
+    id: 3,
+    eyebrow: "Wykończenia",
+    title: "Dodaj blasku swojemu wzorowi",
+    description: "Wybierz zwykły, złoty, srebrny albo holograficzny papier i pokaż swój styl.",
+    imageAlt: "Holograficzna naklejka Stickerka",
+    link: { href: "/about/o-naszych-naklejkach", title: "Poznaj materiały" },
+  },
+  {
+    id: 4,
+    eyebrow: "Bez minimum zamówienia",
+    title: "Zacznij od jednej naklejki",
+    description: "Każdy wzór wycinamy ręcznie, więc możesz testować, mieszać i kolekcjonować po swojemu.",
+    imageAlt: "Ręcznie wycinana naklejka Stickerka",
+    link: { href: "/sklep", title: "Zobacz wzory" },
+  },
+  {
+    id: 5,
+    eyebrow: "Pomysły na co dzień",
+    title: "Udekoruj przedmioty",
+    description: "Ożyw laptop, telefon, biurko, meble albo pokój jednym charakterystycznym detalem.",
+    imageAlt: "Naklejka użyta do dekoracji przedmiotu",
+    link: { href: "/about/inspiracja-naklejkami", title: "Zobacz inspiracje" },
+  },
+];
 
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [userInteraction, setUserInteraction] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const goToSlide = useCallback((slideIndex: number) => {
+    setCurrentSlide((slideIndex + heroSlides.length) % heroSlides.length);
+  }, []);
+
+  const goToNextSlide = useCallback(() => {
+    setCurrentSlide((slideIndex) => (slideIndex + 1) % heroSlides.length);
+  }, []);
+
+  const goToPreviousSlide = useCallback(() => {
+    setCurrentSlide((slideIndex) => (slideIndex - 1 + heroSlides.length) % heroSlides.length);
+  }, []);
 
   useEffect(() => {
-    let timeoutId: any;
+    if (isPaused) return;
+    const intervalId = window.setInterval(goToNextSlide, 6000);
+    return () => window.clearInterval(intervalId);
+  }, [goToNextSlide, isPaused]);
 
-    const handleTimeout = () => {
-      if (currentSlide <= 4) {
-        setCurrentSlide(currentSlide + 1);
-      } else {
-        setCurrentSlide(0);
-      }
-    };
-
-    if (!userInteraction) {
-      timeoutId = setTimeout(handleTimeout, 5000);
-    }
-
-    return () => {
-      // Cleanup function to clear the timeout when the component unmounts or when user interacts
-      clearTimeout(timeoutId);
-    };
-  }, [currentSlide, userInteraction]);
+  const activeSlide = heroSlides[currentSlide];
 
   return (
-    <div
-      className={`relative mt-3 h-[50vh] w-full overflow-hidden rounded-3xl border border-chill-line/80 bg-chill-sand/30 shadow-lg shadow-chill-ink/[0.04] lg:mt-4`}
-    >
-      {[
-        {
-          id: 0,
-          text: "Unikalne naklejki!",
-          link: {
-            href: "/sklep",
-            title: "Przejdź do sklepu",
-            Icon: <FaRightLong className="ml-2" />,
-          },
-          description:
-            "W naszej bogatej kolekcji, obejmującej ponad 2000 różnorodnych naklejek, z pewnością znajdziesz coś idealnego dla siebie!",
-          center: true,
-        },
-        {
-          id: 1,
-          text: "Naklejki na wymiar!",
-          link: { href: "", title: "" },
-          description:
-            "W naszym asortymencie znajdziesz różnorodne wymiary, dostosowane do różnych preferencji i potrzeb.",
-          center: true,
-        },
-        {
-          id: 2,
-          text: "Pobudź kreatywność!",
-          link: {
-            href: "/tworzenie-naklejek",
-            title: "Do kreatora",
-            Icon: <FaRightLong className="ml-2" />,
-          },
-          description:
-            "Oferujemy Ci szansę stworzenia własnej, personalizowanej naklejki, która idealnie odzwierciedli Twój wyjątkowy styl.",
-          center: true,
-        },
-        {
-          id: 3,
-          text: "Naklejki holograficzne!",
-          link: { href: "", title: "" },
-          description: (
-            <div className="flex flex-col">
-              <p>
-                <Link
-                  href="/about/o-naszych-naklejkach"
-                  className="text-chill-mist underline decoration-chill-mist/80 underline-offset-2 hover:text-white"
-                >
-                  Nasze usługi
-                </Link>{" "}
-                to nie tylko wysoka jakość i dbałość o szczegóły, oferujemy druk
-                naklejek na zwykłych i holograficznych strukturach papieru.
-              </p>
-              <ul className="flex flex-row items-start justify-center mt-2 space-x-3 flex-wrap sm:flex-no-wrap">
-                <li className="flex flex-row items-center">
-                  <FaStar className="mr-2 h-4 w-4 text-chill-peach" />
-                  Papier złoty
-                </li>
-                <li className="mb-1 flex flex-row items-center">
-                  <FaStar className="mr-2 h-4 w-4 text-chill-peach" />
-                  Papier srebrny
-                </li>
-                <li className="flex flex-row items-center">
-                  <FaStar className="mr-2 h-4 w-4 text-chill-peach" />
-                  Papier zwykły
-                </li>
-              </ul>
-            </div>
-          ),
-          center: true,
-        },
-        {
-          id: 4,
-          text: "Dowolność zakupów",
-          link: {
-            href: "/sklep",
-            title: "Zobacz wzory",
-            Icon: <FaRightLong className="ml-2" />,
-          },
-          description: (
-            <p>
-              Każda naklejka jest wycinana własnoręcznie, dzięki czemu w naszym
-              sklepie możesz zacząć kolekcjonować unikalne wzory od jednej
-              sztuki!
-            </p>
-          ),
-          center: true,
-        },
-        {
-          id: 5,
-          text: "Udekoruj przedmioty!",
-          link: {
-            href: "/about/inspiracja-naklejkami",
-            title: "Inspiracja naklejkami",
-            Icon: <FaRightLong className="ml-2" />,
-          },
-          description:
-            "Odkryj nowoczesne wzory i zanurz się w pełni barw, które ożywią każde pomieszczenie oraz przedmiot!",
-          center: true,
-        },
-      ].map((slide) => (
-        <>
-          <Slider
-            key={slide.id}
-            slideNumber={slide.id}
-            currentSlide={currentSlide}
-            text={slide.text}
-          />
-          <SliderContent
-            currentSlide={currentSlide}
-            slideNumber={slide.id}
-            slide={slide}
-            key={slide.text}
-          />
-        </>
-      ))}
-      <div
-        className={`absolute bottom-3 left-1/2 z-[500] flex -translate-x-1/2 flex-row items-center gap-2.5 rounded-full bg-chill-ink/25 px-3 py-2 backdrop-blur-sm lg:bottom-6`}
-      >
-        {[0, 1, 2, 3, 4, 5].map((slideNumber) => (
-          <button
-            onClick={() => {
-              setCurrentSlide(slideNumber);
-              setUserInteraction(true);
-            }}
-            className={`${
-              currentSlide === slideNumber
-                ? "border-chill-sage bg-chill-sage"
-                : "border-white/50 bg-white/25"
-            } flex h-4 w-4 items-center justify-center rounded-full border-2 duration-200 md:h-5 md:w-5`}
-            key={slideNumber}
-          >
-            <div
-              className={`w-2.5 h-2.5 bg-white rounded-full duration-300 ${
-                currentSlide === slideNumber ? "scale-100" : "scale-0"
-              }`}
-            ></div>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Slider({
-  slideNumber,
-  currentSlide,
-  text,
-}: {
-  slideNumber: number;
-  currentSlide: number;
-  text: string;
-}) {
-  const isActive = slideNumber === currentSlide;
-
-  return (
-    <div
-      className={`left-1/2 -translate-x-1/2 top-0 absolute w-full h-[65vh] flex items-center justify-center slider  ${
-        isActive ? "active" : ""
-      }`}
+    <section
+      aria-label="Najważniejsze informacje o Stickerka"
+      className="relative aspect-[4/5] min-h-[34rem] w-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-chill-sand shadow-2xl shadow-black/30 sm:aspect-[16/11] sm:min-h-0 lg:aspect-[16/8]"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocus={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
     >
       <Image
-        src={`/sliderImages/${slideNumber}.webp`} // Adjust image paths accordingly
-        width={1300}
-        height={1024}
-        alt={text}
-        className={`h-full lg:w-full lg:h-auto object-cover relative z-0`}
+        key={activeSlide.id}
+        src={`/sliderImages/${activeSlide.id}.webp`}
+        width={1600}
+        height={900}
+        priority={activeSlide.id === 0}
+        alt={activeSlide.imageAlt}
+        className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
+        sizes="(max-width: 640px) 100vw, (max-width: 1280px) 90vw, 1400px"
       />
-    </div>
-  );
-}
-function SliderContent({
-  slideNumber,
-  currentSlide,
-  slide,
-}: {
-  slideNumber: number;
-  currentSlide: number;
-  slide: any;
-}) {
-  const isActive = slideNumber === currentSlide;
-
-  return (
-    <div
-      className={`${isActive ? "active z-[50]" : "z-[0]"} ${
-        slideNumber === 1 && "!p-0"
-      } ${
-        slide.center
-          ? "left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
-          : "left-1/2 -translate-x-1/2 lg:-translate-x-0 lg:left-12 top-1/2 -translate-y-1/2 md:translate-y-0 md:top-12"
-      } slider absolute flex h-max w-[90%] max-w-[750px] flex-col rounded-3xl border border-white/10 bg-chill-ink/45 p-4 backdrop-blur-md md:p-7`}
-    >
-      <h2
-        className={`${slideNumber === 1 && "px-3 pt-3 sm:pt-6 sm:px-6"} ${
-          slide.center ? "text-center" : "text-center lg:text-left"
-        } font-display text-2xl font-semibold text-white md:text-4xl`}
-      >
-        {slide.text}
-      </h2>
-      <div
-        className={`${slideNumber === 1 && "px-3 sm:px-12 lg:px-16"} ${
-          slide.center ? "text-center" : "text-center lg:text-left"
-        } mt-3 text-sm leading-relaxed text-white/95 md:text-base`}
-      >
-        {slide.description}
-        {slide.link.title && (
-          <Link
-            title={slide.link.title}
-            href={slide.link.href}
-            className={`${
-              slide.center ? "mx-auto" : "mx-auto lg:mx-0"
-            } mt-2 flex w-max flex-row items-center rounded-full border border-white/30 bg-chill-sage px-5 py-2 text-base font-semibold text-white shadow-sm duration-300 hover:bg-chill-sage-dark sm:text-lg lg:mt-3`}
-          >
-            {slide.link.title}
-            {slide.link.Icon && slide.link.Icon}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
+      <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4 sm:p-6">
+        <span className="rounded-full border border-white/20 bg-black/25 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm">
+          {String(activeSlide.id + 1).padStart(2, "0")} / {String(heroSlides.length).padStart(2, "0")}
+        </span>
+        <button
+          type="button"
+          onClick={() => setIsPaused((paused) => !paused)}
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20"
+          aria-label={isPaused ? "Wznów prezentację" : "Zatrzymaj prezentację"}
+        >
+          {isPaused ? <FaPlay className="h-3 w-3" /> : <FaPause className="h-3 w-3" />}
+        </button>
+      </div>
+      <div className="absolute inset-x-4 bottom-16 z-10 max-w-xl text-white sm:inset-x-8 sm:bottom-20 lg:inset-x-12 lg:bottom-24">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-chill-sage sm:text-sm">{activeSlide.eyebrow}</p>
+        <h1 className="mt-3 max-w-2xl font-display text-3xl font-semibold leading-[1.05] sm:text-5xl lg:text-6xl">{activeSlide.title}</h1>
+        <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/80 sm:text-base">{activeSlide.description}</p>
+        {activeSlide.sizes && (
+          <div className="mt-5 flex max-w-md divide-x divide-white/20 rounded-2xl border border-white/15 bg-black/25 backdrop-blur-sm">
+            {activeSlide.sizes.map((size) => <span key={size} className="flex-1 px-3 py-3 text-center text-xs font-semibold text-white/90 sm:text-sm">{size}</span>)}
+          </div>
+        )}
+        {activeSlide.link && (
+          <Link href={activeSlide.link.href} className="mt-5 inline-flex items-center rounded-full bg-chill-sage px-5 py-3 text-sm font-bold text-chill-cream transition hover:bg-white hover:text-chill-cream sm:text-base">
+            {activeSlide.link.title}<FaArrowRight className="ml-2 h-3 w-3" />
           </Link>
         )}
       </div>
-      {slideNumber === 1 && (
-        <>
-          <div className="mx-auto mt-2 grid w-full grid-cols-3 gap-3 rounded-b-3xl bg-white/10 py-3 text-white md:mt-4 lg:mx-0">
-            <div className="flex flex-col items-center">
-              <span className="text-sm opacity-90 lg:font-semibold">Mała</span>{" "}
-              <span className="font-display text-chill-peach">6cm</span>
-            </div>
-            <div className="flex flex-col items-center border-x border-white/20 px-3">
-              <span className="text-sm opacity-90 lg:font-semibold">Średnia</span>{" "}
-              <span className="font-display text-chill-peach">8cm</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="text-sm opacity-90 lg:font-semibold">Duża</span>{" "}
-              <span className="font-display text-chill-peach">14cm</span>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+      <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between sm:bottom-6 sm:left-8 sm:right-8 lg:left-12 lg:right-12">
+        <div className="flex items-center gap-2" role="tablist" aria-label="Slajdy prezentacji">
+          {heroSlides.map((slide) => (
+          <button
+              key={slide.id}
+              type="button"
+              onClick={() => goToSlide(slide.id)}
+              className={`h-2 rounded-full transition-all ${currentSlide === slide.id ? "w-8 bg-chill-sage" : "w-2 bg-white/55 hover:bg-white"}`}
+              role="tab"
+              aria-selected={currentSlide === slide.id}
+              aria-label={`Slajd ${slide.id + 1}: ${slide.title}`}
+            />
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <button type="button" onClick={goToPreviousSlide} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20" aria-label="Poprzedni slajd"><FaArrowLeft /></button>
+          <button type="button" onClick={goToNextSlide} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20" aria-label="Następny slajd"><FaArrowRight /></button>
+        </div>
+      </div>
+    </section>
   );
 }

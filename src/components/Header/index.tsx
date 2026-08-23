@@ -8,10 +8,9 @@ import Cart from "../Cart";
 import CreateStickerPopup from "../CreateStickerPopup";
 
 const PROMO_MESSAGES = [
-  "Darmowa wysyłka od 100zł",
-  "Wycinamy ręcznie",
-  "Autorski design",
-  "Stwórz własną",
+  "Ręcznie wycinane",
+  "Przystępne ceny",
+  "Stwórz swoją naklejkę",
 ] as const;
 
 export default function Header() {
@@ -64,8 +63,8 @@ export default function Header() {
         open={createStickerOpen}
         onOpenChange={setCreateStickerOpen}
       />
-      <header className="fixed left-0 top-0 z-header w-full border-b border-chill-line/80 bg-black backdrop-blur-md">
-        <div className="mx-auto flex max-w-[1600px] flex-row items-center justify-between px-4 h-14 md:px-8 md:h-auto md:py-4 lg:px-12 xl:px-16 2xl:px-20">
+      <header className="px-3 sticky left-0 top-0 z-header w-full border-b border-chill-line/80 bg-black backdrop-blur-md">
+        <div className="mx-auto flex flex-row items-center justify-between  h-14 md:h-auto md:py-4">
           <div className="flex flex-row items-center gap-6 lg:gap-10">
             <Link
               href="/"
@@ -88,7 +87,10 @@ export default function Header() {
           >
             {PROMO_MESSAGES[promoIndex]}
           </pre>
-          <div className="flex flex-row items-center gap-2 sm:gap-3">
+            
+
+          {/* Mobile cart button (left of hamburger) */}
+          <div className="flex flex-row items-center gap-2">
             <button
               type="button"
               onClick={() => {
@@ -99,18 +101,6 @@ export default function Header() {
             >
               Stwórz naklejkę
             </button>
-            <button
-              type="button"
-              onClick={() => setCartOpen(true)}
-              className="relative z-10 hidden h-11 w-11 items-center justify-center rounded-full border border-chill-line bg-chill-sand/60 text-chill-ink shadow-sm transition-all hover:border-chill-mist hover:bg-chill-sand md:flex"
-              aria-label="Koszyk"
-            >
-              <FaCartShopping className="text-lg" />
-            </button>
-          </div>
-
-          {/* Mobile cart button (left of hamburger) */}
-          <div className="flex flex-row items-center gap-2 md:hidden">
 
           <button
             type="button"
@@ -118,7 +108,7 @@ export default function Header() {
               setCartOpen(true);
               setMenuShow(false);
             }}
-            className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full border border-chill-line/80 bg-chill-sand/40 text-chill-ink shadow-sm transition-all hover:border-chill-mist hover:bg-chill-sand md:hidden"
+            className="relative z-10 flex h-11 w-11 items-center justify-center text-chill-ink shadow-sm transition-all"
             aria-label="Koszyk"
             >
             <FaCartShopping className="text-lg" />
@@ -126,7 +116,7 @@ export default function Header() {
 
           <button
             type="button"
-            className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full border border-chill-line/80 bg-chill-sand/40 text-chill-ink shadow-sm transition-all hover:border-chill-mist hover:bg-chill-sand/60 md:hidden"
+            className="relative z-10 flex h-11 w-11 items-center justify-center text-chill-ink shadow-sm transition-all"
             onClick={() => setMenuShow(!isMenuShow)}
             aria-expanded={isMenuShow}
             aria-label="Menu"
@@ -150,7 +140,7 @@ export default function Header() {
         aria-hidden={!isMenuShow}
         id="mobile-nav"
       >
-        <div className="mx-auto flex w-full max-w-[520px] flex-col gap-6 px-6 py-8">
+        <div className="mx-auto flex w-3/4 flex-col gap-6 py-8">
           <Link
             href="/"
             onClick={() => setMenuShow(false)}
@@ -229,6 +219,7 @@ export default function Header() {
           </button>
         </div>
       </div>
+      
     </>
   );
 }

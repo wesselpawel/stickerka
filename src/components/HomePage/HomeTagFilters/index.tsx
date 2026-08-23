@@ -28,7 +28,7 @@ function toStickerTileProps(p: Record<string, unknown>): HomeSticker {
 const tagButtonClass = (isActive: boolean) =>
   `shrink-0 whitespace-nowrap px-6 py-1 text-xl font-semibold transition-colors ${
     isActive
-      ? "bg-chill-sage text-white"
+      ? "bg-gray-700/80 text-white"
       : "hover:bg-chill-line text-white hover:text-white/70"
   }`;
 
@@ -47,6 +47,7 @@ export default function HomeTagFilters({
 }) {
   const tiles = useMemo(() => products.map(toStickerTileProps), [products]);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
@@ -96,6 +97,17 @@ export default function HomeTagFilters({
     });
   }, []);
 
+  const selectTag = useCallback((tag: string | null) => {
+    setActiveTag(tag);
+    requestAnimationFrame(() => {
+      const button = scrollRef.current?.querySelector<HTMLButtonElement>(
+        `[data-tag="${tag ?? "__all__"}"]`,
+      );
+      button?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+      galleryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, []);
+
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -112,32 +124,21 @@ export default function HomeTagFilters({
     };
   }, [updateScrollButtons, visibleTags.length]);
 
-  useEffect(() => {
-    if (activeTag == null) return;
-
-    scrollRef.current
-      ?.querySelector<HTMLButtonElement>(`[data-tag="${CSS.escape(activeTag)}"]`)
-      ?.scrollIntoView({ inline: "nearest", behavior: "smooth" });
-  }, [activeTag]);
-
   return (
-    <section className="w-full text-neutral-100">
-      <h1 className="text-xl text-center md:pt-6 font-bold">
-        Wydrukujemy i wyślemy Twoje naklejki w 24 godziny
+    <section className="w-full min-w-0 max-w-full overflow-x-clip text-neutral-100">
+      <h1 className="text-lg text-center px-3 pb-8">
+        Drukujemy i wysyłamy zamówione <br /> naklejki w 24 godziny
       </h1>
-      <div className="mx-auto w-full py-8">
-        <div className="h-16 sticky top-[104px] md:top-[140px] left-0 bg-black z-50 relative w-full">
+      <div className="w-full min-w-0 max-w-full overflow-x-clip">
+        <div className="relative left-0 z-50 h-16 w-full min-w-0 max-w-full overflow-hidden bg-black sticky top-[52px] md:top-[77px]">
           {canScrollLeft && (
             <>
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-y-0 left-0 z-[1] w-10 bg-gradient-to-r from-chill-sage to-transparent"
-              />
+              
               <button
                 type="button"
                 aria-label="Poprzednie tagi"
                 onClick={() => scrollByPage(-1)}
-                className="aspect-square flex justify-center absolute left-0 top-1/2 z-10 flex h-full -translate-y-1/2 items-center bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea px-2 py-1 text-xl font-semibold transition-colors hover:bg-chill-sage/80 hover:text-white/70"
+                className="flex justify-center absolute left-2 top-1/2 z-10 flex h-8 -translate-y-1/2 items-center bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea px-2 py-1 text-xl font-semibold transition-colors hover:bg-chill-sage/80 hover:text-white/70 rounded-xl"
               >
                 <FaArrowLeft />
               </button>
@@ -146,15 +147,12 @@ export default function HomeTagFilters({
 
           {canScrollRight && (
             <>
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-10 bg-gradient-to-l from-chill-sage to-transparent"
-              />
+              
               <button
                 type="button"
                 aria-label="Następne tagi"
                 onClick={() => scrollByPage(1)}
-                className="aspect-square flex justify-center absolute right-0 top-1/2 z-10 flex h-full -translate-y-1/2 items-center bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea px-2 py-1 text-xl font-semibold transition-colors hover:bg-gradient-to-r hover:from-chill-sage hover:via-chill-mist hover:to-chill-sea hover:text-white/70"
+                className="flex justify-center absolute right-2 top-1/2 z-10 flex h-8 -translate-y-1/2 items-center bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea px-2 py-1 text-xl font-semibold transition-colors hover:bg-chill-sage/80 hover:text-white/70 rounded-xl"
               >
                 <FaArrowRight />
               </button>
@@ -163,15 +161,16 @@ export default function HomeTagFilters({
 
           <div
             ref={scrollRef}
-            className="h-full flex overflow-x-auto scroll-smooth bg-chill-cream [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            className="flex h-full w-full min-w-0 max-w-full overflow-x-auto overflow-y-hidden scroll-smooth bg-chill-cream [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             <button
               type="button"
-              onClick={() => setActiveTag(null)}
+              data-tag="__all__"
+              onClick={() => selectTag(null)}
               className={tagButtonClass(activeTag == null)}
               aria-pressed={activeTag == null}
             >
-              Kategorie
+              *
             </button>
 
             {visibleTags.map(({ tag }) => {
@@ -181,7 +180,7 @@ export default function HomeTagFilters({
                   key={tag}
                   type="button"
                   data-tag={tag}
-                  onClick={() => setActiveTag(tag)}
+                  onClick={() => selectTag(tag)}
                   className={tagButtonClass(isActive)}
                   aria-pressed={isActive}
                 >
@@ -192,7 +191,7 @@ export default function HomeTagFilters({
           </div>
         </div>
 
-        <div className="mt-3">
+        <div ref={galleryRef} className="mt-3 scroll-mt-[167px] md:scroll-mt-[203px]">
           {filteredItems.length > 0 ? (
             <HomeStickerGrid items={filteredItems} />
           ) : (

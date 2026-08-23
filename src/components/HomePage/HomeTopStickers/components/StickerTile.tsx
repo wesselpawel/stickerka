@@ -41,7 +41,7 @@ export default function StickerTile({
             alt={sticker.title || "Naklejka"}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-            className="object-contain transition-transform duration-300 ease-out filter drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] group-hover:scale-[1.06] group-hover:drop-shadow-[0_26px_40px_rgba(0,0,0,0.60)]"
+            className="object-contain transition-transform duration-300 ease-out filter drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] group-hover:drop-shadow-[0_26px_40px_rgba(0,0,0,0.60)]"
           />
         ) : (
           <span className="flex h-full items-center justify-center text-xs text-neutral-500">
@@ -50,18 +50,17 @@ export default function StickerTile({
         )}
       </div>
 
-      <div className="group-hover:opacity-100 lg:opacity-0 hover:opacity-100 absolute top-3 left-3">
-        <span className="min-w-0 bg-black/50 p-1 block truncate text-left text-sm font-semibold leading-tight text-neutral-100/90">
-          {getPolishCurrency(20)}
-        </span>
+      <div className="lg:group-hover:opacity-100 opacity-0 lg:hover:opacity-100 absolute top-3 left-3">
+        <pre className="min-w-0 bg-black/50 p-1 block truncate text-left text-sm font-semibold leading-tight text-neutral-100/90">
+          Zamów już od 6zł/szt
+        </pre>
       </div>
-      {title && title.length > 0 && (
+      
       <div className="group-hover:opacity-100 opacity-0 hover:opacity-100 absolute bottom-3 left-3">
         <span className="min-w-0 max-w-full bg-black/50 p-1 block truncate text-left text-sm font-semibold leading-tight text-neutral-100/90">
-          { sticker.title  || "Naklejka"}
+  Dodaj do koszyka          
         </span>
       </div>
-      )}
     </div>
   );
 }

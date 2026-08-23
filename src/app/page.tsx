@@ -5,8 +5,9 @@ import { listOfPrizes } from "@/components/listOfPrizes";
 import { getProducts } from "@/firebase";
 import { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { FaHandScissors, FaShippingFast } from "react-icons/fa";
+import HeroSlider from "@/components/HomePage/HeroSlider";
+import SeoContent from "@/components/SeoContent";
 export const metadata: Metadata = {
   title: "Stickerka.pl - Jedyny taki sklep z naklejkami",
   description:
@@ -48,11 +49,15 @@ export default async function Page({
   }));
 
   return (
-    <div className="relative bg-black/80 pt-24">
+    <>
       <LotteryWheel listOfPrizes={listOfPrizes} />
+    <div className="relative bg-black/90 w-full">
        <HomeStickerTypes />
       <div className="">
-        <div className="relative mt-12 w-full">
+        <div className="relative w-full">
+          <div className="p-6 lg:p-24 lg:py-8">
+          <HeroSlider/>
+          </div>
           <HomeTagFilters products={safeHomeStickers} />
         </div>
         
@@ -117,89 +122,9 @@ export default async function Page({
             </div>
           </div>
         </div>
-        <div className="mx-auto w-full py-8 text-chill-muted">
-          <section aria-label="Naklejki na każdą okazję - opis">
-            <h2 className="font-display text-lg font-semibold text-chill-ink sm:text-xl">
-              A może stickerka?
-            </h2>
-
-            <p className="mt-3 text-sm leading-relaxed">
-              <strong className="text-chill-ink">Stickerka.pl</strong> to miejsce z naklejkami na każdą okazję,
-              <strong className="text-chill-ink"> personalizacji</strong> oraz
-              wyjątkowym <strong className="text-chill-ink">designie</strong>.
-              Nasz sklep z naklejkami to <strong className="text-chill-ink">szeroki wybór</strong>{" "}
-              wzorów, dzięki którym możesz wyróżnić się, udekorować przestrzeń i nadać
-              przedmiotom niepowtarzalny charakter.
-            </p>
-
-            <h3 className="mt-6 text-sm font-bold text-chill-ink">
-              Dlaczego warto wybrać naklejki?
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed">
-              Naklejki to jeden z najprostszych i jednocześnie najbardziej efektownych sposobów
-              na zmianę wyglądu. W kilka sekund możesz
-              <strong className="text-chill-ink"> odświeżyć laptop</strong>,{" "}
-              <strong className="text-chill-ink"> telefon</strong>,{" "}
-              <strong className="text-chill-ink"> samochód</strong> oraz
-              <strong className="text-chill-ink"> udekorować ściany</strong> w domu lub biurze.
-            </p>
-
-            <h3 className="mt-6 text-sm font-bold text-chill-ink">
-              Naklejki na każdą okazję (laptop, telefon, ściany, samochód)
-            </h3>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-              <li>
-                <strong className="text-chill-ink">Naklejki dekoracyjne</strong> – dom, biuro, pokój dziecięcy.
-              </li>
-              <li>
-                <strong className="text-chill-ink">Naklejki na laptopa i telefon</strong> – personalizacja i trwałość.
-              </li>
-              <li>
-                <strong className="text-chill-ink">Naklejki na samochód</strong> – odporność na warunki i UV.
-              </li>
-              <li>
-                <strong className="text-chill-ink">Naklejki okolicznościowe</strong> – urodziny, święta, eventy.
-              </li>
-              <li>
-                <strong className="text-chill-ink">Naklejki personalizowane</strong> – logo, grafika, tekst.
-              </li>
-            </ul>
-
-            <h3 className="mt-6 text-sm font-bold text-chill-ink">
-              Wysoka jakość i trwałość
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed">
-              Nasze <strong className="text-chill-ink">naklejki</strong> są tworzone z materiałów wysokiej jakości:
-              <strong className="text-chill-ink"> odporność na wodę i UV</strong>, intensywne kolory oraz prosta aplikacja.
-              Możesz je łatwo przykleić i usunąć bez niechcianych śladów.
-            </p>
-
-            <h3 className="mt-6 text-sm font-bold text-chill-ink">
-              Naklejki jako forma wyrażenia siebie
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed">
-              Naklejki to więcej niż dekoracja – to sposób na <strong className="text-chill-ink">osobowość</strong>, zainteresowania i styl.
-              Wybieraj motywy <strong className="text-chill-ink">vintage</strong>, <strong className="text-chill-ink">humor</strong>, popkulturę lub minimalizm.
-            </p>
-
-            <h3 className="mt-6 text-sm font-bold text-chill-ink">
-              Idealne dla firm i marek
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed">
-              W Stickerka.pl możesz zamówić <strong className="text-chill-ink">naklejki reklamowe</strong> i <strong className="text-chill-ink">branding</strong>:
-              materiały promocyjne, oznaczenia produktów, elementy identyfikacji wizualnej oraz dodatki do zamówień.
-            </p>
-
-            <h3 className="mt-6 text-sm font-bold text-chill-ink">
-              Łatwe zamawianie i szybka realizacja
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed">
-              Zakupy są proste: intuicyjny proces zamówienia, <strong className="text-chill-ink">szybka realizacja</strong> i wsparcie na każdym etapie.
-              Sprawdź <Link href="/sklep" className="font-semibold text-chill-sage-dark hover:underline">sklep z naklejkami</Link>.
-            </p>
-          </section>
-        </div>
+        <SeoContent page="home" />
       </div>
     </div>
+    </>
   );
 }

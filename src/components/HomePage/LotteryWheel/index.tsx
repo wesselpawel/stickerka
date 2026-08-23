@@ -9,10 +9,18 @@ import Confetti from "react-confetti";
 import { addCoupon } from "@/firebase";
 import { v4 as uuidv4 } from "uuid";
 import { copyToClipboard } from "@/lib/copyToClipboard";
+
+type Prize = {
+  id: number;
+  title: string;
+  imgSrc: string;
+  description: string;
+};
+
 export default function LotteryWheel({
   listOfPrizes,
 }: {
-  listOfPrizes: any[];
+  listOfPrizes: Prize[];
 }) {
   const [prizeListOpen, setPrizeListOpen] = useState(false);
   const [lotteryWheelOpen, setLotteryWheelOpen] = useState(false);
@@ -21,16 +29,17 @@ export default function LotteryWheel({
   const [couponWindowOpen, setCouponWindowOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [prize, setPrize] = useState({
+  const [prize, setPrize] = useState<Prize>({
+    id: -1,
     title: "",
     imgSrc: "",
     description: "",
   });
   const weelColors = () => {
-    let arr: any[] = [];
-    let colors = ["#7C9A82", "#E8C4B8", "#6B9B9E", "#B8CFC0", "#5F7D65"];
-    listOfPrizes.forEach((el) => {
-      let color: any = colors.shift();
+    const arr: string[] = [];
+    const colors = ["#F4B942", "#F26B5E", "#31C7C0", "#E85D9E", "#7C5CFC"];
+    listOfPrizes.forEach(() => {
+      const color = colors.shift() as string;
       arr.push(color);
       colors.push(color);
     });
@@ -38,8 +47,9 @@ export default function LotteryWheel({
     return arr;
   };
   const segColors = weelColors();
-  const onFinished = async (winner: any) => {
+  const onFinished = async (winner: Prize) => {
     setPrize({
+      id: winner.id,
       title: winner.title,
       imgSrc: winner.imgSrc,
       description: winner.description,
@@ -63,46 +73,37 @@ export default function LotteryWheel({
   return (
     <>
       <button
+        type="button"
+        aria-expanded={lotteryWheelOpen}
+        aria-label="Otwórz koło loterii"
         onClick={() => setLotteryWheelOpen(!lotteryWheelOpen)}
         // Keep the "Wylosuj promocję" bar above the fixed header.
-        className="fixed left-0 top-[56px] md:top-[76px] z-[4950] h-max w-full bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea py-2.5 text-chill-ink shadow-sm md:top-[4.75rem] md:py-3"
+        className="fixed bottom-4 right-4 z-[4950] flex aspect-square items-center justify-center overflow-hidden rounded-2xl border border-white/50 bg-gradient-to-br from-chill-sage via-chill-mist to-chill-sea p-3 text-chill-ink shadow-lg shadow-black/20 transition-transform duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-chill-sage"
       >
-        <div className="mx-auto flex flex-row items-center justify-center gap-2 md:gap-3">
-          <Image
-            title="Sprawdź nasze wlepki"
-            src="/lotteryWheel2.png"
-            width={120}
-            height={120}
-            alt="Wlepki"
-            className="h-7 w-auto opacity-95 md:h-10"
-          />
-          <Image
-            title="Sprawdź nasze nalepki"
-            src="/lotterySign2.png"
-            width={500}
-            height={500}
-            alt="Nalepki"
-            className="mx-2 mt-0.5 h-5 w-auto opacity-95 md:mx-4 md:h-7"
-          />
+        <div className="flex flex-col items-center justify-center gap-1.5 md:gap-2">
           <Image
             title="Sprawdź nasze wlepki"
             src="/lotteryWheel2.png"
             width={120}
             height={120}
             alt="Naklejki"
-            className="h-7 w-auto opacity-95 md:h-10"
+            className="w-12 opacity-95"
           />
+          <pre className="text-center text-nowrap text-sm font-semibold leading-tight text-white/90 md:text-base">
+
+         PROMOCJE
+          </pre>
         </div>
       </button>
       {lotteryWheelOpen && (
-        <div className="fixed left-0 top-0 z-[4950] h-screen w-full bg-black/85">
+        <div className="fixed inset-0 z-[4950] h-[100dvh] w-full overflow-y-auto bg-black/50 px-3 py-4 backdrop-blur-sm sm:px-6 ">
           <button
             type="button"
-            className="fixed right-4 top-20 z-[4950] md:right-8 md:top-24"
+            className="fixed right-3 top-3 z-[4960] md:right-8 md:top-6"
             onClick={() => setLotteryWheelOpen(!lotteryWheelOpen)}
             aria-label="Zamknij loterię"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white duration-300 hover:bg-opacity-90">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-lg duration-300 hover:bg-chill-mist">
               <IoClose className="h-6 w-6 text-zinc-800" />
             </div>
           </button>
@@ -111,15 +112,18 @@ export default function LotteryWheel({
               <Confetti width={1920} height={1019} />
             </div>
           )}
-          <div className="overflow-x-hidden h-full md:py-12 overflow-y-scroll w-full flex flex-col items-center justify-center">
-            <div className="bg-slate-800/80 backdrop-blur-sm flex-col flex rounded-xl p-6 md:p-6 justify-center -translate-x-[23%] sm:-translate-x-0">
-              <div className="flex flex-row w-full justify-between mb-3 ">
-                <h2 className="flex text-2xl font-bold flex-row items-center text-white">
+          <div className="flex min-h-full w-full items-center justify-center py-12 sm:py-8">
+            <div className="flex w-full max-w-[min(42rem,100%)] flex-col justify-center rounded-3xl border border-white/15 bg-slate-900/85 p-4 shadow-2xl shadow-black/40 backdrop-blur-md sm:p-6">
+              <div className="mb-3 flex w-full items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-chill-mist">Stickerka</p>
+                  <h2 className="mt-1 text-xl font-bold text-white sm:text-2xl">
                   Wylosuj promocję
-                </h2>
+                  </h2>
+                </div>
                 <button
                   onClick={() => setPrizeListOpen(!prizeListOpen)}
-                  className={`group hidden flex-row items-center justify-between overflow-hidden rounded-lg border duration-300 bg-chill-sage-dark sm:flex`}
+                  className="group hidden shrink-0 flex-row items-center justify-between overflow-hidden rounded-xl border border-white/15 bg-gray-800 duration-300 hover:bg-gray-900 sm:flex"
                 >
                   <div className="flex h-12 w-12 items-center justify-center ">
                     <FaGift className="w-6 h-6 text-white" />
@@ -135,8 +139,8 @@ export default function LotteryWheel({
                 listOfPrizes={listOfPrizes}
                 segColors={segColors}
                 winningSegment={null}
-                onFinished={(winner: any) => onFinished(winner)}
-                primaryColor="gray"
+                onFinished={onFinished}
+                primaryColor="#F4B942"
                 contrastColor="white"
                 buttonText="Losuj"
                 isOnlyOnce={false}
@@ -150,7 +154,7 @@ export default function LotteryWheel({
 
               <button
                 onClick={() => setPrizeListOpen(!prizeListOpen)}
-                className="fixed bottom-5 right-1 z-[4950] flex flex-row items-center justify-between rounded-2xl bg-chill-sage text-white duration-200 hover:bg-chill-sage-dark sm:hidden"
+                className="fixed bottom-4 left-1/2 z-[4960] flex -translate-x-1/2 flex-row items-center justify-between rounded-2xl bg-chill-sage text-white shadow-lg shadow-black/30 duration-200 hover:bg-chill-sage-dark sm:hidden"
               >
                 <div className="flex items-center justify-center rounded-l-3xl bg-white w-12 h-12">
                   <FaGift className="w-6 h-6 text-zinc-800" />
@@ -165,7 +169,7 @@ export default function LotteryWheel({
             )}
             {prize.title !== "" && (
               <div className="fixed left-1/2 top-1/2 z-[4950] flex h-max w-[90%] max-w-[400px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-3xl bg-white font-sans shadow-xl">
-                <h2 className="w-full rounded-t-3xl bg-chill-sage p-6 text-center font-display text-2xl font-semibold text-white">
+                <h2 className="w-full rounded-t-3xl bg-gray-800 p-6 text-center font-display text-2xl font-semibold text-white">
                   Twoja promocja
                 </h2>
                 <Image
@@ -229,11 +233,11 @@ export default function LotteryWheel({
             )}
             {prizeListOpen && (
               <div className="fixed left-1/2 top-1/2 z-[4950] flex h-max w-max max-w-[min(90vw,420px)] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-start rounded-xl bg-white font-sans shadow-xl">
-                <h2 className="w-full rounded-t-xl bg-chill-sage-dark p-6 text-center font-display text-2xl font-semibold text-white">
+                <h2 className="w-full rounded-t-xl bg-gray-800 p-6 text-center font-display text-2xl font-semibold text-white">
                  Promocje
                 </h2>
                 <div className="flex flex-col w-full p-6">
-                  {listOfPrizes.map((item: any, i: any) => (
+                  {listOfPrizes.map((item, i) => (
                     <div
                       key={i}
                       className="flex flex-row items-center justify-between font-sans text-sm font-semibold text-black"

@@ -31,6 +31,8 @@ export default async function RootLayout({
       <body
         className={`${jakarta.variable} ${fraunces.variable} font-sans`}
       >
+        
+
         {" "}
         <StoreProvider>
           <Toast />
@@ -40,6 +42,7 @@ export default async function RootLayout({
          {children}
           <Footer />
         </StoreProvider>
+      
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-YY7NKD2K0W"

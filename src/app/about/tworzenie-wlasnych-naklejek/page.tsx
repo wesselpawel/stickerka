@@ -4,6 +4,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { RiEmojiStickerLine } from "react-icons/ri";
 import type { Metadata } from "next";
+import SeoContent from "@/components/SeoContent";
 
 export const metadata: Metadata = {
   title: "Tworzenie Własnych Naklejek - Personalizuj swoje Chwile",
@@ -111,7 +112,7 @@ export default function Page() {
           <FaShoppingCart className="ml-3 h-6 w-8" />
         </Link>
         <Link
-          href="/tworzenie-naklejek"
+          href="/kontakt"
           className="p-4 font-bold text-4xl flex flex-row items-center justify-center w-full bg-[#F7A4F2] rounded-3xl text-white text-center hover:bg-[#f7a4f2b4] duration-300"
           title="Wszystkie nasze naklejki"
         >
@@ -119,6 +120,7 @@ export default function Page() {
           <RiEmojiStickerLine className="ml-3 h-6 w-8" />
         </Link>
       </div>
+      <SeoContent page="custom" />
     </>
   );
 }

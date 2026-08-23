@@ -1,13 +1,15 @@
+import Image from "next/image";
 import Link from "next/link";
-import HeroAbout from "./HeroAbout";
-import { FaArrowRightLong } from "react-icons/fa6";
+import { FaArrowRightLong, FaHandScissors, FaUserGroup } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
+import { RiEmojiStickerLine } from "react-icons/ri";
 import type { Metadata } from "next";
+import SeoContent from "@/components/SeoContent";
 
 export const metadata: Metadata = {
-  title: "Stickerka.pl: Nasza Historia",
+  title: "Stickerka.pl: Naklejki, inspiracje i własne projekty",
   description:
-    "Rozwijamy naszą pasję do tworzenia naklejek od wielu lat, zaczynając od skromnych początków w domowym warsztacie. Nasza misja jest jasna - dostarczać naklejki, które nie tylko ozdabiają, ale również wyrażają osobowość i kreatywność każdej osoby.",
+    "Poznaj Stickerka.pl: ręcznie wycinane naklejki, pomysły na ich wykorzystanie, własne projekty oraz współpraca dla artystów i firm.",
   icons: [
     {
       url: "/favicon.ico",
@@ -18,45 +20,56 @@ export const metadata: Metadata = {
 };
 export default function Page() {
   return (
-    <>
-      <HeroAbout
-        mainH1={"Nasza historia - Stickerka.pl"}
-        mainP={
-          "Rozwijamy naszą pasję do tworzenia naklejek od wielu lat, zaczynając od skromnych początków w domowym warsztacie."
-        }
-        firstH2="Misja i wartości"
-        secondP="Nasza misja jest jasna - dostarczać naklejki, które nie tylko ozdabiają, ale również wyrażają osobowość i kreatywność każdej osoby. Stawiamy na najwyższą jakość materiałów, innowacyjne wzory i ekologiczne podejście do produkcji. Nasze wartości obejmują zrównoważony rozwój, pasję do sztuki oraz zaangażowanie w tworzenie produktów, które przekraczają oczekiwania naszych klientów."
-        secondH2="Rozwijamy się!"
-        thirdP="Dziś nasza historia to pełna wyzwań podróż, podczas której przekształciliśmy się w cenioną markę oferującą szeroką gamę unikalnych produktów."
-        image={{
-          src: "/about-images/dragon-sticker.webp",
-          alt: "Naklejka Smok Niebieski Dumny",
-        }}
-        image2={{
-          src: "/about-images/pretty-cat.webp",
-          alt: "Naklejka/Wlepa Kot Z Maslanym Spojrzeniem",
-        }}
-        image3={{
-          src: "/about-images/shrek.webp",
-          alt: "Naklejka/Wlepa Shrek Nie Patrzy Na Wybuchy",
-        }}
-      />
-      <Link
-        href="/about/o-naszych-naklejkach"
-        className="p-4 font-bold text-4xl flex flex-row items-center justify-center w-full bg-[#F7A4F2] rounded-3xl text-white text-center mb-6 hover:bg-[#f7a4f2b4] duration-300"
-        title="Informacje o naszych naklejkach"
-      >
-        Czytaj &quot;O Naszych Naklejkach&quot;{" "}
-        <FaArrowRightLong className="ml-3 h-6 w-8" />
-      </Link>
-      <Link
-        href="/sklep"
-        className="p-4 font-bold text-4xl flex flex-row items-center justify-center w-full bg-[#F7A4F2] rounded-3xl text-white text-center mb-12 hover:bg-[#f7a4f2b4] duration-300"
-        title="Wszystkie nasze naklejki"
-      >
-        Zajrzyj do sklepu
-        <FaShoppingCart className="ml-3 h-6 w-8" />
-      </Link>
-    </>
+    <main className="w-full bg-chill-cream px-4 pb-20 pt-20 text-chill-ink md:px-8 lg:px-16">
+      <section className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
+        <div>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-chill-sage">Stickerka.pl</p>
+          <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight md:text-6xl">
+            Naklejki, które robią miejsce na Twój styl.
+          </h1>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-chill-muted md:text-lg">
+            Tworzymy i ręcznie wycinamy naklejki dla osób, które chcą dodać charakteru laptopowi,
+            telefonowi, meblom albo własnej marce. Wybierz, czego dziś potrzebujesz.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/sklep" className="inline-flex items-center rounded-full bg-chill-sage px-5 py-3 font-bold text-chill-cream transition hover:bg-chill-sage-dark">
+              Przejdź do sklepu <FaShoppingCart className="ml-2" />
+            </Link>
+            <Link href="/kontakt" className="inline-flex items-center rounded-full border border-chill-line px-5 py-3 font-bold transition hover:border-chill-sage">
+              Masz własny pomysł <FaArrowRightLong className="ml-2" />
+            </Link>
+          </div>
+        </div>
+        <Image src="/about-images/dragon-sticker.webp" width={1000} height={750} alt="Niebieska naklejka smoka" className="h-full max-h-[30rem] rounded-3xl object-cover" />
+      </section>
+
+      <section className="mx-auto mt-20 max-w-6xl">
+        <h2 className="font-display text-3xl font-semibold md:text-4xl">Co chcesz zrobić?</h2>
+        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <InfoCard href="/about/o-naszych-naklejkach" icon={<RiEmojiStickerLine />} title="Poznaj naklejki" text="Materiały, ręczne wycinanie i kolekcje stworzone z dbałością o szczegóły." />
+          <InfoCard href="/about/inspiracja-naklejkami" icon={<FaHandScissors />} title="Znajdź zastosowanie" text="Pomysły na laptop, telefon, biuro, samochód, meble i pokój dziecka." />
+          <InfoCard href="/about/tworzenie-wlasnych-naklejek" icon={<RiEmojiStickerLine />} title="Stwórz własny projekt" text="Prześlij zdjęcie lub opisz pomysł. Zobacz, co możemy przygotować." />
+          <InfoCard href="/about/projektanci-naklejek" icon={<FaUserGroup />} title="Współpracuj z nami" text="Oferta dla artystów, projektantów i firm potrzebujących naklejek promocyjnych." />
+        </div>
+      </section>
+
+      <section className="mx-auto mt-20 grid max-w-6xl gap-8 border-t border-chill-line pt-12 md:grid-cols-3">
+        <div><h2 className="font-display text-2xl font-semibold">Od domowego warsztatu</h2><p className="mt-3 text-sm leading-relaxed text-chill-muted">Rozwijamy Stickerkę z pasji do ilustracji, pomysłowych wzorów i rzeczy, które można mieć zawsze przy sobie.</p></div>
+        <div><h2 className="font-display text-2xl font-semibold">Ręczna praca</h2><p className="mt-3 text-sm leading-relaxed text-chill-muted">Dbamy o jakość materiałów i wykończenie każdej naklejki, ograniczając odpady podczas produkcji.</p></div>
+        <div><h2 className="font-display text-2xl font-semibold">Szybki wybór</h2><p className="mt-3 text-sm leading-relaxed text-chill-muted">Gotowe wzory znajdziesz w sklepie. W sprawie większego lub niestandardowego zamówienia napisz do nas.</p></div>
+      </section>
+      <SeoContent page="about" />
+    </main>
+  );
+}
+
+function InfoCard({ href, icon, title, text }: { href: string; icon: React.ReactNode; title: string; text: string }) {
+  return (
+    <Link href={href} className="group flex min-h-56 flex-col rounded-2xl border border-chill-line bg-chill-sand p-5 transition hover:-translate-y-1 hover:border-chill-sage hover:shadow-lg hover:shadow-black/20">
+      <span className="text-3xl text-chill-sage">{icon}</span>
+      <h3 className="mt-6 font-display text-xl font-semibold">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-chill-muted">{text}</p>
+      <span className="mt-auto pt-5 text-sm font-bold text-chill-sage group-hover:underline">Dowiedz się więcej <FaArrowRightLong className="ml-1 inline" /></span>
+    </Link>
   );
 }

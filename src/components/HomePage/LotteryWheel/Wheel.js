@@ -128,8 +128,12 @@ const WheelComponent = ({
     ctx.translate(centerX, centerY);
     ctx.rotate((lastAngle + angle) / 2);
     ctx.fillStyle = contrastColor || "white";
-    ctx.font = "bold 1em proxima-nova";
-    ctx.fillText(value.title.substr(0, 21), size / 2 + 20, 0);
+    ctx.font = "900 22px proxima-nova";
+    ctx.shadowColor = "rgba(20, 26, 38, 0.72)";
+    ctx.shadowBlur = 4;
+    ctx.fillText(getShortTitle(value.title), size / 2 + 18, 0);
+    ctx.shadowColor = "transparent";
+    ctx.shadowBlur = 0;
     ctx.restore();
   };
 
@@ -138,11 +142,11 @@ const WheelComponent = ({
     let lastAngle = angleCurrent;
     const len = listOfPrizes.length;
     const PI2 = Math.PI * 2;
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = primaryColor || "black";
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.88)";
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.font = "1em proxima-nova";
+    ctx.font = "16px proxima-nova";
     for (let i = 1; i <= len; i++) {
       const angle = PI2 * (i / len) + angleCurrent;
       drawSegment(i - 1, lastAngle, angle);
@@ -153,11 +157,11 @@ const WheelComponent = ({
     ctx.beginPath();
     ctx.arc(centerX, centerY, 50, 0, PI2, false);
     ctx.closePath();
-    ctx.fillStyle = primaryColor || "black";
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = contrastColor || "white";
+    ctx.fillStyle = "#202A3A";
+    ctx.lineWidth = 12;
+    ctx.strokeStyle = "#FFFFFF";
     ctx.fill();
-    ctx.font = "bold 1em proxima-nova";
+    ctx.font = "900 17px proxima-nova";
     ctx.fillStyle = contrastColor || "white";
     ctx.textAlign = "center";
 
@@ -170,8 +174,8 @@ const WheelComponent = ({
     ctx.arc(centerX, centerY, size, 0, PI2, false);
     ctx.closePath();
 
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = primaryColor || "black";
+    ctx.lineWidth = 12;
+    ctx.strokeStyle = primaryColor || "#F4B942";
     ctx.stroke();
   };
 
@@ -194,15 +198,23 @@ const WheelComponent = ({
     if (i < 0) i = i + listOfPrizes.length;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillStyle = primaryColor || "black";
-    ctx.font = "bold 2.5em proxima-nova";
+    ctx.fillStyle = "#202A3A";
+    ctx.font = "900 28px proxima-nova";
     currentSegment = listOfPrizes[i];
-    isFinished &&
-      ctx.fillText(currentSegment, centerX + 10, centerY + size + 50);
+    if (isFinished) {
+      ctx.fillText(currentSegment.title, centerX + 10, centerY + size + 50);
+    }
+  };
+  const getShortTitle = (title) => {
+    if (title.includes("-25%")) return "-25%";
+    if (title.includes("-20%")) return "-20%";
+    if (title.includes("-15%")) return "-15%";
+    if (title.includes("-10%")) return "-10%";
+    return title.replace("darmowa", "gratis");
   };
   const clear = () => {
     const ctx = canvasContext;
-    ctx.clearRect(0, 0, 1000, 500);
+    ctx.clearRect(0, 0, 600, 600);
   };
   return (
     <canvas
@@ -210,6 +222,10 @@ const WheelComponent = ({
       width="600"
       height="600"
       style={{
+        display: "block",
+        height: "auto",
+        maxWidth: "100%",
+        width: "min(600px, 100%)",
         pointerEvents:
           timerHandle !== 0 || (isFinished && isOnlyOnce) ? "none" : "auto",
       }}

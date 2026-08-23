@@ -3,6 +3,7 @@ import HeroAbout from "../HeroAbout";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import type { Metadata } from "next";
+import SeoContent from "@/components/SeoContent";
 
 export const metadata: Metadata = {
   title: "Stickerka.pl: Inspiracje i Dekoracje Naklejkami",
@@ -103,6 +104,7 @@ export default function Page() {
         Zajrzyj do sklepu
         <FaShoppingCart className="ml-3 h-6 w-8" />
       </Link>
+      <SeoContent page="inspiration" />
     </>
   );
 }
