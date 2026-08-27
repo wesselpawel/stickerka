@@ -8,7 +8,6 @@ import { useDispatch } from "react-redux";
 import { setCart } from "@/redux/slices/shopSlice";
 import { getPolishCurrency } from "@/lib/getPolishCurrency";
 import { getPrice } from "@/lib/getStickerPrice";
-import { STICKER_UNIT_PRICE_PLN } from "@/lib/stickerPricing.js";
 import { removeNumbersFromString } from "@/lib/removeNumbersFromString";
 import StickerTile from "./StickerTile";
 import Masonry from "react-masonry-css";
@@ -30,11 +29,13 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
   const [selected, setSelected] = useState<HomeSticker | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [justAdded, setJustAdded] = useState(false);
+  const [stickerSize, setStickerSize] = useState<"sticker-s" | "sticker-m" | "sticker-l">("sticker-m");
 
   const openModal = useCallback((s: HomeSticker) => {
     setSelected(s);
     setQuantity(1);
     setJustAdded(false);
+    setStickerSize("sticker-m");
   }, []);
 
   const handleDialogClose = useCallback(() => {
@@ -116,131 +117,147 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
         aria-labelledby="sticker-popup-title"
       >
         {selected && (
-          <div className="flex max-h-[min(92dvh,42rem)] flex-col overflow-y-auto">
-            {/* Top (sticky) */}
-            <div className="sticky top-0 z-10 bg-neutral-900/60 backdrop-blur px-4 py-4 sm:px-6">
-              <div className="flex items-start justify-between gap-3">
+          <div className="sticker-quick-buy-content">
+            <div className="sticker-quick-buy-header">
+              <div>
                 <h2
                   id="sticker-popup-title"
-                  className="pr-2 text-base font-semibold leading-snug sm:text-lg"
+                  className="text-xl font-bold leading-tight sm:text-2xl"
                 >
                   {removeNumbersFromString(selected.title || "")}
                 </h2>
-                <button
+                <p className="mt-1 text-sm text-cyan-100/65">Wybierz rozmiar i liczbę sztuk</p>
+              </div>
+              <button
                   ref={closeBtnRef}
                   type="button"
                   onClick={() => dialogRef.current?.close()}
-                  className="min-h-[44px] min-w-[84px] shrink-0 rounded-lg border border-neutral-700 bg-neutral-800/40 px-3 text-sm font-medium text-neutral-100 hover:bg-neutral-800/60"
+                  className="sticker-quick-buy-close"
                   aria-label="Zamknij"
                 >
-                  Zamknij
+                  ×
                 </button>
-              </div>
+            </div>
 
-              <div className="relative mx-auto mt-4 aspect-square w-full max-w-[min(260px,60vw)] overflow-hidden rounded-md border border-neutral-700 bg-neutral-900/30">
-                {img ? (
+            <div className="mt-3 sticker-quick-buy-body">
+              <div
+                className="sticker-stage relative aspect-square overflow-hidden"
+                data-sticker-size={stickerSize}
+              >
+                <Image
+                  alt=""
+                  src="/desk.jpg"
+                  fill
+                  sizes="(max-width: 640px) 100vw, 52vw"
+                  className="object-cover"
+                />
+                {img && (
                   <Image
                     src={img}
-                    alt=""
+                    alt={removeNumbersFromString(selected.title || "")}
                     fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 60vw, 260px"
+                    sizes="(max-width: 640px) 100vw, 52vw"
+                    className={`sticker-image ${stickerSize}`}
                   />
-                ) : (
-                  <span className="flex h-full items-center justify-center text-neutral-400">
-                    —
-                  </span>
                 )}
               </div>
 
-              <p className="mt-4 text-center">
-                <span className="text-xl font-bold sm:text-2xl">
-                  {STICKER_UNIT_PRICE_PLN} zł
-                </span>
-                <span className="text-sm font-normal text-neutral-600">
-                  {" "}
-                  / sztuka
-                </span>
-              </p>
-            </div>
+              <div className="sticker-quick-buy-controls">
+                <div>
+                  <p className="sticker-control-label">Rozmiar</p>
+                  <div className="sticker-size-options" role="group" aria-label="Rozmiar naklejki">
+                    {[
+                      ["sticker-s", "Mała", "6 cm"],
+                      ["sticker-m", "Średnia", "10 cm"],
+                      ["sticker-l", "Duża", "14 cm"],
+                    ].map(([value, label, detail]) => (
+                      <button
+                        key={value}
+                        type="button"
+                        className={`sticker-size-option ${stickerSize === value ? "is-selected" : ""}`}
+                        onClick={() => setStickerSize(value as "sticker-s" | "sticker-m" | "sticker-l")}
+                        aria-pressed={stickerSize === value}
+                      >
+                        <span>{label}</span>
+                        <small>{detail}</small>
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
+                {!justAdded && (
+                  <>
+                    <div>
+                      <p className="sticker-control-label">Ilość</p>
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        type="button"
+                        className="sticker-quantity-button"
+                        onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                        aria-label="Zmniejsz ilość"
+                      >
+                        −
+                      </button>
+  
+                      <input
+                        id="sticker-qty"
+                        type="number"
+                        inputMode="numeric"
+                        min={1}
+                        value={quantity}
+                        onChange={(e) => {
+                          const v = parseInt(e.target.value, 10);
+                          if (!Number.isNaN(v) && v >= 1) setQuantity(v);
+                        }}
+                        className="sticker-quantity-input"
+                        aria-label="Ilość sztuk"
+                      />
+  
+                      <button
+                        type="button"
+                        className="sticker-quantity-button"
+                        onClick={() => setQuantity((q) => q + 1)}
+                        aria-label="Zwiększ ilość"
+                      >
+                        +
+                      </button>
+                    </div>
+                    </div>
 
+                    <p className="sticker-total">
+                      Razem: {getPolishCurrency(lineTotal)}
+                    </p>
 
-            {/* Bottom (sticky) */}
-            <div className="sticky bottom-0 z-10 bg-neutral-900/60 backdrop-blur px-4 py-2.5 sm:px-6">
-              {!justAdded && (
-                <>
-                  <label htmlFor="sticker-qty" className="sr-only">
-                    Ilość
-                  </label>
-
-                  <div className="flex items-center justify-center gap-2">
                     <button
                       type="button"
-                      className="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-lg border border-neutral-800 bg-neutral-800/20 text-base font-bold text-neutral-100"
-                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                      aria-label="Zmniejsz ilość"
+                      onClick={handleAddToCart}
+                      className="sticker-add-button"
                     >
-                      −
+                      Dodaj do koszyka
                     </button>
-
-                    <input
-                      id="sticker-qty"
-                      type="number"
-                      inputMode="numeric"
-                      min={1}
-                      value={quantity}
-                      onChange={(e) => {
-                        const v = parseInt(e.target.value, 10);
-                        if (!Number.isNaN(v) && v >= 1) setQuantity(v);
-                      }}
-                      className="min-h-[36px] w-14 rounded-lg border border-neutral-700 bg-neutral-800/30 px-2 text-center text-base font-semibold text-neutral-100"
-                      aria-label="Ilość sztuk"
-                    />
-
+                  </>
+                )}
+  
+                {justAdded && (
+                  <div className="flex flex-col gap-3">
                     <button
                       type="button"
-                      className="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-lg border border-neutral-800 bg-neutral-800/20 text-base font-bold text-neutral-100"
-                      onClick={() => setQuantity((q) => q + 1)}
-                      aria-label="Zwiększ ilość"
+                      onClick={browseMore}
+                      className="min-h-[48px] w-full rounded-lg border-2 border-neutral-700 bg-neutral-800/40 py-3 text-center text-base font-semibold text-neutral-100 hover:bg-neutral-800/60"
                     >
-                      +
+                      Przeglądaj dalej
+                    </button>
+  
+                    <button
+                      type="button"
+                      onClick={goCheckout}
+                      className="min-h-[48px] w-full rounded-lg bg-blue-600 py-3 text-center text-base font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+                    >
+                      Przejdź do płatności
                     </button>
                   </div>
-
-                  <p className="mt-1 text-center text-sm font-bold sm:text-base">
-                    Razem: {getPolishCurrency(lineTotal)}
-                  </p>
-
-                  <button
-                    type="button"
-                    onClick={handleAddToCart}
-                    className="mt-2 min-h-[44px] w-full rounded-lg bg-indigo-600 hover:bg-[#f87ff0b6] duration-300 py-2.5 text-center text-base font-semibold text-white hover:bg-neutral-800"
-                  >
-                    Dodaj do koszyka
-                  </button>
-                </>
-              )}
-
-              {justAdded && (
-                <div className="flex flex-col gap-3">
-                  <button
-                    type="button"
-                    onClick={browseMore}
-                    className="min-h-[48px] w-full rounded-lg border-2 border-neutral-700 bg-neutral-800/40 py-3 text-center text-base font-semibold text-neutral-100 hover:bg-neutral-800/60"
-                  >
-                    Przeglądaj dalej
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={goCheckout}
-                    className="min-h-[48px] w-full rounded-lg bg-blue-600 py-3 text-center text-base font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
-                  >
-                    Przejdź do płatności
-                  </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         )}
