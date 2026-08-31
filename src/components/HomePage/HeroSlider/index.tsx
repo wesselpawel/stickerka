@@ -3,6 +3,21 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaPause, FaPlay } from "react-icons/fa";
 import CreateStickerPopup from "@/components/CreateStickerPopup";
+import sliderImage0 from "../../../../public/sliderImages/0.webp";
+import sliderImage1 from "../../../../public/sliderImages/1.webp";
+import sliderImage2 from "../../../../public/sliderImages/2.webp";
+import sliderImage3 from "../../../../public/sliderImages/3.webp";
+import sliderImage4 from "../../../../public/sliderImages/4.webp";
+import sliderImage5 from "../../../../public/sliderImages/5.webp";
+
+const sliderImages = [
+  sliderImage0,
+  sliderImage1,
+  sliderImage2,
+  sliderImage3,
+  sliderImage4,
+  sliderImage5,
+];
 
 type HeroSlide = {
   id: number;
@@ -119,7 +134,7 @@ export default function HeroSlider() {
       >
       <Image
         key={activeSlide.id}
-        src={`/sliderImages/${activeSlide.id}.webp`}
+        src={sliderImages[activeSlide.id] ?? sliderImages[0]}
         width={1600}
         height={900}
         priority={activeSlide.id === 0}

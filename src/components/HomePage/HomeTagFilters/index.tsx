@@ -6,6 +6,7 @@ import HomeStickerGrid, {
 } from "../HomeTopStickers/components/HomeStickerGrid";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
+import AnimatedNewestUsersPurchases from "../../AnimatedNewestUsersPurchases";
 
 function toStickerTileProps(p: Record<string, unknown>): HomeSticker {
   const categories = Array.isArray((p as any).categories)
@@ -129,6 +130,7 @@ export default function HomeTagFilters({
       <h1 className="text-lg text-center px-3 pb-8">
         Drukujemy i wysyłamy zamówione <br /> naklejki w 24 godziny
       </h1>
+      <AnimatedNewestUsersPurchases />
       <div className="w-full min-w-0 max-w-full overflow-x-clip">
         <div className="relative left-0 z-50 h-16 w-full min-w-0 max-w-full overflow-hidden bg-black sticky top-[52px] md:top-[77px]">
           {canScrollLeft && (

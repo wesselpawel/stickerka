@@ -12,6 +12,7 @@ import { getStickerPriceBySize } from "@/lib/stickerPricing.js";
 import { removeNumbersFromString } from "@/lib/removeNumbersFromString";
 import StickerTile from "./StickerTile";
 import Masonry from "react-masonry-css";
+import deskBackground from "../../../../../public/desk.png";
 
 export type HomeSticker = {
   id: string;
@@ -151,7 +152,7 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
               >
                 <Image
                   alt=""
-                  src="/desk.jpg"
+                  src={deskBackground}
                   fill
                   sizes="(max-width: 640px) 100vw, 52vw"
                   className="object-cover"

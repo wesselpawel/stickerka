@@ -7,6 +7,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
 import SeoContent from "@/components/SeoContent";
 import CreateStickerPopup from "@/components/CreateStickerPopup";
+import heroSilverSticker from "../../../public/home-images/silver.webp";
 
 export default function Page() {
   const [createStickerOpen, setCreateStickerOpen] = useState(false);
@@ -31,7 +32,7 @@ export default function Page() {
             </button>
           </div>
         </div>
-        <Image src="/home-images/silver.webp" width={1000} height={750} alt="Niebieska naklejka smoka" className="h-full max-h-[30rem] rounded-3xl object-cover" />
+        <Image src={heroSilverSticker} width={1000} height={750} alt="Niebieska naklejka smoka" className="h-full max-h-[30rem] rounded-3xl object-cover" />
       </section>
 
       

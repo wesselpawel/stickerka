@@ -9,6 +9,7 @@ import Confetti from "react-confetti";
 import { addCoupon } from "@/firebase";
 import { v4 as uuidv4 } from "uuid";
 import { copyToClipboard } from "@/lib/copyToClipboard";
+import lotteryWheelIcon from "../../../../public/lotteryWheel2.png";
 
 type Prize = {
   id: number;
@@ -83,7 +84,7 @@ export default function LotteryWheel({
         <div className="flex flex-col items-center justify-center gap-1.5 md:gap-2">
           <Image
             title="Sprawdź nasze wlepki"
-            src="/lotteryWheel2.png"
+            src={lotteryWheelIcon}
             width={120}
             height={120}
             alt="Naklejki"

@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Sklep z naklejkami",
   description:
-    "Sklep z ręcznie wycinanymi naklejkami. Przeglądaj nasze naklejki. Zamów naklejkę dla siebie.",
+    "Sklep z ręcznie wycinanymi naklejkami. Kolekcja naklejek na każdą okazję. Zamów naklejkę dla siebie.",
   authors: [
     { name: "Paweł Wessel", url: "https://wesselpawel.com" },
     { name: "Eliza Czerwińska", url: "https://blackbellart.com/" },
