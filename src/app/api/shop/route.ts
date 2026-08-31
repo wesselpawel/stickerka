@@ -2,6 +2,8 @@ import { getProducts } from "@/firebase";
 import { polishToEnglish } from "@/lib/polishToEnglish";
 import { NextResponse, NextRequest } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   const products = await getProducts();
   const secret = req.nextUrl.searchParams.get("secret");

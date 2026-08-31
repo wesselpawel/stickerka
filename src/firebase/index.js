@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore/lite";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import { unstable_noStore } from "next/cache";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -101,6 +102,7 @@ async function addCheckout(checkout) {
 
 // stickers — one Firestore document per sticker
 async function getProducts() {
+  unstable_noStore();
   const colRef = collection(db, STICKERS_COLLECTION);
   const snapshot = await getDocs(colRef);
   const products = snapshot.docs.map((d) => normalizeStickerDoc(d));

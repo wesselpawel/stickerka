@@ -31,21 +31,21 @@ export const listOfPrizes = [
     id: 4,
     title: "3 + 1 darmowa",
     description:
-      "Kod promocyjny: co 4 naklejki w koszyku (łącznie, dowolne wzory) jedna w gratisie — rabat 20 zł za każde pełne 4 szt. (np. 8 szt. = 40 zł rabatu).",
+      "Kod promocyjny: co 4 naklejki w koszyku (łącznie, dowolne wzory) jedna w gratisie — rabat odpowiada cenie najtańszej naklejki w zestawie (np. 4x 12,90 zł = 51,60 zł, a 1 w gratisie to 12,90 zł rabatu).",
     imgSrc: "/lotteryImages/3+1-D.webp",
   },
   {
     id: 5,
     title: "4 + 1 darmowa",
     description:
-      "Kod promocyjny: co 5 naklejek w koszyku (łącznie) jedna w gratisie — rabat 20 zł za każde pełne 5 szt.",
+      "Kod promocyjny: co 5 naklejek w koszyku (łącznie) jedna w gratisie — rabat odpowiada cenie najtańszej naklejki w zestawie.",
     imgSrc: "/lotteryImages/4+1-D.webp",
   },
   {
     id: 6,
     title: "5 + 1 darmowa",
     description:
-      "Kod promocyjny: co 6 naklejek w koszyku (łącznie) jedna w gratisie — rabat 20 zł za każde pełne 6 szt.",
+      "Kod promocyjny: co 6 naklejek w koszyku (łącznie) jedna w gratisie — rabat odpowiada cenie najtańszej naklejki w zestawie.",
     imgSrc: "/lotteryImages/5+1-D.webp",
   },
 ];

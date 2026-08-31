@@ -1,16 +1,21 @@
 {
   "name": "Stickerka.pl",
-  "short_name": "Stickerka",
-  "description": "Stickerka.pl to polski sklep internetowy specjalizujący się w szerokim asortymencie naklejek różnego rodzaju. Oferujemy wysokiej jakości naklejki na różne powierzchnie, od dekoracyjnych po użytkowe, zapewniając naszym klientom możliwość wyboru spośród wielu unikalnych wzorów i projektów.",
+  "short_name": "Sticker shop",
+  "description": "Sklep z ręcznie wycinanymi naklejkami. Przeglądaj nasze naklejki. Zamów naklejkę dla siebie.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#FFFFFF",
   "icons": [
     {
-      "src": "/favicons/favicon.ico",
-      "sizes": "48x48",
-      "type": "image/x-icon"
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
   "related_applications": []

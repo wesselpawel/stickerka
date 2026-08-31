@@ -33,89 +33,9 @@ export default function About({ onClose }: { onClose: () => void }) {
             </div>
           </div>
         </Link>
+        
         <Link
-          href="/about/o-naszych-naklejkach"
-          title="Czytaj o naszych naklejkach"
-          className="group flex overflow-hidden rounded-2xl border border-chill-line bg-white transition-shadow hover:shadow-md"
-          onClick={() => onClose()}
-        >
-          <div className="flex w-full flex-row items-stretch">
-            <div className="flex w-14 shrink-0 items-center justify-center bg-chill-mist/60 text-chill-sage-dark transition-colors group-hover:bg-chill-sage/25">
-              <RiEmojiStickerLine className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col p-4">
-              <h2 className="font-display text-lg font-semibold text-chill-ink">
-                Nasze naklejki
-              </h2>
-              <p className="mt-1 text-sm leading-relaxed text-chill-muted">
-                Rozwijamy pasję do tworzenia naklejek od lat — od domowego
-                warsztatu do cenionej marki.
-              </p>
-            </div>
-          </div>
-        </Link>
-        <Link
-          href="/about/inspiracja-naklejkami"
-          title="Zainspiruj się z nami"
-          className="group flex overflow-hidden rounded-2xl border border-chill-line bg-white transition-shadow hover:shadow-md"
-          onClick={() => onClose()}
-        >
-          <div className="flex w-full flex-row items-stretch">
-            <div className="flex w-14 shrink-0 items-center justify-center bg-chill-mist/60 text-chill-sage-dark transition-colors group-hover:bg-chill-sage/25">
-              <RiEmojiStickerLine className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col p-4">
-              <h2 className="font-display text-lg font-semibold text-chill-ink">
-                Inspiracja naklejkami
-              </h2>
-              <p className="mt-1 text-sm leading-relaxed text-chill-muted">
-                Spersonalizowane naklejki, które oddają Twój styl.
-              </p>
-            </div>
-          </div>
-        </Link>
-        <Link
-          href="/about/tworzenie-wlasnych-naklejek"
-          title="Stwórz własną naklejkę"
-          className="group flex overflow-hidden rounded-2xl border border-chill-line bg-white transition-shadow hover:shadow-md"
-          onClick={() => onClose()}
-        >
-          <div className="flex w-full flex-row items-stretch">
-            <div className="flex w-14 shrink-0 items-center justify-center bg-chill-mist/60 text-chill-sage-dark transition-colors group-hover:bg-chill-sage/25">
-              <RiEmojiStickerLine className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col p-4">
-              <h2 className="font-display text-lg font-semibold text-chill-ink">
-                Tworzenie własnych naklejek
-              </h2>
-              <p className="mt-1 text-sm leading-relaxed text-chill-muted">
-                Narzędzia i inspiracje do własnych projektów.
-              </p>
-            </div>
-          </div>
-        </Link>
-        <Link
-          href="/about/projektanci-naklejek"
-          title="Współpracuj z nami"
-          className="group flex overflow-hidden rounded-2xl border border-chill-line bg-white transition-shadow hover:shadow-md"
-          onClick={() => onClose()}
-        >
-          <div className="flex w-full flex-row items-stretch">
-            <div className="flex w-14 shrink-0 items-center justify-center bg-chill-mist/60 text-chill-sage-dark transition-colors group-hover:bg-chill-sage/25">
-              <FaUserGroup className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col p-4">
-              <h2 className="font-display text-lg font-semibold text-chill-ink">
-                Współpraca
-              </h2>
-              <p className="mt-1 text-sm leading-relaxed text-chill-muted">
-                Dla artystów i projektantów z pasją do designu.
-              </p>
-            </div>
-          </div>
-        </Link>
-        <Link
-          href="/kontakt"
+          href="/contact"
           title="Skontaktuj się"
           className="group flex overflow-hidden rounded-2xl border border-chill-line bg-white transition-shadow hover:shadow-md"
           onClick={() => onClose()}

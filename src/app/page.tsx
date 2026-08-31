@@ -8,10 +8,13 @@ import Image from "next/image";
 import { FaHandScissors, FaShippingFast } from "react-icons/fa";
 import HeroSlider from "@/components/HomePage/HeroSlider";
 import SeoContent from "@/components/SeoContent";
+
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
-  title: "Stickerka.pl - Jedyny taki sklep z naklejkami",
+  title: "Sklep z naklejkami",
   description:
-    "Ręcznie wycinane naklejki. Kup jedną z naszych naklejek i twórz własne. Naklejki złote, srebrne, holo. Naklejki na każdą okazję. Sklep z największą kolekcja naklejek ozdobnych.",
+    "Sklep z ręcznie wycinanymi naklejkami. Przeglądaj nasze naklejki. Zamów naklejkę dla siebie.",
   authors: [
     { name: "Paweł Wessel", url: "https://wesselpawel.com" },
     { name: "Eliza Czerwińska", url: "https://blackbellart.com/" },
@@ -19,13 +22,6 @@ export const metadata: Metadata = {
   publisher: "Stickerka.pl",
   keywords: [
     "naklejki ręcznie wycinane, naklejki na każdą okazję, naklejki na ścianę, naklejki dla dzieci, naklejki, naklejki bajkowe, naklejki złote, naklejki holograficzne, naklejki srebrne, drukowanie naklejek, naklejki z anime, naklejki na ścianę do kuchni, naklejki na ścianę nowoczesne, naklejki na ścianę dinozaury, naklejki na ścianę kwiaty, nalepki na ścianę",
-  ],
-  icons: [
-    {
-      url: "/favicon.ico",
-      sizes: "48x48",
-      type: "image/x-icon",
-    },
   ],
 };
 export default async function Page({

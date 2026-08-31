@@ -8,16 +8,12 @@ import dynamic from "next/dynamic";
 import { FaScissors } from "react-icons/fa6";
 
 const shopLinks = [
-  { label: "Wszystkie naklejki", href: "/sklep" },
-  { label: "Nasze naklejki", href: "/about/o-naszych-naklejkach" },
-  { label: "Inspiracje", href: "/about/inspiracja-naklejkami" },
+  { label: "Wszystkie naklejki", href: "/" },
 ];
 
 const aboutLinks = [
   { label: "O Stickerka.pl", href: "/about" },
-  { label: "Własne naklejki", href: "/about/tworzenie-wlasnych-naklejek" },
-  { label: "Współpraca", href: "/about/projektanci-naklejek" },
-  { label: "Kontakt", href: "/kontakt" },
+  { label: "Kontakt", href: "/contact" },
 ];
 
 // Dynamic import for the upload popup (CreateStickerPopup)
@@ -68,7 +64,7 @@ export default function Footer() {
               <Link href="https://www.instagram.com/Stickerka.pl/" className="flex items-center text-chill-muted transition-colors hover:text-chill-sage-dark" target="_blank" rel="noopener noreferrer">
                 <FaInstagram className="mr-3 text-chill-sage" aria-hidden="true" />Instagram: Stickerka.pl
               </Link>
-              <Link href="/kontakt" className="mt-1 font-semibold text-chill-sage-dark transition-colors hover:text-chill-ink">Napisz do nas <FaArrowRight className="ml-1 inline" aria-hidden="true" /></Link>
+              <Link href="/contact" className="mt-1 font-semibold text-chill-sage-dark transition-colors hover:text-chill-ink">Napisz do nas <FaArrowRight className="ml-1 inline" aria-hidden="true" /></Link>
             </div>
           </div>
         </div>

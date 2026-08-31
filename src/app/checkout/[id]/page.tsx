@@ -110,7 +110,7 @@ export default async function Checkout({
               <p className="mt-8 text-sm text-chill-muted">
                 W razie pytań przejdź do{" "}
                 <Link
-                  href="/kontakt"
+                  href="/contact"
                   className="font-medium text-chill-sage underline decoration-chill-sage/40 underline-offset-4 transition hover:text-chill-ink hover:decoration-chill-sage"
                 >
                   kontaktu
@@ -151,7 +151,7 @@ export default async function Checkout({
               <p className="mt-8 text-sm text-chill-muted">
                 W razie pytań przejdź do{" "}
                 <Link
-                  href="/kontakt"
+                  href="/contact"
                   className="font-medium text-chill-sage underline decoration-chill-sage/40 underline-offset-4 transition hover:text-chill-ink hover:decoration-chill-sage"
                 >
                   kontaktu

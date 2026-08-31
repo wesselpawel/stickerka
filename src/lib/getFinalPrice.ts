@@ -2,6 +2,7 @@ import { listOfPrizes } from "@/components/listOfPrizes";
 import {
   STICKER_UNIT_PRICE_PLN,
   cartSubtotalPln,
+  getLowestStickerPriceInCart,
 } from "@/lib/stickerPricing.js";
 
 /** Total number of sticker pieces in the cart (all lines). */
@@ -14,13 +15,14 @@ function totalCartPieces(cart: any[]): number {
 }
 
 /**
- * Bundle: every N pieces → one free sticker (20 zł) per complete set.
+ * Bundle: every N pieces → one free sticker, valued at the cheapest sticker size in the cart.
  * Counts pieces across the whole cart (mixed designs).
  */
-function bundleDiscountPln(totalPieces: number, piecesPerFreeSet: number): number {
+function bundleDiscountPln(totalPieces: number, piecesPerFreeSet: number, cart: any[]): number {
   if (piecesPerFreeSet < 2) return 0;
   const sets = Math.floor(totalPieces / piecesPerFreeSet);
-  return sets * STICKER_UNIT_PRICE_PLN;
+  if (sets <= 0) return 0;
+  return sets * getLowestStickerPriceInCart(cart);
 }
 
 function resolvePrize(prizeId: unknown) {
@@ -64,7 +66,7 @@ export function getFinalPrice(prizeId: any, cart: any) {
         break;
 
       case "3 + 1 darmowa": {
-        const discount = bundleDiscountPln(totalPieces, 4);
+        const discount = bundleDiscountPln(totalPieces, 4, cart);
         const ok = discount > 0;
         discountedPrice = cartPrice - discount;
         message = ok
@@ -73,7 +75,7 @@ export function getFinalPrice(prizeId: any, cart: any) {
         break;
       }
       case "4 + 1 darmowa": {
-        const discount = bundleDiscountPln(totalPieces, 5);
+        const discount = bundleDiscountPln(totalPieces, 5, cart);
         const ok = discount > 0;
         discountedPrice = cartPrice - discount;
         message = ok
@@ -82,7 +84,7 @@ export function getFinalPrice(prizeId: any, cart: any) {
         break;
       }
       case "5 + 1 darmowa": {
-        const discount = bundleDiscountPln(totalPieces, 6);
+        const discount = bundleDiscountPln(totalPieces, 6, cart);
         const ok = discount > 0;
         discountedPrice = cartPrice - discount;
         message = ok

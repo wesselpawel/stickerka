@@ -88,7 +88,7 @@ export default function TypesOfPaper({
                 ))}
               </div>
               <Link
-                href="/sklep"
+                href="/#gallery"
                 className="mt-4 w-max rounded-full bg-chill-sage px-5 py-2.5 text-sm font-semibold text-white shadow-sm duration-300 hover:bg-chill-sage-dark"
               >
                 Zobacz wzory

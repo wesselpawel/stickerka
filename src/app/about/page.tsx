@@ -1,24 +1,15 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaArrowRightLong, FaHandScissors, FaUserGroup } from "react-icons/fa6";
+import { FaArrowRightLong } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
-import { RiEmojiStickerLine } from "react-icons/ri";
-import type { Metadata } from "next";
 import SeoContent from "@/components/SeoContent";
+import CreateStickerPopup from "@/components/CreateStickerPopup";
 
-export const metadata: Metadata = {
-  title: "Stickerka.pl: Naklejki, inspiracje i własne projekty",
-  description:
-    "Poznaj Stickerka.pl: ręcznie wycinane naklejki, pomysły na ich wykorzystanie, własne projekty oraz współpraca dla artystów i firm.",
-  icons: [
-    {
-      url: "/favicon.ico",
-      sizes: "48x48",
-      type: "image/x-icon",
-    },
-  ],
-};
 export default function Page() {
+  const [createStickerOpen, setCreateStickerOpen] = useState(false);
   return (
     <main className="w-full bg-chill-cream px-4 pb-20 pt-20 text-chill-ink md:px-8 lg:px-16">
       <section className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
@@ -32,26 +23,18 @@ export default function Page() {
             telefonowi, meblom albo własnej marce. Wybierz, czego dziś potrzebujesz.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/sklep" className="inline-flex items-center rounded-full bg-chill-sage px-5 py-3 font-bold text-chill-cream transition hover:bg-chill-sage-dark">
+            <Link href="/" className="inline-flex items-center rounded-full bg-chill-sage px-5 py-3 font-bold text-chill-cream transition hover:bg-chill-sage-dark">
               Przejdź do sklepu <FaShoppingCart className="ml-2" />
             </Link>
-            <Link href="/kontakt" className="inline-flex items-center rounded-full border border-chill-line px-5 py-3 font-bold transition hover:border-chill-sage">
+            <button onClick={() => setCreateStickerOpen(true)} className="inline-flex items-center rounded-full border border-chill-line px-5 py-3 font-bold transition hover:border-chill-sage">
               Masz własny pomysł <FaArrowRightLong className="ml-2" />
-            </Link>
+            </button>
           </div>
         </div>
-        <Image src="/about-images/dragon-sticker.webp" width={1000} height={750} alt="Niebieska naklejka smoka" className="h-full max-h-[30rem] rounded-3xl object-cover" />
+        <Image src="/home-images/silver.webp" width={1000} height={750} alt="Niebieska naklejka smoka" className="h-full max-h-[30rem] rounded-3xl object-cover" />
       </section>
 
-      <section className="mx-auto mt-20 max-w-6xl">
-        <h2 className="font-display text-3xl font-semibold md:text-4xl">Co chcesz zrobić?</h2>
-        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <InfoCard href="/about/o-naszych-naklejkach" icon={<RiEmojiStickerLine />} title="Poznaj naklejki" text="Materiały, ręczne wycinanie i kolekcje stworzone z dbałością o szczegóły." />
-          <InfoCard href="/about/inspiracja-naklejkami" icon={<FaHandScissors />} title="Znajdź zastosowanie" text="Pomysły na laptop, telefon, biuro, samochód, meble i pokój dziecka." />
-          <InfoCard href="/about/tworzenie-wlasnych-naklejek" icon={<RiEmojiStickerLine />} title="Stwórz własny projekt" text="Prześlij zdjęcie lub opisz pomysł. Zobacz, co możemy przygotować." />
-          <InfoCard href="/about/projektanci-naklejek" icon={<FaUserGroup />} title="Współpracuj z nami" text="Oferta dla artystów, projektantów i firm potrzebujących naklejek promocyjnych." />
-        </div>
-      </section>
+      
 
       <section className="mx-auto mt-20 grid max-w-6xl gap-8 border-t border-chill-line pt-12 md:grid-cols-3">
         <div><h2 className="font-display text-2xl font-semibold">Od domowego warsztatu</h2><p className="mt-3 text-sm leading-relaxed text-chill-muted">Rozwijamy Stickerkę z pasji do ilustracji, pomysłowych wzorów i rzeczy, które można mieć zawsze przy sobie.</p></div>
@@ -59,6 +42,7 @@ export default function Page() {
         <div><h2 className="font-display text-2xl font-semibold">Szybki wybór</h2><p className="mt-3 text-sm leading-relaxed text-chill-muted">Gotowe wzory znajdziesz w sklepie. W sprawie większego lub niestandardowego zamówienia napisz do nas.</p></div>
       </section>
       <SeoContent page="about" />
+      <CreateStickerPopup open={createStickerOpen} onOpenChange={setCreateStickerOpen} />
     </main>
   );
 }

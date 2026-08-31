@@ -26,7 +26,7 @@ const content = {
             W sklepie czekają naklejki z autorskimi motywami, wzory kolorowe,
             minimalistyczne, zabawne i inspirowane popkulturą. Możesz wybrać
             pojedynczą naklejkę albo połączyć kilka w zestaw dopasowany do
-            własnego stylu. Zobacz aktualne kolekcje w naszym <Link href="/sklep">sklepie z naklejkami</Link>.
+            własnego stylu. Zobacz aktualne kolekcje na <Link href="/#gallery">stronie głównej z galerią</Link>.
           </>
         ),
       },
@@ -45,7 +45,7 @@ const content = {
       {
         title: "Naklejki dla osób, twórców i firm",
         text: (
-          <>Potrzebujesz naklejek z własną grafiką, logo albo krótkim hasłem? Opisz swój pomysł na stronie <Link href="/about/tworzenie-wlasnych-naklejek">własnych naklejek</Link> lub <Link href="/kontakt">skontaktuj się z nami</Link>. Przy większych zamówieniach przygotujemy rozwiązanie dopasowane do Twojej marki.</>
+          <>Potrzebujesz naklejek z własną grafiką, logo albo krótkim hasłem? Opisz swój pomysł na stronie własnych naklejek lub <Link href="/contact">skontaktuj się z nami</Link>. Przy większych zamówieniach przygotujemy rozwiązanie dopasowane do Twojej marki.</>
         ),
       },
     ],
@@ -57,9 +57,9 @@ const content = {
       <>Stickerka.pl powstała z połączenia ilustracji, ręcznej pracy i radości z małych przedmiotów, które mogą opowiadać coś o swoim właścicielu. Tworzymy naklejki dla osób szukających gotowych wzorów oraz dla tych, którzy chcą zamienić własny pomysł w fizyczny produkt.</>
     ),
     sections: [
-      { title: "Od inspiracji do gotowej naklejki", text: <>Rozwijamy kolekcje tak, aby obok popularnych motywów było w nich miejsce na nowe style i niezależne ilustracje. Zajrzyj do <Link href="/about/o-naszych-naklejkach">informacji o naszych naklejkach</Link>, poznaj proces i wybierz kierunek dla siebie.</> },
-      { title: "Naklejki do codziennych zastosowań", text: <>Naklejka może ozdobić laptop, telefon, notes, opakowanie prezentu, mebel lub kącik do pracy. W <Link href="/about/inspiracja-naklejkami">strefie inspiracji</Link> pokazujemy, jak wykorzystać je w domu, biurze i podczas tworzenia własnych projektów.</> },
-      { title: "Własny projekt i współpraca", text: <>Realizujemy pomysły klientów i rozmawiamy o kolekcjach z artystami, projektantami oraz firmami. Sprawdź, jak wygląda <Link href="/about/tworzenie-wlasnych-naklejek">tworzenie własnych naklejek</Link> albo przeczytaj o <Link href="/about/projektanci-naklejek">współpracy z projektantami</Link>.</> },
+      { title: "Od inspiracji do gotowej naklejki", text: <>Rozwijamy kolekcje tak, aby obok popularnych motywów było miejsce na nowe style, bardziej wyraziste ilustracje i unikatowe serie. Każdy wzór dobieramy tak, by łatwo pasował do laptopa, notesu, telefonu i codziennych rzeczy, które chcesz podkreślić własnym charakterem.</> },
+      { title: "Naklejki do codziennych zastosowań", text: <>Naklejka może ozdobić laptop, telefon, notes, opakowanie prezentu, mebel lub kącik do pracy. Wystarczy dobrze dopasować wzór i rozmiar do powierzchni, aby całość wyglądała schludnie i od razu przykuwała uwagę.</> },
+      { title: "Własny projekt i współpraca", text: <>Realizujemy pomysły klientów i współpracujemy z twórcami, projektantami oraz firmami. Jeśli masz pomysł na grafikę, możemy go przenieść w gotowy materiał do druku i dopasować do Twojego stylu lub marki.</> },
     ],
   },
   inspiration: {
@@ -69,7 +69,7 @@ const content = {
     sections: [
       { title: "Naklejki na laptopa i telefon", text: <>Połącz kilka mniejszych wzorów lub wybierz jedną wyrazistą ilustrację. To szybka dekoracja sprzętu, która pozwala pokazać zainteresowania bez wymiany całego etui czy obudowy.</> },
       { title: "Dekoracje do domu i biura", text: <>Naklejki mogą uzupełnić pudełka, notesy, meble i akcesoria na biurku. Wybierz spójną paletę albo zbuduj kolekcję kontrastujących motywów, aby nadać przestrzeni bardziej osobisty charakter.</> },
-      { title: "Własny styl zamiast gotowego schematu", text: <>Inspiracji szukaj w ulubionych kolorach, naturze, popkulturze i codziennych rytuałach. Gotowe wzory znajdziesz w <Link href="/sklep">sklepie</Link>, a własny pomysł możesz rozwinąć na stronie <Link href="/about/tworzenie-wlasnych-naklejek">personalizowanych naklejek</Link>.</> },
+      { title: "Własny styl zamiast gotowego schematu", text: <>Inspiracji szukaj w ulubionych kolorach, naturze, popkulturze i codziennych rytuałach. W sklepie znajdziesz gotowe wzory, a jeśli wolisz coś bardziej osobistego, możesz od razu zaproponować własny pomysł przy tworzeniu naklejki.</> },
     ],
   },
   custom: {
@@ -79,7 +79,7 @@ const content = {
     sections: [
       { title: "Jak przygotować projekt naklejki?", text: <>Wybierz wyraźny plik i zastanów się, gdzie naklejka będzie używana. W wiadomości opisz preferowany rozmiar, kształt, kolorystykę i liczbę sztuk. Im więcej szczegółów znamy, tym łatwiej dopasować projekt do Twojej wizji.</> },
       { title: "Naklejki ze zdjęć, ilustracji i logo", text: <>Personalizowane naklejki sprawdzą się jako prezent, oznaczenie produktów, dodatek do paczek i element identyfikacji wizualnej. Mogą przedstawiać osobę, zwierzę, postać, grafikę lub znak Twojej firmy.</> },
-      { title: "Porozmawiajmy o Twoim pomyśle", text: <>Przeczytaj więcej o <Link href="/about/projektanci-naklejek">współpracy z artystami i firmami</Link> albo napisz przez <Link href="/kontakt">formularz kontaktowy</Link>. Gotowe kolekcje możesz obejrzeć w <Link href="/sklep">sklepie Stickerka.pl</Link>.</> },
+      { title: "Porozmawiajmy o Twoim pomyśle", text: <>Jeśli masz pomysł na własną grafikę, napisz przez <Link href="/contact">formularz kontaktowy</Link>. Chętnie doradzimy, jak dopasować projekt do rozmiaru, materiału i miejsca zastosowania.</> },
     ],
   },
   designers: {
@@ -89,7 +89,7 @@ const content = {
     sections: [
       { title: "Dla artystów i projektantów", text: <>Możemy wspólnie opracować serię wzorów, ustalić kierunek kolekcji i przygotować naklejki gotowe do sprzedaży lub promocji twórczości. Liczy się charakter projektu, jakość wykonania i dobra komunikacja.</> },
       { title: "Naklejki reklamowe dla firm", text: <>Naklejki z logo, hasłem lub ilustracją marki są praktycznym dodatkiem do paczek, eventów i kampanii. Pomagają zwiększyć rozpoznawalność firmy, a klient może wykorzystać je później na własnych przedmiotach.</> },
-      { title: "Następny krok", text: <>Opisz zakres projektu, planowaną liczbę naklejek i termin realizacji na stronie <Link href="/kontakt">kontaktu</Link>. Jeśli szukasz gotowych inspiracji, sprawdź nasze <Link href="/sklep">kolekcje naklejek</Link> oraz stronę o <Link href="/about/tworzenie-wlasnych-naklejek">tworzeniu własnych wzorów</Link>.</> },
+      { title: "Następny krok", text: <>Opisz zakres projektu, planowaną liczbę naklejek i termin realizacji na stronie <Link href="/contact">kontaktu</Link>. Jeśli szukasz gotowych inspiracji, sprawdź naszą <Link href="/#gallery">galerię naklejek</Link> i zacznij od wzoru, który najlepiej oddaje Twój styl lub markę.</> },
     ],
   },
 } satisfies Record<SeoContentPage, { label: string; title: string; intro: React.ReactNode; sections: { title: string; text: React.ReactNode }[] }>;

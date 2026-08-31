@@ -58,9 +58,7 @@ export default function ImageThumbnail({
         </form>
       )} */}
       <Link
-        href={`/sklep/${product.categories[0]}/${polishToEnglish(
-          product.title
-        )}`}
+        href="/#gallery"
         title={`Zobacz produkt ${product.title}`}
         className="relative group duration-500 overflow-hidden"
       >

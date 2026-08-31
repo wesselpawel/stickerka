@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { lineTotalPln } from "@/lib/stickerPricing.js";
+import { DEFAULT_STICKER_SIZE, lineTotalPln } from "@/lib/stickerPricing.js";
 
 /** Unique key per cart line (custom uploads never merge across different files). */
 function cartLineKey(item) {
   if (item.customStickerId) return `c:${item.customStickerId}`;
-  return `p:${item.title}|${item.paperType || "normal"}`;
+  const size = item?.size || item?.stickerSize || DEFAULT_STICKER_SIZE;
+  return `p:${item.title}|${item.paperType || "normal"}|${size}`;
 }
 
 const initialState = {
@@ -28,12 +29,15 @@ export const shopSlice = createSlice({
       if (idx >= 0) {
         const q = Number(state.cart[idx].quantity) + Number(p.quantity);
         state.cart[idx].quantity = q;
-        state.cart[idx].price = lineTotalPln(q);
+        state.cart[idx].size = state.cart[idx].size || p.size || DEFAULT_STICKER_SIZE;
+        state.cart[idx].price = lineTotalPln(q, state.cart[idx].size || DEFAULT_STICKER_SIZE);
       } else {
+        const size = p.size || p.stickerSize || DEFAULT_STICKER_SIZE;
         state.cart.push({
           ...p,
+          size,
           quantity: Number(p.quantity),
-          price: lineTotalPln(p.quantity),
+          price: lineTotalPln(p.quantity, size),
         });
       }
       localStorage.setItem("cart", JSON.stringify(state.cart));
@@ -50,7 +54,8 @@ export const shopSlice = createSlice({
           state.cart = Array.isArray(parsed)
             ? parsed.map((item) => {
                 const q = Math.max(1, Math.floor(Number(item.quantity) || 1));
-                return { ...item, quantity: q, price: lineTotalPln(q) };
+                const size = item?.size || item?.stickerSize || DEFAULT_STICKER_SIZE;
+                return { ...item, size, quantity: q, price: lineTotalPln(q, size) };
               })
             : [];
         } catch {

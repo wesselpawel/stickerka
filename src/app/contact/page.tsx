@@ -8,13 +8,6 @@ export const metadata: Metadata = {
   title: "Skontaktuj się z Stickerka.pl - Profesjonalna Obsługa Klienta",
   description:
     "Masz pytania, sugestie lub chcesz dowiedzieć się więcej? Skontaktuj się z naszym profesjonalnym zespołem obsługi klienta. Jesteśmy tutaj, aby sprostać Twoim oczekiwaniom i odpowiedzieć na wszelkie pytania dotyczące naszych produktów i usług. Znajdź nasze dane kontaktowe oraz godziny pracy. Czekamy na Twój telefon lub e-mail!",
-  icons: [
-    {
-      url: "/favicon.ico",
-      sizes: "48x48",
-      type: "image/x-icon",
-    },
-  ],
 };
 export default function Page() {
   return (
@@ -56,11 +49,11 @@ export default function Page() {
         <FaArrowRightLong className="ml-3 h-6 w-8" />
       </Link>
       <Link
-        href="/sklep"
+        href="/#gallery"
         className="p-4 font-bold text-4xl flex flex-row items-center justify-center w-full bg-[#F7A4F2] rounded-3xl text-center mb-12 hover:bg-[#f7a4f2b4] duration-300"
         title="Wszystkie nasze naklejki"
       >
-        Zajrzyj do sklepu
+        Zajrzyj do galerii
         <FaShoppingCart className="ml-3 h-6 w-8" />
       </Link>
     </>

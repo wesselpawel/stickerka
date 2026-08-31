@@ -52,6 +52,25 @@ export default function Header() {
     };
   }, [aboutOpen]);
 
+  useEffect(() => {
+    if (!isMenuShow) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuShow(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isMenuShow]);
+
+  useEffect(() => {
+    if (!isMenuShow) return;
+    const onPointerDown = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node;
+      // Close if clicking outside the menu button area
+      if (!target) setMenuShow(false);
+    };
+    // Only for desktop, use outside click detection via Escape
+  }, [isMenuShow]);
+
   return (
     <>
       <Cart
@@ -89,7 +108,7 @@ export default function Header() {
           </pre>
             
 
-          {/* Mobile cart button (left of hamburger) */}
+          {/* Desktop and mobile controls */}
           <div className="flex flex-row items-center gap-2">
             <button
               type="button"
@@ -160,35 +179,7 @@ export default function Header() {
               Czytaj o nas
             </Link>
             <Link
-              href="/about/o-naszych-naklejkach"
-              onClick={() => setMenuShow(false)}
-              className="rounded-xl bg-chill-ink/0 px-3 py-2 text-base font-medium text-chill-sand/95 hover:bg-chill-sage-dark/15 hover:text-chill-cream"
-            >
-              Nasze naklejki
-            </Link>
-            <Link
-              href="/about/inspiracja-naklejkami"
-              onClick={() => setMenuShow(false)}
-              className="rounded-xl bg-chill-ink/0 px-3 py-2 text-base font-medium text-chill-sand/95 hover:bg-chill-sage-dark/15 hover:text-chill-cream"
-            >
-              Inspiracja naklejkami
-            </Link>
-            <Link
-              href="/about/tworzenie-wlasnych-naklejek"
-              onClick={() => setMenuShow(false)}
-              className="rounded-xl bg-chill-ink/0 px-3 py-2 text-base font-medium text-chill-sand/95 hover:bg-chill-sage-dark/15 hover:text-chill-cream"
-            >
-              Tworzenie własnych naklejek
-            </Link>
-            <Link
-              href="/about/projektanci-naklejek"
-              onClick={() => setMenuShow(false)}
-              className="rounded-xl bg-chill-ink/0 px-3 py-2 text-base font-medium text-chill-sand/95 hover:bg-chill-sage-dark/15 hover:text-chill-cream"
-            >
-              Współpraca
-            </Link>
-            <Link
-              href="/kontakt"
+              href="/contact"
               onClick={() => setMenuShow(false)}
               className="rounded-xl bg-chill-ink/0 px-3 py-2 text-base font-medium text-chill-sand/95 hover:bg-chill-sage-dark/15 hover:text-chill-cream"
             >
@@ -217,6 +208,41 @@ export default function Header() {
             <FaCartShopping className="text-2xl" />
             <span className="font-semibold">Koszyk</span>
           </button>
+        </div>
+      </div>
+
+      {/* Desktop menu: positioned dropdown from hamburger */}
+      <div
+        className={`hidden md:block fixed top-14 right-3 z-[6000] 
+          transform transition-all duration-300 ease-out origin-top-right
+          ${isMenuShow ? "scale-100 opacity-100 pointer-events-auto" : "scale-95 opacity-0 pointer-events-none"}`}
+        aria-hidden={!isMenuShow}
+        id="desktop-nav"
+      >
+        <div className="mt-2 w-56 rounded-2xl border border-chill-line/60 bg-chill-ink/95 backdrop-blur-md shadow-xl shadow-black/40 overflow-hidden">
+          <div className="flex flex-col">
+            <Link
+              href="/"
+              onClick={() => setMenuShow(false)}
+              className="px-6 py-4 text-base font-medium text-chill-sand/95 hover:bg-chill-sage/20 hover:text-chill-cream transition-colors border-b border-chill-line/40"
+            >
+              Strona główna
+            </Link>
+            <Link
+              href="/about/"
+              onClick={() => setMenuShow(false)}
+              className="px-6 py-4 text-base font-medium text-chill-sand/95 hover:bg-chill-sage/20 hover:text-chill-cream transition-colors border-b border-chill-line/40"
+            >
+              Czytaj o nas
+            </Link>
+            <Link
+              href="/contact"
+              onClick={() => setMenuShow(false)}
+              className="px-6 py-4 text-base font-medium text-chill-sand/95 hover:bg-chill-sage/20 hover:text-chill-cream transition-colors"
+            >
+              Kontakt
+            </Link>
+          </div>
         </div>
       </div>
       

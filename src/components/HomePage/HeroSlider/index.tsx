@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaPause, FaPlay } from "react-icons/fa";
+import CreateStickerPopup from "@/components/CreateStickerPopup";
 
 type HeroSlide = {
   id: number;
@@ -21,7 +21,7 @@ const heroSlides: HeroSlide[] = [
     title: "Znajdź wzór, który pasuje do Ciebie",
     description: "Ponad 2000 autorskich naklejek do kolekcjonowania od jednej sztuki.",
     imageAlt: "Kolekcja kolorowych naklejek Stickerka",
-    link: { href: "/sklep", title: "Przejdź do sklepu" },
+    link: { href: "/", title: "Do sklepu" },
   },
   {
     id: 1,
@@ -29,7 +29,7 @@ const heroSlides: HeroSlide[] = [
     title: "Mała, średnia czy duża?",
     description: "Wybierz format dopasowany do laptopa, telefonu, mebla albo ściany.",
     imageAlt: "Naklejka Stickerka w różnych rozmiarach",
-    sizes: ["Mała · 6 cm", "Średnia · 8 cm", "Duża · 14 cm"],
+    sizes: ["Mała · 6 cm", "Średnia · 10 cm", "Duża · 14 cm"],
   },
   {
     id: 2,
@@ -37,7 +37,7 @@ const heroSlides: HeroSlide[] = [
     title: "Pobudź kreatywność",
     description: "Masz własny projekt? Opowiedz nam o nim, a wspólnie zamienimy go w naklejkę.",
     imageAlt: "Kreatywna ilustracja na naklejce",
-    link: { href: "/kontakt", title: "Opowiedz o projekcie" },
+    link: { href: "/", title: "Stwórz własną naklejkę" },
   },
   {
     id: 3,
@@ -45,7 +45,7 @@ const heroSlides: HeroSlide[] = [
     title: "Dodaj blasku swojemu wzorowi",
     description: "Wybierz zwykły, złoty, srebrny albo holograficzny papier i pokaż swój styl.",
     imageAlt: "Holograficzna naklejka Stickerka",
-    link: { href: "/about/o-naszych-naklejkach", title: "Poznaj materiały" },
+    link: { href: "/", title: "Zamów teraz" },
   },
   {
     id: 4,
@@ -53,7 +53,7 @@ const heroSlides: HeroSlide[] = [
     title: "Zacznij od jednej naklejki",
     description: "Każdy wzór wycinamy ręcznie, więc możesz testować, mieszać i kolekcjonować po swojemu.",
     imageAlt: "Ręcznie wycinana naklejka Stickerka",
-    link: { href: "/sklep", title: "Zobacz wzory" },
+    link: { href: "/", title: "Zobacz wzory" },
   },
   {
     id: 5,
@@ -61,13 +61,14 @@ const heroSlides: HeroSlide[] = [
     title: "Udekoruj przedmioty",
     description: "Ożyw laptop, telefon, biurko, meble albo pokój jednym charakterystycznym detalem.",
     imageAlt: "Naklejka użyta do dekoracji przedmiotu",
-    link: { href: "/about/inspiracja-naklejkami", title: "Zobacz inspiracje" },
+    link: { href: "/", title: "Sprawdź naklejki" },
   },
 ];
 
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [createStickerOpen, setCreateStickerOpen] = useState(false);
 
   const goToSlide = useCallback((slideIndex: number) => {
     setCurrentSlide((slideIndex + heroSlides.length) % heroSlides.length);
@@ -89,15 +90,33 @@ export default function HeroSlider() {
 
   const activeSlide = heroSlides[currentSlide];
 
+  const handlePrimaryAction = () => {
+    if (activeSlide.id === 2) {
+      setCreateStickerOpen(true);
+      return;
+    }
+
+    document.getElementById("gallery")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   return (
-    <section
-      aria-label="Najważniejsze informacje o Stickerka"
-      className="relative aspect-[4/5] min-h-[34rem] w-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-chill-sand shadow-2xl shadow-black/30 sm:aspect-[16/11] sm:min-h-0 lg:aspect-[16/8]"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocus={() => setIsPaused(true)}
-      onBlur={() => setIsPaused(false)}
-    >
+    <>
+      <CreateStickerPopup
+        open={createStickerOpen}
+        onOpenChange={setCreateStickerOpen}
+      />
+
+      <section
+        aria-label="Najważniejsze informacje o Stickerka"
+        className="relative aspect-[4/5] min-h-[34rem] w-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-chill-sand shadow-2xl shadow-black/30 sm:aspect-[16/11] sm:min-h-0 lg:aspect-[16/8]"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onFocus={() => setIsPaused(true)}
+        onBlur={() => setIsPaused(false)}
+      >
       <Image
         key={activeSlide.id}
         src={`/sliderImages/${activeSlide.id}.webp`}
@@ -132,9 +151,14 @@ export default function HeroSlider() {
           </div>
         )}
         {activeSlide.link && (
-          <Link href={activeSlide.link.href} className="mt-5 inline-flex items-center rounded-full bg-chill-sage px-5 py-3 text-sm font-bold text-chill-cream transition hover:bg-white hover:text-chill-cream sm:text-base">
-            {activeSlide.link.title}<FaArrowRight className="ml-2 h-3 w-3" />
-          </Link>
+          <button
+            type="button"
+            onClick={handlePrimaryAction}
+            className="mt-5 inline-flex items-center rounded-full bg-chill-sage px-5 py-3 text-sm font-bold text-chill-cream transition hover:bg-white hover:text-chill-cream sm:text-base"
+          >
+            {activeSlide.link.title}
+            <FaArrowRight className="ml-2 h-3 w-3" />
+          </button>
         )}
       </div>
       <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between sm:bottom-6 sm:left-8 sm:right-8 lg:left-12 lg:right-12">
@@ -155,7 +179,8 @@ export default function HeroSlider() {
           <button type="button" onClick={goToPreviousSlide} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20" aria-label="Poprzedni slajd"><FaArrowLeft /></button>
           <button type="button" onClick={goToNextSlide} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20" aria-label="Następny slajd"><FaArrowRight /></button>
         </div>
-      </div>
-    </section>
+        </div>
+      </section>
+    </>
   );
 }

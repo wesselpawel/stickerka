@@ -191,7 +191,7 @@ export default function HomeTagFilters({
           </div>
         </div>
 
-        <div ref={galleryRef} className="mt-3 scroll-mt-[167px] md:scroll-mt-[203px]">
+        <div id="gallery" ref={galleryRef} className="mt-3 scroll-mt-[167px] md:scroll-mt-[203px]">
           {filteredItems.length > 0 ? (
             <HomeStickerGrid items={filteredItems} />
           ) : (

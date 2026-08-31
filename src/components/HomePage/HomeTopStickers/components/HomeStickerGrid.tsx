@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setCart } from "@/redux/slices/shopSlice";
 import { getPolishCurrency } from "@/lib/getPolishCurrency";
 import { getPrice } from "@/lib/getStickerPrice";
+import { getStickerPriceBySize } from "@/lib/stickerPricing.js";
 import { removeNumbersFromString } from "@/lib/removeNumbersFromString";
 import StickerTile from "./StickerTile";
 import Masonry from "react-masonry-css";
@@ -30,12 +31,16 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
   const [quantity, setQuantity] = useState(1);
   const [justAdded, setJustAdded] = useState(false);
   const [stickerSize, setStickerSize] = useState<"sticker-s" | "sticker-m" | "sticker-l">("sticker-m");
+  const [imageLoading, setImageLoading] = useState(true);
+
+  const unitPrice = useMemo(() => getStickerPriceBySize(stickerSize), [stickerSize]);
 
   const openModal = useCallback((s: HomeSticker) => {
     setSelected(s);
     setQuantity(1);
     setJustAdded(false);
     setStickerSize("sticker-m");
+    setImageLoading(true);
   }, []);
 
   const handleDialogClose = useCallback(() => {
@@ -54,15 +59,15 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
     }
   }, [selected]);
 
-  const lineTotal = selected ? getPrice(quantity).sumAfterDiscount : 0;
+  const lineTotal = selected ? getPrice(quantity, stickerSize).sumAfterDiscount : 0;
 
   const handleAddToCart = () => {
     if (!selected?.title) return;
     dispatch(
       setCart({
         ...selected,
-        // Single price/product mode: keep merge behavior consistent.
         paperType: "normal",
+        size: stickerSize,
         quantity,
         price: lineTotal,
       })
@@ -151,6 +156,20 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
                   sizes="(max-width: 640px) 100vw, 52vw"
                   className="object-cover"
                 />
+                
+                {/* Loader skeleton while image is loading */}
+                {img && imageLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-neutral-800/40 to-neutral-900/40 backdrop-blur-sm">
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="relative h-12 w-12">
+                        <div className="absolute inset-0 rounded-full border-4 border-neutral-700/50"></div>
+                        <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-cyan-400 border-r-cyan-400 animate-spin"></div>
+                      </div>
+                      <p className="text-sm font-medium text-neutral-300">Ładowanie...</p>
+                    </div>
+                  </div>
+                )}
+                
                 {img && (
                   <Image
                     src={img}
@@ -158,6 +177,7 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
                     fill
                     sizes="(max-width: 640px) 100vw, 52vw"
                     className={`sticker-image ${stickerSize}`}
+                    onLoadingComplete={() => setImageLoading(false)}
                   />
                 )}
               </div>
@@ -167,10 +187,10 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
                   <p className="sticker-control-label">Rozmiar</p>
                   <div className="sticker-size-options" role="group" aria-label="Rozmiar naklejki">
                     {[
-                      ["sticker-s", "Mała", "6 cm"],
-                      ["sticker-m", "Średnia", "10 cm"],
-                      ["sticker-l", "Duża", "14 cm"],
-                    ].map(([value, label, detail]) => (
+                      ["sticker-s", "Mała", "6 cm", 7.9],
+                      ["sticker-m", "Średnia", "10 cm", 12.9],
+                      ["sticker-l", "Duża", "14 cm", 15.9],
+                    ].map(([value, label, detail, price]) => (
                       <button
                         key={value}
                         type="button"
@@ -180,6 +200,7 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
                       >
                         <span>{label}</span>
                         <small>{detail}</small>
+                        <small className="mt-1 font-semibold text-cyan-100">{getPolishCurrency(Number(price))}</small>
                       </button>
                     ))}
                   </div>
@@ -224,9 +245,16 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
                     </div>
                     </div>
 
-                    <p className="sticker-total">
-                      Razem: {getPolishCurrency(lineTotal)}
-                    </p>
+                    <div className="rounded-2xl border border-chill-line/80 bg-white/5 p-3">
+                      <div className="flex items-center justify-between gap-3 text-sm text-neutral-200">
+                        <span>Cena jednostkowa</span>
+                        <span className="font-semibold text-white">{getPolishCurrency(unitPrice)}</span>
+                      </div>
+                      <div className="mt-2 flex items-center justify-between gap-3 text-sm text-neutral-200">
+                        <span>Łącznie</span>
+                        <span className="text-lg font-bold text-white">{getPolishCurrency(lineTotal)}</span>
+                      </div>
+                    </div>
 
                     <button
                       type="button"

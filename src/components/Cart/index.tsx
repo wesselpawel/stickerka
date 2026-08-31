@@ -149,7 +149,7 @@ export default function Cart({
                   <p className="mt-1 text-sm text-chill-muted">
                     {cartLinesLabel(cart.length)}
                     {" · "}
-                    20 zł/szt.
+                    ceny zależne od rozmiaru
                   </p>
                 )}
               </div>
@@ -183,8 +183,8 @@ export default function Cart({
                     const cat = item.categories?.[0];
                     const href =
                       cat && item.title && !item.isCustomSticker
-                        ? `/sklep/${polishToEnglish(cat)}/${polishToEnglish(item.title)}`
-                        : "/sklep";
+                        ? "/#gallery"
+                        : "/#gallery";
                     return (
                       <li
                         key={
@@ -291,11 +291,11 @@ export default function Cart({
                     Zamknij
                   </button>
                   <Link
-                    href="/sklep"
+                    href="/#gallery"
                     onClick={() => setCartOpen(false)}
                     className="flex w-full items-center justify-center rounded-2xl bg-chill-sage-dark px-5 py-3.5 text-center text-sm font-semibold text-white shadow-sm transition-colors hover:bg-chill-sage sm:w-auto sm:min-w-[160px]"
                   >
-                    Przeglądaj sklep
+                    Przeglądaj galerię
                   </Link>
                 </div>
               ) : (

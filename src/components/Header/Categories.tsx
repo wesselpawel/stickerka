@@ -1,5 +1,19 @@
 import Link from "next/link";
-import { categoriesArray } from "../categories";
+
+const categoriesArray = [
+  { h1: "Naklejki" },
+  { h1: "Holograficzne" },
+  { h1: "Złote" },
+  { h1: "Srebrne" },
+  { h1: "Kwiaty" },
+  { h1: "Dinozaury" },
+  { h1: "Anime" },
+  { h1: "Kuchnia" },
+  { h1: "Nowoczesne" },
+  { h1: "Dla dzieci" },
+  { h1: "Święta" },
+  { h1: "Własne projekty" },
+];
 
 export default function Categories({ setHovered }: { setHovered: any }) {
   return (
@@ -10,7 +24,7 @@ export default function Categories({ setHovered }: { setHovered: any }) {
         {categoriesArray.map((cat: any, i: any) => (
           <Link
             title={`Zobacz ${cat.h1.toLowerCase()}`}
-            href={`/sklep/${cat.category}`}
+            href="/#gallery"
             key={i}
             className={`${
               i === 0 ? "ml-3 mt-3" : ""

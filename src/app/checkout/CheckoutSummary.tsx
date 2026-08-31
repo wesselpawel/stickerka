@@ -122,7 +122,7 @@ export default function CheckoutSummary() {
             Dodaj naklejki w sklepie, a potem wróć tutaj, żeby dokończyć zamówienie.
           </p>
           <Link
-            href="/sklep"
+            href="/"
             className="mt-8 inline-flex min-h-[48px] items-center justify-center rounded-2xl bg-chill-sage-dark px-8 text-sm font-semibold text-white transition-colors hover:bg-chill-sage"
           >
             Przejdź do sklepu
@@ -135,7 +135,7 @@ export default function CheckoutSummary() {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-8 lg:pb-12">
       <nav className="text-xs text-chill-muted">
-        <Link href="/sklep" className="hover:text-chill-sage-dark">
+        <Link href="/" className="hover:text-chill-sage-dark">
           Sklep
         </Link>
         <span className="mx-2 text-chill-line">/</span>
@@ -223,23 +223,26 @@ export default function CheckoutSummary() {
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    {item.isCustomSticker ? (
-                      <p className="font-semibold text-zinc-900">
+
+
+                    
+                      <p
+                        className="font-semibold text-zinc-900"
+                        >
                         {removeNumbersFromString(item.title)}
                       </p>
-                    ) : (
-                      <Link
-                        href={`/sklep/${item.categories?.[0] ?? "wszystkie"}/${polishToEnglish(item.title)}`}
-                        className="font-semibold text-zinc-900 underline decoration-zinc-300 decoration-1 underline-offset-2 hover:text-chill-sage-dark"
-                      >
-                        {removeNumbersFromString(item.title)}
-                      </Link>
-                    )}
+                    
                     <p className="mt-1 text-sm text-zinc-600">
                       {item.quantity}×{" "}
                       {item.isCustomSticker
-                        ? "własna grafika · 20 zł/szt."
-                        : "20 zł/szt."}
+                        ? "własna grafika · 12,90 zł/szt."
+                        : `${
+                            item.size === "sticker-s"
+                              ? "7,90"
+                              : item.size === "sticker-l"
+                                ? "15,90"
+                                : "12,90"
+                          } zł/szt.`}
                     </p>
                   </div>
                   <div className="shrink-0 text-right">
