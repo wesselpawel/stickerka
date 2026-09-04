@@ -12,6 +12,7 @@ import { getCouponById } from "@/firebase";
 import { listOfPrizes } from "@/components/listOfPrizes";
 import { setPromotion } from "@/redux/slices/shopSlice";
 import { getFinalPrice } from "@/lib/getFinalPrice";
+import { lineTotalPln } from "@/lib/stickerPricing.js";
 
 const SHIPPING_PLN = 10;
 
@@ -25,6 +26,9 @@ export default function CheckoutSummary() {
   );
   const freeShipping = beforeDiscount >= 100;
   const totalWithShipping = freeShipping ? finalPrice : finalPrice + SHIPPING_PLN;
+  const beforeDiscountWithShipping = freeShipping
+    ? beforeDiscount
+    : beforeDiscount + SHIPPING_PLN;
 
   const [customerInfo, setCustomerInfo] = useState({
     firstName: "",
@@ -160,7 +164,7 @@ export default function CheckoutSummary() {
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               {promotion !== -1 && message === "Kod aktywny" && (
                 <span className="text-2xl font-semibold text-zinc-400 line-through decoration-zinc-400 md:text-3xl">
-                  {getPolishCurrency(beforeDiscount)}
+                  {getPolishCurrency(beforeDiscountWithShipping)}
                 </span>
               )}
               <span className="font-display text-3xl font-semibold text-zinc-900 md:text-4xl">
@@ -201,6 +205,20 @@ export default function CheckoutSummary() {
               </div>
             )}
 
+            {freeShipping && (
+              <div className="mt-3 rounded-2xl border border-chill-sage/30 bg-chill-sage/10 px-4 py-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-chill-sage-dark">
+                  Zniżka
+                </p>
+                <p className="mt-1 text-sm text-zinc-800">
+                  <span className="font-medium">Darmowa wysyłka</span>
+                  <span className="ml-2 font-semibold text-chill-sage-dark">
+                    −{getPolishCurrency(SHIPPING_PLN)}
+                  </span>
+                </p>
+              </div>
+            )}
+
             <div className="mt-8 space-y-0 divide-y divide-zinc-200">
               {cart.map((item: any, i: number) => (
                 <div
@@ -235,19 +253,22 @@ export default function CheckoutSummary() {
                     <p className="mt-1 text-sm text-zinc-600">
                       {item.quantity}×{" "}
                       {item.isCustomSticker
-                        ? "własna grafika · 12,90 zł/szt."
-                        : `${
-                            item.size === "sticker-s"
-                              ? "7,90"
-                              : item.size === "sticker-l"
-                                ? "15,90"
-                                : "12,90"
-                          } zł/szt.`}
+                        ? `własna grafika · ${getPolishCurrency(
+                            lineTotalPln(1, item.size || item.stickerSize)
+                          )}/szt.`
+                        : `${getPolishCurrency(
+                            lineTotalPln(1, item.size || item.stickerSize)
+                          )}/szt.`}
                     </p>
                   </div>
                   <div className="shrink-0 text-right">
                     <p className="font-semibold tabular-nums text-zinc-900">
-                      {getPolishCurrency(item.price)}
+                      {getPolishCurrency(
+                        lineTotalPln(
+                          item.quantity,
+                          item.size || item.stickerSize
+                        )
+                      )}
                     </p>
                   </div>
                 </div>

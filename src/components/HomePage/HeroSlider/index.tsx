@@ -3,11 +3,11 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaPause, FaPlay } from "react-icons/fa";
 import CreateStickerPopup from "@/components/CreateStickerPopup";
-import sliderImage0 from "../../../../public/sliderImages/0.webp";
-import sliderImage1 from "../../../../public/sliderImages/1.webp";
-import sliderImage2 from "../../../../public/sliderImages/2.webp";
-import sliderImage3 from "../../../../public/sliderImages/3.webp";
-import sliderImage4 from "../../../../public/sliderImages/4.webp";
+import sliderImage0 from "../../../../public/sliderImages/silver.webp";
+import sliderImage1 from "../../../../public/sliderImages/4.webp";
+import sliderImage2 from "../../../../public/sliderImages/3.webp";
+import sliderImage3 from "../../../../public/sliderImages/2.webp";
+import sliderImage4 from "../../../../public/sliderImages/1.webp";
 import sliderImage5 from "../../../../public/sliderImages/5.webp";
 
 const sliderImages = [
@@ -32,52 +32,53 @@ type HeroSlide = {
 const heroSlides: HeroSlide[] = [
   {
     id: 0,
-    eyebrow: "Kolekcja Stickerka",
-    title: "Znajdź wzór, który pasuje do Ciebie",
-    description: "Ponad 2000 autorskich naklejek do kolekcjonowania od jednej sztuki.",
-    imageAlt: "Kolekcja kolorowych naklejek Stickerka",
-    link: { href: "/", title: "Do sklepu" },
+    eyebrow: "NAJWIĘKSZA KOLEKCJA W POLSCE",
+    title: "Znajdź wzór na wszystko. Od 1 sztuki!",
+    description: "Unikalne, gotowe naklejki na Twoje przedmioty. Bez minimum logistycznego.",
+    imageAlt: "Kolekcja naklejek Stickerka",
+    link: { href: "/", title: "Przeglądaj gotowe wzory" },
   },
   {
     id: 1,
+    eyebrow: "NOWOŚĆ! ZAMAWIAJ ZE ZDJĘCIA",
+    title: "Zamień każde zdjęcie w naklejkę!",
+    description: "Zrób zdjęcie (kotu, psu, zachodowi słońca), wgraj je i stwórz własny, niepowtarzalny pakiet naklejek w 3 minuty.",
+    imageAlt: "Kreatywna ilustracja na naklejce",
+    link: { href: "/", title: "Zamów naklejki ze zdjęcia" },
+  },
+  {
+    id: 2,
     eyebrow: "Trzy rozmiary",
     title: "Mała, średnia czy duża?",
     description: "Wybierz format dopasowany do laptopa, telefonu, mebla albo ściany.",
     imageAlt: "Naklejka Stickerka w różnych rozmiarach",
-    sizes: ["Mała · 6 cm", "Średnia · 10 cm", "Duża · 14 cm"],
+    sizes: ["Mała · 6 cm · 3,99zł", "Średnia · 10 cm · 6,99zł", "Duża · 14 cm · 9,99zł"],
+    link: { href: "/", title: "Pokaż naklejki" },
   },
-  {
-    id: 2,
-    eyebrow: "Twój pomysł",
-    title: "Pobudź kreatywność",
-    description: "Masz własny projekt? Opowiedz nam o nim, a wspólnie zamienimy go w naklejkę.",
-    imageAlt: "Kreatywna ilustracja na naklejce",
-    link: { href: "/", title: "Stwórz własną naklejkę" },
-  },
-  {
-    id: 3,
-    eyebrow: "Wykończenia",
-    title: "Dodaj blasku swojemu wzorowi",
-    description: "Wybierz zwykły, złoty, srebrny albo holograficzny papier i pokaż swój styl.",
-    imageAlt: "Holograficzna naklejka Stickerka",
-    link: { href: "/", title: "Zamów teraz" },
-  },
-  {
-    id: 4,
-    eyebrow: "Bez minimum zamówienia",
-    title: "Zacznij od jednej naklejki",
-    description: "Każdy wzór wycinamy ręcznie, więc możesz testować, mieszać i kolekcjonować po swojemu.",
-    imageAlt: "Ręcznie wycinana naklejka Stickerka",
-    link: { href: "/", title: "Zobacz wzory" },
-  },
-  {
-    id: 5,
-    eyebrow: "Pomysły na co dzień",
-    title: "Udekoruj przedmioty",
-    description: "Ożyw laptop, telefon, biurko, meble albo pokój jednym charakterystycznym detalem.",
-    imageAlt: "Naklejka użyta do dekoracji przedmiotu",
-    link: { href: "/", title: "Sprawdź naklejki" },
-  },
+  // {
+  //   id: 3,
+  //   eyebrow: "Wykończenia",
+  //   title: "Dodaj blasku swojemu wzorowi",
+  //   description: "Wybierz zwykły, złoty, srebrny albo holograficzny papier i pokaż swój styl.",
+  //   imageAlt: "Holograficzna naklejka Stickerka",
+  //   link: { href: "/", title: "Zamów teraz" },
+  // },
+  // {
+  //   id: 4,
+  //   eyebrow: "Bez minimum zamówienia",
+  //   title: "Zacznij od jednej naklejki",
+  //   description: "Każdy wzór wycinamy ręcznie, więc możesz testować, mieszać i kolekcjonować po swojemu.",
+  //   imageAlt: "Ręcznie wycinana naklejka Stickerka",
+  //   link: { href: "/", title: "Zobacz wzory" },
+  // },
+  // {
+  //   id: 5,
+  //   eyebrow: "Pomysły na co dzień",
+  //   title: "Udekoruj przedmioty",
+  //   description: "Ożyw laptop, telefon, biurko, meble albo pokój jednym charakterystycznym detalem.",
+  //   imageAlt: "Naklejka użyta do dekoracji przedmiotu",
+  //   link: { href: "/", title: "Sprawdź naklejki" },
+  // },
 ];
 
 export default function HeroSlider() {
@@ -106,7 +107,7 @@ export default function HeroSlider() {
   const activeSlide = heroSlides[currentSlide];
 
   const handlePrimaryAction = () => {
-    if (activeSlide.id === 2) {
+    if (activeSlide.id === 1) {
       setCreateStickerOpen(true);
       return;
     }
@@ -144,17 +145,17 @@ export default function HeroSlider() {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
       <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4 sm:p-6">
-        <span className="rounded-full border border-white/20 bg-black/25 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm">
+        {/* <span className="rounded-full border border-white/20 bg-black/25 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm">
           {String(activeSlide.id + 1).padStart(2, "0")} / {String(heroSlides.length).padStart(2, "0")}
-        </span>
-        <button
+        </span> */}
+        {/* <button
           type="button"
           onClick={() => setIsPaused((paused) => !paused)}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20"
           aria-label={isPaused ? "Wznów prezentację" : "Zatrzymaj prezentację"}
         >
           {isPaused ? <FaPlay className="h-3 w-3" /> : <FaPause className="h-3 w-3" />}
-        </button>
+        </button> */}
       </div>
       <div className="absolute inset-x-4 bottom-16 z-10 max-w-xl text-white sm:inset-x-8 sm:bottom-20 lg:inset-x-12 lg:bottom-24">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-chill-sage sm:text-sm">{activeSlide.eyebrow}</p>

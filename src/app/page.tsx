@@ -51,7 +51,7 @@ export default async function Page({
        <HomeStickerTypes />
       <div className="">
         <div className="relative w-full">
-          <div className="p-6 lg:p-24 lg:py-8">
+          <div className="p-6 lg:p-16 xl:px-48 2xl:px-60 lg:py-8">
           <HeroSlider/>
           </div>
           <HomeTagFilters products={safeHomeStickers} />

@@ -37,7 +37,7 @@
     overflow: hidden;
   }
   dialog.create-sticker-dialog {
-    width: min(calc(100vw - 1.5rem), 28rem);
+    width: min(calc(100vw - 1.5rem), 58rem);
     max-height: min(92dvh, 44rem);
   }
   dialog.sticker-quick-buy::backdrop,
@@ -55,6 +55,27 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .contact-input {
+    width: 100%;
+    border: 1px solid #d8e1d9;
+    border-radius: 0.8rem;
+    background: #fbfcf8;
+    padding: 0.8rem 0.95rem;
+    color: #24342f;
+    outline: none;
+    transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  }
+
+  .contact-input::placeholder {
+    color: #91a098;
+  }
+
+  .contact-input:focus {
+    border-color: #5e9d7d;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgb(94 157 125 / 0.14);
   }
 }
 .line {
@@ -189,6 +210,13 @@
   padding: 1rem 0;
 }
 
+.sticker-create-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+  gap: 1.5rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
 .sticker-control-label {
   margin-bottom: 0.65rem;
   color: rgb(234 251 255 / 0.58);
@@ -206,10 +234,10 @@
 
 .sticker-size-option {
   display: flex;
-  min-height: 4.25rem;
   flex-direction: column;
   justify-content: center;
   gap: 0.15rem;
+  padding:4px 0px;
   border: 1px solid rgb(234 251 255 / 0.16);
   border-radius: 0.75rem;
   background: rgb(255 255 255 / 0.04);
@@ -338,7 +366,8 @@
 }
 
 @media (max-width: 700px) {
-  .sticker-quick-buy-body {
+  .sticker-quick-buy-body,
+  .sticker-create-body {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }

@@ -185,12 +185,11 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
 
               <div className="sticker-quick-buy-controls">
                 <div>
-                  <p className="sticker-control-label">Rozmiar</p>
                   <div className="sticker-size-options" role="group" aria-label="Rozmiar naklejki">
                     {[
-                      ["sticker-s", "Mała", "6 cm", 7.9],
-                      ["sticker-m", "Średnia", "10 cm", 12.9],
-                      ["sticker-l", "Duża", "14 cm", 15.9],
+                      ["sticker-s", "Mała", "6 cm", 3.99],
+                      ["sticker-m", "Średnia", "10 cm", 7],
+                      ["sticker-l", "Duża", "14 cm", 9],
                     ].map(([value, label, detail, price]) => (
                       <button
                         key={value}
@@ -201,7 +200,7 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
                       >
                         <span>{label}</span>
                         <small>{detail}</small>
-                        <small className="mt-1 font-semibold text-cyan-100">{getPolishCurrency(Number(price))}</small>
+                        
                       </button>
                     ))}
                   </div>
@@ -210,7 +209,6 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
                 {!justAdded && (
                   <>
                     <div>
-                      <p className="sticker-control-label">Ilość</p>
                     <div className="flex items-center justify-center gap-2">
                       <button
                         type="button"
@@ -246,16 +244,7 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
                     </div>
                     </div>
 
-                    <div className="rounded-2xl border border-chill-line/80 bg-white/5 p-3">
-                      <div className="flex items-center justify-between gap-3 text-sm text-neutral-200">
-                        <span>Cena jednostkowa</span>
-                        <span className="font-semibold text-white">{getPolishCurrency(unitPrice)}</span>
-                      </div>
-                      <div className="mt-2 flex items-center justify-between gap-3 text-sm text-neutral-200">
-                        <span>Łącznie</span>
-                        <span className="text-lg font-bold text-white">{getPolishCurrency(lineTotal)}</span>
-                      </div>
-                    </div>
+                    
 
                     <button
                       type="button"

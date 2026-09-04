@@ -2,16 +2,22 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import Image from "next/image";
 import { v4 as uuidv4 } from "uuid";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { registerCustomStickerUpload, storage } from "@/firebase";
 import { setCart } from "@/redux/slices/shopSlice";
 import { getPolishCurrency } from "@/lib/getPolishCurrency";
-import { getPrice } from "@/lib/getStickerPrice";
-import { STICKER_UNIT_PRICE_PLN } from "@/lib/stickerPricing.js";
+import { getPrice, getStickerPriceBySize, type Size } from "@/lib/getStickerPrice";
 import { toast } from "react-toastify";
+import deskBackground from "../../../public/desk.png";
 
 const MAX_BYTES = 15 * 1024 * 1024;
+const stickerSizes: { value: Size; label: string; detail: string }[] = [
+  { value: "sticker-s", label: "Mała", detail: "6,99 zł" },
+  { value: "sticker-m", label: "Średnia", detail: "9,99 zł" },
+  { value: "sticker-l", label: "Duża", detail: "12,99 zł" },
+];
 
 type Props = {
   open: boolean;
@@ -27,6 +33,7 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [stickerSize, setStickerSize] = useState<Size>("sticker-m");
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
@@ -51,6 +58,7 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
     if (!open) {
       setFile(null);
       setQuantity(1);
+      setStickerSize("sticker-m");
       setUploading(false);
       setError("");
       setPreviewUrl((prev) => {
@@ -87,7 +95,7 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
     setFile(f);
   };
 
-  const lineTotal = getPrice(quantity).sumAfterDiscount;
+  const lineTotal = getPrice(quantity, stickerSize).sumAfterDiscount;
 
   const addToCart = async () => {
     if (!file) {
@@ -135,7 +143,9 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
           image_source: downloadURL,
           image_thumbnail: downloadURL,
           paperType: "normal",
+          size: stickerSize,
           quantity,
+          price: lineTotal,
           originalFileName: file.name,
           firestoreUploadId: firestoreUploadId || undefined,
         })
@@ -163,36 +173,31 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
       aria-labelledby="create-sticker-title"
     >
       {open && (
-        <div className="flex max-h-[min(92dvh,44rem)] flex-col overflow-hidden">
-          <div className="sticky top-0 z-10 border-b border-chill-line bg-chill-cream/95 px-4 py-3 backdrop-blur sm:px-5">
-            <div className="flex items-start justify-between gap-3">
+        <div className="sticker-quick-buy-content">
+          <div className="sticker-quick-buy-header">
+            <div className="flex w-full items-start justify-between gap-3">
               <div>
                 <h2
                   id="create-sticker-title"
-                  className="font-display text-lg font-semibold text-chill-ink"
+                  className="text-xl font-bold leading-tight sm:text-2xl"
                 >
                   Stwórz naklejkę
                 </h2>
-                <p className="mt-0.5 text-xs text-chill-muted">
-                  Prześlij grafikę — drukujemy 1:1 (max 15 MB).{" "}
-                  <span className="font-semibold text-chill-ink">
-                    {STICKER_UNIT_PRICE_PLN} zł / szt.
-                  </span>
-                </p>
+                
               </div>
               <button
                 ref={closeBtnRef}
                 type="button"
                 onClick={() => dialogRef.current?.close()}
-                className="min-h-[40px] shrink-0 rounded-lg border border-chill-line bg-black px-3 text-sm font-medium text-chill-ink hover:bg-chill-sand"
+                className="sticker-quick-buy-close"
                 aria-label="Zamknij"
               >
-                Zamknij
+                ×
               </button>
             </div>
           </div>
 
-          <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3 sm:px-5">
+          <div className="sticker-create-body">
             <input
               ref={fileInputRef}
               type="file"
@@ -201,74 +206,69 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
               onChange={(e) => onPickFile(e.target.files?.[0] ?? null)}
             />
 
-            {!previewUrl ? (
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="flex min-h-[160px] w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-chill-line bg-chill-sand/30 px-4 py-8 text-center transition-colors hover:border-chill-sage hover:bg-chill-sand/50"
-              >
-                <span className="text-sm font-semibold text-chill-ink">
-                  Kliknij, aby wybrać obrazek
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="sticker-stage relative aspect-square overflow-hidden"
+              data-sticker-size={stickerSize}
+              aria-label={previewUrl ? "Zmień przesłaną grafikę" : "Prześlij grafikę"}
+            >
+              <Image alt="" src={deskBackground} fill sizes="(max-width: 700px) 100vw, 52vw" className="object-cover" />
+              <Image
+                src={previewUrl || "/questionMark.png"}
+                alt={previewUrl ? "Podgląd przesłanej grafiki" : "Miejsce na grafikę naklejki"}
+                fill
+                unoptimized={Boolean(previewUrl)}
+                sizes="(max-width: 700px) 100vw, 52vw"
+                className={`sticker-image ${stickerSize}`}
+              />
+              {!previewUrl && (
+                <span className="absolute inset-x-4 bottom-4 z-10 rounded-xl bg-black/75 px-4 py-3 text-center text-sm font-bold text-white shadow-lg">
+                  Kliknij, aby przesłać zdjęcie
                 </span>
-                <span className="mt-1 text-xs text-chill-muted">
-                  JPG, PNG, WebP… — zachowujemy jakość pliku do druku
-                </span>
-              </button>
-            ) : (
-              <div className="space-y-3">
-                <div className="relative mx-auto aspect-square w-full max-w-[min(260px,72vw)] overflow-hidden rounded-xl border border-chill-line bg-chill-sand/40">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={previewUrl}
-                    alt="Podgląd przesłanej grafiki"
-                    className="h-full w-full object-contain"
-                  />
+              )}
+            </button>
+
+            <div className="sticker-quick-buy-controls">
+              {previewUrl ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-cyan-100/65">Podgląd Twojej naklejki.</p>
+                  <div className="flex flex-wrap gap-2">
+                    <button type="button" onClick={() => fileInputRef.current?.click()} className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold text-white hover:bg-white/10">Zmień plik</button>
+                    <button type="button" onClick={() => { setFile(null); setPreviewUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; }); }} className="rounded-lg border border-transparent px-3 py-2 text-sm font-semibold text-cyan-100/65 underline-offset-4 hover:text-white hover:underline">Usuń</button>
+                  </div>
+                  {file && <p className="text-xs text-cyan-100/55">{file.name} · {(file.size / 1024 / 1024).toFixed(2)} MB</p>}
                 </div>
-                <div className="flex flex-wrap items-center justify-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="rounded-lg border border-chill-line bg-white px-3 py-2 text-sm font-medium text-black hover:text-chill-ink hover:bg-chill-sand"
-                  >
-                    Zmień plik
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setFile(null);
-                      setPreviewUrl((prev) => {
-                        if (prev) URL.revokeObjectURL(prev);
-                        return null;
-                      });
-                    }}
-                    className="rounded-lg border border-transparent px-3 py-2 text-sm font-medium text-chill-muted underline-offset-4 hover:text-chill-ink hover:underline"
-                  >
-                    Usuń
-                  </button>
+              ) : (
+                <div>
+                  <p className="sticker-control-label">Grafika naklejki</p>
+                  <p className="text-sm text-cyan-100/65">Prześlij zdjęcie, ilustrację lub logo.</p>
                 </div>
-                {file && (
-                  <p className="text-center text-xs text-chill-muted">
-                    {file.name} · {(file.size / 1024 / 1024).toFixed(2)} MB
-                  </p>
-                )}
+              )}
+
+              <div>
+                <div className="sticker-size-options" role="group" aria-label="Rozmiar naklejki">
+                  {stickerSizes.map(({ value, label, detail }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      className={`sticker-size-option ${stickerSize === value ? "is-selected" : ""}`}
+                      onClick={() => setStickerSize(value)}
+                      aria-pressed={stickerSize === value}
+                    >
+                      <span>{label}</span>
+                      <small>{detail}</small>
+                    </button>
+                  ))}
+                </div>
               </div>
-            )}
 
-            {error ? (
-              <p className="mt-3 text-center text-sm font-medium text-red-700" role="alert">
-                {error}
-              </p>
-            ) : null}
-          </div>
+              {error ? <p className="text-sm font-medium text-red-300" role="alert">{error}</p> : null}
 
-          <div className="sticky bottom-0 z-10 border-t border-chill-line bg-chill-cream/95 px-4 py-2.5 backdrop-blur sm:px-5">
-            <label htmlFor="create-sticker-qty" className="sr-only">
-              Ilość
-            </label>
             <div className="flex items-center justify-center gap-2">
               <button
                 type="button"
-                className="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-lg border border-chill-ink text-base font-bold"
+                className="sticker-quantity-button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 aria-label="Zmniejsz ilość"
               >
@@ -284,29 +284,28 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
                   const v = parseInt(e.target.value, 10);
                   if (!Number.isNaN(v) && v >= 1) setQuantity(v);
                 }}
-                className="bg-black min-h-[36px] w-14 rounded-lg border border-chill-line px-2 text-center text-base font-semibold"
+                className="sticker-quantity-input"
                 aria-label="Ilość sztuk"
               />
               <button
                 type="button"
-                className="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-lg border border-chill-ink text-base font-bold"
+                className="sticker-quantity-button"
                 onClick={() => setQuantity((q) => q + 1)}
                 aria-label="Zwiększ ilość"
               >
                 +
               </button>
             </div>
-            <p className="mt-1 text-center text-sm font-bold text-chill-ink">
-              Razem: {getPolishCurrency(lineTotal)}
-            </p>
+            
             <button
               type="button"
               disabled={!file || uploading}
               onClick={addToCart}
-              className="mt-2 min-h-[44px] w-full rounded-xl bg-chill-sage-dark py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-chill-sage disabled:cursor-not-allowed disabled:opacity-50"
+              className="sticker-add-button disabled:cursor-not-allowed disabled:opacity-50"
             >
               {uploading ? "Przesyłanie…" : "Dodaj do koszyka"}
             </button>
+            </div>
           </div>
         </div>
       )}

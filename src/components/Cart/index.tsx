@@ -237,22 +237,39 @@ export default function Cart({
                                     </span>{" "}
                                     {item.isCustomSticker ? (
                                       <>
+                                        <span className="text-chill-line"> · </span>
                                         grafika klienta
                                         <span className="text-chill-line"> · </span>
-                                        20 zł/szt.
+                                        {polishToEnglish(item.size)==="sticker-l" && "14cm szer."} {polishToEnglish(item.size)==="sticker-m" && "10cm szer."} {polishToEnglish(item.size)==="sticker-s" && "6cm szer."}
+                                        <span className="text-chill-line"> · </span>
+                                        {polishToEnglish(item.size)==="sticker-l" && "12,99 zł"} {polishToEnglish(item.size)==="sticker-m" && "9,99 zł"} {polishToEnglish(item.size)==="sticker-s" && "6,99 zł"}
+                                        /szt.
                                       </>
                                     ) : (
                                       <>
-                                        {paperLabel(item.paperType || "normal")}
+                                        {/* Naklejka Rozmiar  */}
                                         <span className="text-chill-line"> · </span>
-                                        20 zł/szt.
+                                        naklejka
+                                        <span className="text-chill-line"> · </span>
+                                         {polishToEnglish(item.size)==="sticker-l" && "14cm szer."} {polishToEnglish(item.size)==="sticker-m" && "10cm szer."} {polishToEnglish(item.size)==="sticker-s" && "6cm szer."}
+                                        <span className="text-chill-line"> · </span>
+                                        {getPolishCurrency(
+                                          lineTotalPln(
+                                            1,
+                                            item.size || item.stickerSize
+                                          )
+                                        )}
+                                        /szt.
                                       </>
                                     )}
                                   </p>
                                 </div>
                                 <p className="shrink-0 font-display text-base font-semibold tabular-nums text-chill-ink sm:text-lg">
                                   {getPolishCurrency(
-                                    lineTotalPln(item.quantity)
+                                    lineTotalPln(
+                                      item.quantity,
+                                      item.size || item.stickerSize
+                                    )
                                   )}
                                 </p>
                               </div>

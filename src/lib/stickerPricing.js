@@ -1,8 +1,8 @@
 /** Sticker pricing by size, used across shop, cart and checkout. */
 export const STICKER_SIZE_PRICES = {
-  "sticker-s": 7.9,
-  "sticker-m": 12.9,
-  "sticker-l": 15.9,
+  "sticker-s": 6.99,
+  "sticker-m": 9.99,
+  "sticker-l": 12.99,
 };
 
 export const DEFAULT_STICKER_SIZE = "sticker-m";

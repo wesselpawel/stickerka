@@ -240,6 +240,18 @@ async function registerCustomStickerUpload({
   });
   return docRef.id;
 }
+
+async function addContactMessage(message) {
+  const docRef = await addDoc(collection(db, "contact_messages"), {
+    name: message.name,
+    email: message.email,
+    subject: message.subject || "Wiadomość z formularza kontaktowego",
+    message: message.message,
+    status: "unread",
+    createdAt: serverTimestamp(),
+  });
+  return docRef.id;
+}
 async function updateOrder(keys, values, id) {
   if (id == null || id === "") {
     throw new Error("updateOrder: missing order id");
@@ -414,5 +426,6 @@ export {
   updateOrder,
   incrementGoogleCounter,
   registerCustomStickerUpload,
+  addContactMessage,
   auth,
 };
