@@ -41,7 +41,7 @@ export default function HomeTopStickers({
   products: ReadonlyArray<Record<string, unknown>>;
 }) {
   const plain = products.map((p) => toStickerTileProps(p));
-  const items = shuffle(plain).slice(0, 20);
+  const items = shuffle(plain);
 
   return (
     <section className="border-b border-neutral-800 bg-black/40 text-neutral-100">
