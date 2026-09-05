@@ -35,7 +35,7 @@ const tagButtonClass = (isActive: boolean) =>
 
 export default function HomeTagFilters({
   products,
-  maxTags = 14,
+  maxTags,
 }: {
   products: ReadonlyArray<{
     id: string;
@@ -78,7 +78,7 @@ export default function HomeTagFilters({
     return tiles.filter((t) => (t.categories ?? []).includes(activeTag));
   }, [activeTag, tiles]);
 
-  const visibleTags = sortedTags.slice(0, maxTags);
+  const visibleTags = maxTags == null ? sortedTags : sortedTags.slice(0, maxTags);
 
   const updateScrollButtons = useCallback(() => {
     const el = scrollRef.current;
@@ -172,7 +172,7 @@ export default function HomeTagFilters({
               className={tagButtonClass(activeTag == null)}
               aria-pressed={activeTag == null}
             >
-              *
+              Wszystkie
             </button>
 
             {visibleTags.map(({ tag }) => {

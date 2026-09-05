@@ -1,13 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setCart } from "@/redux/slices/shopSlice";
 import { getPolishCurrency } from "@/lib/getPolishCurrency";
-import { getPrice } from "@/lib/getStickerPrice";
 import { getStickerPriceBySize } from "@/lib/stickerPricing.js";
 import { removeNumbersFromString } from "@/lib/removeNumbersFromString";
 import StickerTile from "./StickerTile";
@@ -22,26 +20,40 @@ export type HomeSticker = {
   image_source?: string;
 };
 
+type StickerSize = "sticker-s" | "sticker-m" | "sticker-l";
+
+const stickerSizes: { value: StickerSize; label: string; detail: string }[] = [
+  { value: "sticker-s", label: "Mała", detail: "6 cm" },
+  { value: "sticker-m", label: "Średnia", detail: "10 cm" },
+  { value: "sticker-l", label: "Duża", detail: "14 cm" },
+];
+
 export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
   const dispatch = useDispatch();
-  const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   const [selected, setSelected] = useState<HomeSticker | null>(null);
-  const [quantity, setQuantity] = useState(1);
-  const [justAdded, setJustAdded] = useState(false);
-  const [stickerSize, setStickerSize] = useState<"sticker-s" | "sticker-m" | "sticker-l">("sticker-m");
+  const [quantities, setQuantities] = useState<Record<StickerSize, number>>({
+    "sticker-s": 0,
+    "sticker-m": 0,
+    "sticker-l": 0,
+  });
+  const [stickerSize, setStickerSize] = useState<StickerSize>("sticker-m");
   const [imageLoading, setImageLoading] = useState(true);
-
-  const unitPrice = useMemo(() => getStickerPriceBySize(stickerSize), [stickerSize]);
+  const [justAdded, setJustAdded] = useState(false);
+  const totalQuantity = Object.values(quantities).reduce((sum, value) => sum + value, 0);
+  const totalPrice = (Object.entries(quantities) as [StickerSize, number][]).reduce(
+    (sum, [size, quantity]) => sum + quantity * getStickerPriceBySize(size),
+    0,
+  );
 
   const openModal = useCallback((s: HomeSticker) => {
     setSelected(s);
-    setQuantity(1);
-    setJustAdded(false);
+    setQuantities({ "sticker-s": 0, "sticker-m": 0, "sticker-l": 0 });
     setStickerSize("sticker-m");
     setImageLoading(true);
+    setJustAdded(false);
   }, []);
 
   const handleDialogClose = useCallback(() => {
@@ -60,39 +72,48 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
     }
   }, [selected]);
 
-  const lineTotal = selected ? getPrice(quantity, stickerSize).sumAfterDiscount : 0;
-
   const handleAddToCart = () => {
-    if (!selected?.title) return;
-    dispatch(
-      setCart({
-        ...selected,
-        paperType: "normal",
-        size: stickerSize,
-        quantity,
-        price: lineTotal,
-      })
-    );
-    toast.success("Dodano do koszyka", { autoClose: 3000, closeOnClick: true });
+    if (!selected?.title || totalQuantity < 1) return;
+
+    (Object.entries(quantities) as [StickerSize, number][]).forEach(([size, quantity]) => {
+      if (quantity < 1) return;
+      dispatch(
+        setCart({
+          ...selected,
+          paperType: "normal",
+          size,
+          quantity,
+          price: quantity * getStickerPriceBySize(size),
+        }),
+      );
+    });
     setJustAdded(true);
+    toast.success(
+      `Dodano ${totalQuantity} ${totalQuantity === 1 ? "naklejkę" : "naklejek"} do koszyka`,
+      { containerId: "quick-buy-toast", autoClose: 2500, closeOnClick: true },
+    );
   };
 
-  const goCheckout = () => {
+  const continueBrowsing = () => {
     dialogRef.current?.close();
-    router.push("/checkout");
   };
 
-  const browseMore = () => {
+  const openCart = () => {
     dialogRef.current?.close();
+    window.setTimeout(() => {
+      window.dispatchEvent(new Event("sticker-cart-open"));
+    }, 180);
   };
 
   const img = selected?.image_thumbnail || selected?.image_source || "";
 
   const breakpointColumnsObj = {
-    default: 5,
-    1366: 4,
-    1100: 3,
-    800: 2,
+    default: 7,
+    1800: 7,
+    1536: 6,
+    1280: 5,
+    1024: 4,
+    800: 3,
     500: 2,
   };
 
@@ -101,7 +122,7 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
       <div>
         <Masonry
           breakpointCols={breakpointColumnsObj}
-          className="my-masonry-grid"
+          className="my-masonry-grid px-3"
           columnClassName="my-masonry-grid_column"
         >
           {items.map((p, i) => (
@@ -123,7 +144,15 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
         aria-labelledby="sticker-popup-title"
       >
         {selected && (
-          <div className="sticker-quick-buy-content">
+          <>
+            <ToastContainer
+              containerId="quick-buy-toast"
+              position="top-center"
+              newestOnTop
+              closeOnClick
+              pauseOnFocusLoss={false}
+            />
+            <div className="sticker-quick-buy-content">
             <div className="sticker-quick-buy-header">
               <div>
                 <h2
@@ -186,98 +215,121 @@ export default function HomeStickerGrid({ items }: { items: HomeSticker[] }) {
               <div className="sticker-quick-buy-controls">
                 <div>
                   <div className="sticker-size-options" role="group" aria-label="Rozmiar naklejki">
-                    {[
-                      ["sticker-s", "Mała", "6 cm", 3.99],
-                      ["sticker-m", "Średnia", "10 cm", 7],
-                      ["sticker-l", "Duża", "14 cm", 9],
-                    ].map(([value, label, detail, price]) => (
+                    {stickerSizes.map(({ value, label, detail }) => (
                       <button
                         key={value}
                         type="button"
                         className={`sticker-size-option ${stickerSize === value ? "is-selected" : ""}`}
-                        onClick={() => setStickerSize(value as "sticker-s" | "sticker-m" | "sticker-l")}
+                        onClick={() => setStickerSize(value)}
                         aria-pressed={stickerSize === value}
                       >
                         <span>{label}</span>
-                        <small>{detail}</small>
-                        
+                        <small>{detail} · {getPolishCurrency(getStickerPriceBySize(value))}/szt.</small>
                       </button>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {!justAdded && (
-                  <>
-                    <div>
+                  <div className="sticker-selected-quantity">
+                    <p className="sticker-control-label">
+                      {/* Naklejka {stickerSizes.find(({ value }) => value === stickerSize)?.label} ILOŚĆ: */}
+                    </p>
                     <div className="flex items-center justify-center gap-2">
                       <button
                         type="button"
                         className="sticker-quantity-button"
-                        onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                        onClick={() => setQuantities((current) => ({
+                          ...current,
+                          [stickerSize]: Math.max(0, current[stickerSize] - 1),
+                        }))}
                         aria-label="Zmniejsz ilość"
                       >
                         −
                       </button>
-  
                       <input
-                        id="sticker-qty"
                         type="number"
+                        min={0}
                         inputMode="numeric"
-                        min={1}
-                        value={quantity}
-                        onChange={(e) => {
-                          const v = parseInt(e.target.value, 10);
-                          if (!Number.isNaN(v) && v >= 1) setQuantity(v);
+                        value={quantities[stickerSize]}
+                        onChange={(event) => {
+                          const nextValue = Number.parseInt(event.target.value, 10);
+                          setQuantities((current) => ({
+                            ...current,
+                            [stickerSize]: Number.isNaN(nextValue) ? 0 : Math.max(0, nextValue),
+                          }));
                         }}
                         className="sticker-quantity-input"
                         aria-label="Ilość sztuk"
                       />
-  
                       <button
                         type="button"
                         className="sticker-quantity-button"
-                        onClick={() => setQuantity((q) => q + 1)}
+                        onClick={() => setQuantities((current) => ({
+                          ...current,
+                          [stickerSize]: current[stickerSize] + 1,
+                        }))}
                         aria-label="Zwiększ ilość"
                       >
                         +
                       </button>
                     </div>
+                  </div>
+{justAdded ? (
+                  <div className="sticker-added-actions" role="status" aria-live="polite">
+                    <p className="sticker-added-message">
+                      Dodano {totalQuantity} {totalQuantity === 1 && "naklejkę"} {totalQuantity > 1 && totalQuantity < 5 && "naklejki"} {(totalQuantity >= 5 || totalQuantity === 0) && "naklejek"} do koszyka
+                    </p>
+                    <div className="flex flex-col gap-2 sm:flex-row">
+                      <button
+                        type="button"
+                        onClick={continueBrowsing}
+                        className="sticker-secondary-button"
+                      >
+                        Przeglądaj dalej
+                      </button>
+                      <button
+                        type="button"
+                        onClick={openCart}
+                        className="sticker-add-button"
+                      >
+                        Zobacz koszyk
+                      </button>
                     </div>
-
-                    
-
-                    <button
-                      type="button"
-                      onClick={handleAddToCart}
-                      className="sticker-add-button"
-                    >
-                      Dodaj do koszyka
-                    </button>
-                  </>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleAddToCart}
+                    disabled={totalQuantity === 0}
+                    className="sticker-add-button disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Dodaj do koszyka · {getPolishCurrency(totalPrice)}
+                  </button>
                 )}
-  
-                {justAdded && (
-                  <div className="flex flex-col gap-3">
-                    <button
-                      type="button"
-                      onClick={browseMore}
-                      className="min-h-[48px] w-full rounded-lg border-2 border-neutral-700 bg-neutral-800/40 py-3 text-center text-base font-semibold text-neutral-100 hover:bg-neutral-800/60"
-                    >
-                      Przeglądaj dalej
-                    </button>
-  
-                    <button
-                      type="button"
-                      onClick={goCheckout}
-                      className="min-h-[48px] w-full rounded-lg bg-blue-600 py-3 text-center text-base font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
-                    >
-                      Przejdź do płatności
-                    </button>
+                <div className="sticker-total" aria-live="polite">
+                  <span>Razem: </span>{totalQuantity}  {totalQuantity === 1 && "naklejka"} {totalQuantity > 1 && totalQuantity < 5 && "naklejki"} {(totalQuantity >= 5 || totalQuantity === 0) && "naklejek"} · {getPolishCurrency(totalPrice)}
+                {totalQuantity > 1 && (
+                  <div className="sticker-total-breakdown" aria-label="Podsumowanie rozmiarów naklejek">
+                    {(Object.entries(quantities) as [StickerSize, number][]).map(([size, quantity]) => {
+                      if (quantity < 1) return null;
+                      const label = stickerSizes.find((option) => option.value === size)?.label;
+                      return (
+                        <div key={size} className="flex items-center justify-between gap-4 text-sm text-cyan-100/65">
+                          <span>{label}: {quantity} szt.</span>
+                          <span>{getPolishCurrency(quantity * getStickerPriceBySize(size))}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
+                </div>
+
+
+                
               </div>
             </div>
-          </div>
+            </div>
+          </>
         )}
       </dialog>
     </>

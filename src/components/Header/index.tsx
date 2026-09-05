@@ -29,6 +29,15 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
+    const openCartFromGallery = () => {
+      setCartOpen(true);
+      setMenuShow(false);
+    };
+    window.addEventListener("sticker-cart-open", openCartFromGallery);
+    return () => window.removeEventListener("sticker-cart-open", openCartFromGallery);
+  }, []);
+
+  useEffect(() => {
     if (!aboutOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setAboutOpen(false);
