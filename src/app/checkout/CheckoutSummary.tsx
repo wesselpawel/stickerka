@@ -1,6 +1,5 @@
 "use client";
 import { getPolishCurrency } from "@/lib/getPolishCurrency";
-import { polishToEnglish } from "@/lib/polishToEnglish";
 import { removeNumbersFromString } from "@/lib/removeNumbersFromString";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import Image from "next/image";
@@ -12,7 +11,8 @@ import { getCouponById } from "@/firebase";
 import { listOfPrizes } from "@/components/listOfPrizes";
 import { setPromotion } from "@/redux/slices/shopSlice";
 import { getFinalPrice } from "@/lib/getFinalPrice";
-import { lineTotalPln } from "@/lib/stickerPricing.js";
+import { cartItemTotalPln, lineTotalPln } from "@/lib/stickerPricing.js";
+import CartLineImage from "@/components/Cart/CartLineImage";
 
 const SHIPPING_PLN = 10;
 
@@ -20,15 +20,10 @@ export default function CheckoutSummary() {
   const { couponId, promotion } = useAppSelector((state: any) => state.shop);
   const [isLoading, setLoading] = useState(true);
   const cart = useAppSelector((state: any) => state.shop.cart);
-  const { beforeDiscount, finalPrice, message } = getFinalPrice(
-    promotion,
-    cart
-  );
+  const { beforeDiscount, finalPrice, message } = getFinalPrice(promotion, cart);
   const freeShipping = beforeDiscount >= 100;
   const totalWithShipping = freeShipping ? finalPrice : finalPrice + SHIPPING_PLN;
-  const beforeDiscountWithShipping = freeShipping
-    ? beforeDiscount
-    : beforeDiscount + SHIPPING_PLN;
+  const beforeDiscountWithShipping = freeShipping ? beforeDiscount : beforeDiscount + SHIPPING_PLN;
 
   const [customerInfo, setCustomerInfo] = useState({
     firstName: "",
@@ -76,9 +71,7 @@ export default function CheckoutSummary() {
       if (cancelled || !res || (res as any).error) return;
       const r = res as { id?: string; prizeId?: unknown };
       if (r.id != null && r.prizeId != null) {
-        dispatch(
-          setPromotion({ couponId: r.id, promotion: r.prizeId as number })
-        );
+        dispatch(setPromotion({ couponId: r.id, promotion: r.prizeId as number }));
         localStorage.setItem("activeCoupon", r.id);
       }
     }
@@ -90,9 +83,7 @@ export default function CheckoutSummary() {
 
   const prizeTitle =
     promotion !== -1
-      ? listOfPrizes.find(
-          (p) => p.id === Number(promotion) || p.id === promotion
-        )?.title
+      ? listOfPrizes.find((p) => p.id === Number(promotion) || p.id === promotion)?.title
       : null;
 
   if (isLoading) {
@@ -119,9 +110,7 @@ export default function CheckoutSummary() {
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-zinc-100 text-3xl">
             🛒
           </div>
-          <h1 className="font-display text-2xl font-semibold text-zinc-900">
-            Koszyk jest pusty
-          </h1>
+          <h1 className="font-display text-2xl font-semibold text-zinc-900">Koszyk jest pusty</h1>
           <p className="mt-2 text-sm text-zinc-600">
             Dodaj naklejki w sklepie, a potem wróć tutaj, żeby dokończyć zamówienie.
           </p>
@@ -182,9 +171,7 @@ export default function CheckoutSummary() {
               >
                 <p
                   className={`text-xs font-semibold uppercase tracking-wide ${
-                    message === "Kod aktywny"
-                      ? "text-chill-sage-dark"
-                      : "text-chill-muted"
+                    message === "Kod aktywny" ? "text-chill-sage-dark" : "text-chill-muted"
                   }`}
                 >
                   {message === "Kod aktywny" ? message : "Kod"}
@@ -197,9 +184,7 @@ export default function CheckoutSummary() {
                     </span>
                   )}
                   {message !== "Kod aktywny" && (
-                    <span className="mt-2 block text-sm font-normal text-zinc-600">
-                      {message}
-                    </span>
+                    <span className="mt-2 block text-sm font-normal text-zinc-600">{message}</span>
                   )}
                 </p>
               </div>
@@ -221,17 +206,13 @@ export default function CheckoutSummary() {
 
             <div className="mt-8 space-y-0 divide-y divide-zinc-200">
               {cart.map((item: any, i: number) => (
-                <div
-                  key={i}
-                  className="flex gap-3 py-4 first:pt-0 last:pb-0 sm:gap-4"
-                >
+                <div key={i} className="flex gap-3 py-4 first:pt-0 last:pb-0 sm:gap-4">
                   <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 sm:h-[88px] sm:w-[88px]">
                     {item?.image_thumbnail || item?.image_source ? (
-                      <Image
+                      <CartLineImage
+                        item={item}
                         width={120}
                         height={120}
-                        src={item?.image_thumbnail || item?.image_source}
-                        alt=""
                         className="h-full w-full object-cover"
                       />
                     ) : (
@@ -241,34 +222,26 @@ export default function CheckoutSummary() {
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-zinc-900">
+                      {removeNumbersFromString(item.title)}
+                    </p>
 
-
-                    
-                      <p
-                        className="font-semibold text-zinc-900"
-                        >
-                        {removeNumbersFromString(item.title)}
-                      </p>
-                    
                     <p className="mt-1 text-sm text-zinc-600">
-                      {item.quantity}×{" "}
-                      {item.isCustomSticker
-                        ? `własna grafika · ${getPolishCurrency(
-                            lineTotalPln(1, item.size || item.stickerSize)
-                          )}/szt.`
-                        : `${getPolishCurrency(
+                      {item.isCollectionBundle
+                        ? `${item.quantity}× zestaw · ${item.collectionStickerCount} wzorów · ${getPolishCurrency(
+                            item.collectionStickerCount *
+                              lineTotalPln(1, item.size || item.stickerSize)
+                          )}/zestaw`
+                        : `${item.quantity}× ${
+                            item.isCustomSticker ? "własna grafika · " : ""
+                          }${getPolishCurrency(
                             lineTotalPln(1, item.size || item.stickerSize)
                           )}/szt.`}
                     </p>
                   </div>
                   <div className="shrink-0 text-right">
                     <p className="font-semibold tabular-nums text-zinc-900">
-                      {getPolishCurrency(
-                        lineTotalPln(
-                          item.quantity,
-                          item.size || item.stickerSize
-                        )
-                      )}
+                      {getPolishCurrency(cartItemTotalPln(item))}
                     </p>
                   </div>
                 </div>
@@ -278,9 +251,7 @@ export default function CheckoutSummary() {
             <div className="mt-6 space-y-3 border-t border-zinc-200 pt-6 text-sm">
               <div className="flex justify-between gap-4 text-zinc-600">
                 <span>Wartość produktów</span>
-                <span className="tabular-nums text-zinc-900">
-                  {getPolishCurrency(finalPrice)}
-                </span>
+                <span className="tabular-nums text-zinc-900">{getPolishCurrency(finalPrice)}</span>
               </div>
               <div className="flex justify-between gap-4 text-zinc-600">
                 <span>Wysyłka</span>
@@ -294,9 +265,7 @@ export default function CheckoutSummary() {
               </div>
               <div className="flex justify-between gap-4 border-t border-zinc-200 pt-3 font-semibold text-zinc-900">
                 <span>Razem</span>
-                <span className="tabular-nums">
-                  {getPolishCurrency(totalWithShipping)}
-                </span>
+                <span className="tabular-nums">{getPolishCurrency(totalWithShipping)}</span>
               </div>
             </div>
           </section>
@@ -305,9 +274,7 @@ export default function CheckoutSummary() {
         {/* Form + pay */}
         <div className="lg:col-span-7">
           <section className="rounded-3xl border border-chill-line bg-white p-6 shadow-sm md:p-8">
-            <h2 className="font-display text-xl font-semibold text-zinc-900">
-              Dane do zamówienia
-            </h2>
+            <h2 className="font-display text-xl font-semibold text-zinc-900">Dane do zamówienia</h2>
             <p className="mt-1 text-sm text-zinc-600">
               Użyjemy ich do wysyłki i kontaktu w razie pytań.
             </p>

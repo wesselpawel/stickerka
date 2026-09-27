@@ -1,10 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DEFAULT_STICKER_SIZE, lineTotalPln } from "@/lib/stickerPricing.js";
+import { cartItemTotalPln, DEFAULT_STICKER_SIZE } from "@/lib/stickerPricing.js";
 
 /** Unique key per cart line (custom uploads never merge across different files). */
 function cartLineKey(item) {
+  if (item.isCollectionBundle) return `collection:${item.collectionId}`;
   if (item.customStickerId) return `c:${item.customStickerId}`;
   const size = item?.size || item?.stickerSize || DEFAULT_STICKER_SIZE;
+  if (item.collectionId && item.collectionItemId) {
+    return `collection:${item.collectionId}:${item.collectionItemId}|${size}`;
+  }
   return `p:${item.title}|${item.paperType || "normal"}|${size}`;
 }
 
@@ -30,15 +34,16 @@ export const shopSlice = createSlice({
         const q = Number(state.cart[idx].quantity) + Number(p.quantity);
         state.cart[idx].quantity = q;
         state.cart[idx].size = state.cart[idx].size || p.size || DEFAULT_STICKER_SIZE;
-        state.cart[idx].price = lineTotalPln(q, state.cart[idx].size || DEFAULT_STICKER_SIZE);
+        state.cart[idx].price = cartItemTotalPln(state.cart[idx]);
       } else {
         const size = p.size || p.stickerSize || DEFAULT_STICKER_SIZE;
-        state.cart.push({
+        const item = {
           ...p,
           size,
           quantity: Number(p.quantity),
-          price: lineTotalPln(p.quantity, size),
-        });
+        };
+        item.price = cartItemTotalPln(item);
+        state.cart.push(item);
       }
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
@@ -55,7 +60,8 @@ export const shopSlice = createSlice({
             ? parsed.map((item) => {
                 const q = Math.max(1, Math.floor(Number(item.quantity) || 1));
                 const size = item?.size || item?.stickerSize || DEFAULT_STICKER_SIZE;
-                return { ...item, size, quantity: q, price: lineTotalPln(q, size) };
+                const restoredItem = { ...item, size, quantity: q };
+                return { ...restoredItem, price: cartItemTotalPln(restoredItem) };
               })
             : [];
         } catch {
@@ -72,7 +78,6 @@ export const shopSlice = createSlice({
   },
 });
 
-export const { setCart, removeFromCart, prepareCart, clearCart, setPromotion } =
-  shopSlice.actions;
+export const { setCart, removeFromCart, prepareCart, clearCart, setPromotion } = shopSlice.actions;
 
 export default shopSlice.reducer;

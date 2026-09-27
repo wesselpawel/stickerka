@@ -9,6 +9,7 @@ import { registerCustomStickerUpload, storage } from "@/firebase";
 import { setCart } from "@/redux/slices/shopSlice";
 import { getPolishCurrency } from "@/lib/getPolishCurrency";
 import { getStickerPriceBySize, type Size } from "@/lib/getStickerPrice";
+import { useCartQuantityFlow } from "@/components/Cart/CartQuantityFlow";
 import { toast } from "react-toastify";
 import deskBackground from "../../../public/desk.png";
 
@@ -26,6 +27,7 @@ type Props = {
 
 export default function CreateStickerPopup({ open, onOpenChange }: Props) {
   const dispatch = useDispatch();
+  const { openQuantityPicker } = useCartQuantityFlow();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -102,18 +104,16 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
   const totalQuantity = Object.values(quantities).reduce((sum, value) => sum + value, 0);
   const totalPrice = (Object.entries(quantities) as [Size, number][]).reduce(
     (sum, [size, quantity]) => sum + quantity * getStickerPriceBySize(size),
-    0,
+    0
   );
 
-  const addToCart = async () => {
+  const addToCart = async (quantity: number) => {
     if (!file) {
       setError("Najpierw wybierz obrazek.");
       return;
     }
     const customStickerId = uuidv4();
-    const safeName = (file.name || "upload")
-      .replace(/[^\w.\-]+/g, "_")
-      .slice(0, 120);
+    const safeName = (file.name || "upload").replace(/[^\w.\-]+/g, "_").slice(0, 120);
     const storagePath = `custom-stickers/${customStickerId}/${safeName}`;
 
     setUploading(true);
@@ -141,46 +141,50 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
         );
       }
 
-      (Object.entries(quantities) as [Size, number][]).forEach(([size, quantity]) => {
-        if (quantity < 1) return;
-        const cartLineId = `${customStickerId}-${size}`;
-        dispatch(
-          setCart({
-            id: cartLineId,
-            customStickerId: cartLineId,
-            isCustomSticker: true,
-            title: "Własna naklejka",
-            categories: ["wlasna-naklejka"],
-            image_source: downloadURL,
-            image_thumbnail: downloadURL,
-            paperType: "normal",
-            size,
-            quantity,
-            price: quantity * getStickerPriceBySize(size),
-            originalFileName: file.name,
-            firestoreUploadId: firestoreUploadId || undefined,
-          }),
-        );
-      });
-
-      toast.success("Dodano własną naklejkę do koszyka", {
-        autoClose: 3500,
-        closeOnClick: true,
-      });
-      onOpenChange(false);
+      const cartLineId = `${customStickerId}-${stickerSize}`;
+      dispatch(
+        setCart({
+          id: cartLineId,
+          customStickerId: cartLineId,
+          isCustomSticker: true,
+          title: "Własna naklejka",
+          categories: ["wlasna-naklejka"],
+          image_source: downloadURL,
+          image_thumbnail: downloadURL,
+          paperType: "normal",
+          size: stickerSize,
+          quantity,
+          price: quantity * getStickerPriceBySize(stickerSize),
+          originalFileName: file.name,
+          firestoreUploadId: firestoreUploadId || undefined,
+        })
+      );
     } catch (e) {
       console.error(e);
       setError("Nie udało się wysłać pliku. Spróbuj ponownie.");
       toast.error("Błąd przesyłania pliku");
+      return false;
     } finally {
       setUploading(false);
     }
   };
 
+  const requestAddToCart = () => {
+    if (!file) {
+      setError("Najpierw wybierz obrazek.");
+      return;
+    }
+    openQuantityPicker({
+      unitPrice: getStickerPriceBySize(stickerSize),
+      loadingMessage: "Przesyłamy Twoją grafikę. To może potrwać chwilę.",
+      onConfirm: (quantity) => addToCart(quantity),
+    });
+  };
+
   return (
     <dialog
       ref={dialogRef}
-      className="create-sticker-dialog font-sans text-chill-ink"
+      className="create-sticker-dialog font-sans"
       onClose={handleDialogClose}
       aria-labelledby="create-sticker-title"
     >
@@ -195,7 +199,6 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
                 >
                   Stwórz naklejkę
                 </h2>
-                
               </div>
               <button
                 ref={closeBtnRef}
@@ -225,7 +228,13 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
               data-sticker-size={stickerSize}
               aria-label={previewUrl ? "Zmień przesłaną grafikę" : "Prześlij grafikę"}
             >
-              <Image alt="" src={deskBackground} fill sizes="(max-width: 700px) 100vw, 52vw" className="object-cover" />
+              <Image
+                alt=""
+                src={deskBackground}
+                fill
+                sizes="(max-width: 700px) 100vw, 52vw"
+                className="object-cover"
+              />
               <Image
                 src={previewUrl || "/questionMark.png"}
                 alt={previewUrl ? "Podgląd przesłanej grafiki" : "Miejsce na grafikę naklejki"}
@@ -244,17 +253,39 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
             <div className="sticker-quick-buy-controls">
               {previewUrl ? (
                 <div className="space-y-3">
-                  <p className="text-sm text-cyan-100/65">Podgląd Twojej naklejki.</p>
+                  <p className="theme-muted text-sm">Podgląd Twojej naklejki.</p>
                   <div className="flex flex-wrap gap-2">
-                    <button type="button" onClick={() => fileInputRef.current?.click()} className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold text-white hover:bg-white/10">Zmień plik</button>
-                    <button type="button" onClick={() => { setFile(null); setPreviewUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; }); }} className="rounded-lg border border-transparent px-3 py-2 text-sm font-semibold text-cyan-100/65 underline-offset-4 hover:text-white hover:underline">Usuń</button>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="theme-surface-muted theme-text rounded-lg border theme-border px-3 py-2 text-sm font-semibold hover:bg-zinc-200 dark:hover:bg-zinc-600"
+                    >
+                      Zmień plik
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFile(null);
+                        setPreviewUrl((prev) => {
+                          if (prev) URL.revokeObjectURL(prev);
+                          return null;
+                        });
+                      }}
+                      className="theme-muted rounded-lg border border-transparent px-3 py-2 text-sm font-semibold underline-offset-4 hover:underline"
+                    >
+                      Usuń
+                    </button>
                   </div>
-                  {file && <p className="text-xs text-cyan-100/55">{file.name} · {(file.size / 1024 / 1024).toFixed(2)} MB</p>}
+                  {file && (
+                    <p className="theme-muted text-xs">
+                      {file.name} · {(file.size / 1024 / 1024).toFixed(2)} MB
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div>
                   <p className="sticker-control-label">Grafika naklejki</p>
-                  <p className="text-sm text-cyan-100/65">Prześlij zdjęcie, ilustrację lub logo.</p>
+                  <p className="theme-muted text-sm">Prześlij zdjęcie, ilustrację lub logo.</p>
                 </div>
               )}
 
@@ -275,81 +306,101 @@ export default function CreateStickerPopup({ open, onOpenChange }: Props) {
                 </div>
               </div>
 
-              {error ? <p className="text-sm font-medium text-red-300" role="alert">{error}</p> : null}
+              {error ? (
+                <p className="text-sm font-medium text-red-300" role="alert">
+                  {error}
+                </p>
+              ) : null}
 
-            <div className="sticker-selected-quantity">
-              <p className="sticker-control-label">
-                Naklejka {stickerSizes.find(({ value }) => value === stickerSize)?.label} ILOŚĆ:
-              </p>
-              <div className="flex items-center justify-center gap-2">
+              <div className="sticker-selected-quantity">
+                <p className="sticker-control-label">
+                  Naklejka {stickerSizes.find(({ value }) => value === stickerSize)?.label} ILOŚĆ:
+                </p>
+                <div className="flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    className="sticker-quantity-button"
+                    onClick={() =>
+                      setQuantities((current) => ({
+                        ...current,
+                        [stickerSize]: Math.max(0, current[stickerSize] - 1),
+                      }))
+                    }
+                    aria-label="Zmniejsz ilość"
+                  >
+                    −
+                  </button>
+                  <input
+                    id="create-sticker-qty"
+                    type="number"
+                    min={0}
+                    inputMode="numeric"
+                    value={quantities[stickerSize]}
+                    onChange={(e) => {
+                      const nextValue = Number.parseInt(e.target.value, 10);
+                      setQuantities((current) => ({
+                        ...current,
+                        [stickerSize]: Number.isNaN(nextValue) ? 0 : Math.max(0, nextValue),
+                      }));
+                    }}
+                    className="sticker-quantity-input"
+                    aria-label="Ilość sztuk"
+                  />
+                  <button
+                    type="button"
+                    className="sticker-quantity-button"
+                    onClick={() =>
+                      setQuantities((current) => ({
+                        ...current,
+                        [stickerSize]: current[stickerSize] + 1,
+                      }))
+                    }
+                    aria-label="Zwiększ ilość"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="sticker-total" aria-live="polite">
+                <span>Razem: </span>
+                {totalQuantity} {totalQuantity === 1 && "naklejka"}{" "}
+                {totalQuantity > 1 && totalQuantity < 5 && "naklejki"}{" "}
+                {(totalQuantity >= 5 || totalQuantity === 0) && "naklejek"} ·{" "}
+                {getPolishCurrency(totalPrice)}
+              </div>
+
+              {totalQuantity > 1 && (
+                <div
+                  className="sticker-total-breakdown"
+                  aria-label="Podsumowanie rozmiarów naklejek"
+                >
+                  {(Object.entries(quantities) as [Size, number][]).map(([size, quantity]) => {
+                    if (quantity < 1) return null;
+                    const label = stickerSizes.find((option) => option.value === size)?.label;
+                    return (
+                      <div
+                        key={size}
+                        className="theme-muted flex items-center justify-between gap-4 text-sm"
+                      >
+                        <span>
+                          {label}: {quantity} szt.
+                        </span>
+                        <span>{getPolishCurrency(quantity * getStickerPriceBySize(size))}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
               <button
                 type="button"
-                className="sticker-quantity-button"
-                onClick={() => setQuantities((current) => ({
-                  ...current,
-                  [stickerSize]: Math.max(0, current[stickerSize] - 1),
-                }))}
-                aria-label="Zmniejsz ilość"
+                disabled={!file || uploading}
+                onClick={requestAddToCart}
+                className="sticker-add-button disabled:cursor-not-allowed disabled:opacity-50"
               >
-                −
+                {uploading ? "Przesyłanie…" : "Dodaj do koszyka"}
               </button>
-              <input
-                id="create-sticker-qty"
-                type="number"
-                min={0}
-                inputMode="numeric"
-                value={quantities[stickerSize]}
-                onChange={(e) => {
-                  const nextValue = Number.parseInt(e.target.value, 10);
-                  setQuantities((current) => ({
-                    ...current,
-                    [stickerSize]: Number.isNaN(nextValue) ? 0 : Math.max(0, nextValue),
-                  }));
-                }}
-                className="sticker-quantity-input"
-                aria-label="Ilość sztuk"
-              />
-              <button
-                type="button"
-                className="sticker-quantity-button"
-                onClick={() => setQuantities((current) => ({
-                  ...current,
-                  [stickerSize]: current[stickerSize] + 1,
-                }))}
-                aria-label="Zwiększ ilość"
-              >
-                +
-              </button>
-              </div>
-            </div>
-
-            <div className="sticker-total" aria-live="polite">
-              <span>Razem: </span>{totalQuantity} {totalQuantity === 1 && "naklejka"} {totalQuantity > 1 && totalQuantity < 5 && "naklejki"} {(totalQuantity >= 5 || totalQuantity === 0) && "naklejek"} · {getPolishCurrency(totalPrice)}
-            </div>
-
-            {totalQuantity > 1 && (
-              <div className="sticker-total-breakdown" aria-label="Podsumowanie rozmiarów naklejek">
-                {(Object.entries(quantities) as [Size, number][]).map(([size, quantity]) => {
-                  if (quantity < 1) return null;
-                  const label = stickerSizes.find((option) => option.value === size)?.label;
-                  return (
-                    <div key={size} className="flex items-center justify-between gap-4 text-sm text-cyan-100/65">
-                      <span>{label}: {quantity} szt.</span>
-                      <span>{getPolishCurrency(quantity * getStickerPriceBySize(size))}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            
-            <button
-              type="button"
-              disabled={!file || uploading || totalQuantity === 0}
-              onClick={addToCart}
-              className="sticker-add-button disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {uploading ? "Przesyłanie…" : "Dodaj do koszyka"}
-            </button>
             </div>
           </div>
         </div>

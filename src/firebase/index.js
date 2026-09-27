@@ -73,9 +73,7 @@ async function updateCheckout(checkoutId, updatedCheckout) {
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     const checkouts = docSnap.data().checkouts;
-    const checkoutIndex = checkouts.findIndex(
-      (checkout) => checkout.id === checkoutId
-    );
+    const checkoutIndex = checkouts.findIndex((checkout) => checkout.id === checkoutId);
     if (checkoutIndex !== -1) {
       const updatedCheckouts = [...checkouts];
       updatedCheckouts[checkoutIndex] = {
@@ -145,10 +143,7 @@ async function addArrayOfProducts(imageArray) {
 
 /** Pass Firestore document id (string), or legacy full object (uses object.id if set) */
 async function deleteProduct(imageDataOrId) {
-  const id =
-    typeof imageDataOrId === "string"
-      ? imageDataOrId
-      : imageDataOrId?.id;
+  const id = typeof imageDataOrId === "string" ? imageDataOrId : imageDataOrId?.id;
   if (!id || typeof id !== "string") {
     throw new Error("deleteProduct: pass sticker document id (string)");
   }
@@ -161,13 +156,51 @@ async function updateProduct(stickerId, updatedProduct) {
     throw new Error("updateProduct: first argument must be sticker document id");
   }
   const { id: _ignore, ...fields } = updatedProduct;
-  const thumb =
-    fields.image_thumbnail || fields.image_source;
+  const thumb = fields.image_thumbnail || fields.image_source;
   await updateDoc(doc(db, STICKERS_COLLECTION, stickerId), {
     ...fields,
     image_thumbnail: thumb,
     updatedAt: serverTimestamp(),
   });
+}
+
+// Collections are curated groups of sticker references and standalone images.
+async function getCollections() {
+  unstable_noStore();
+  const snapshot = await getDocs(collection(db, "collections"));
+  return snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
+}
+
+async function addCollection(collectionData) {
+  const docRef = await addDoc(collection(db, "collections"), {
+    name: collectionData.name,
+    description: collectionData.description || "",
+    items: collectionData.items || [],
+    published: collectionData.published !== false,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+  return docRef.id;
+}
+
+async function updateCollection(collectionId, collectionData) {
+  if (!collectionId || typeof collectionId !== "string") {
+    throw new Error("updateCollection: missing collection id");
+  }
+  await updateDoc(doc(db, "collections", collectionId), {
+    name: collectionData.name,
+    description: collectionData.description || "",
+    items: collectionData.items || [],
+    published: collectionData.published !== false,
+    updatedAt: serverTimestamp(),
+  });
+}
+
+async function deleteCollection(collectionId) {
+  if (!collectionId || typeof collectionId !== "string") {
+    throw new Error("deleteCollection: missing collection id");
+  }
+  await deleteDoc(doc(db, "collections", collectionId));
 }
 
 // blog
@@ -236,6 +269,16 @@ async function registerCustomStickerUpload({
     originalFileName: originalFileName || "",
     mimeType: mimeType || "",
     sizeBytes: sizeBytes ?? 0,
+    createdAt: serverTimestamp(),
+  });
+  return docRef.id;
+}
+
+async function registerRelatableStickerCreation({ downloadURL, storagePath, configuration }) {
+  const docRef = await addDoc(collection(db, "relatable_sticker_creations"), {
+    downloadURL,
+    storagePath,
+    configuration,
     createdAt: serverTimestamp(),
   });
   return docRef.id;
@@ -405,6 +448,10 @@ export {
   addCheckout,
   storage,
   getProducts,
+  getCollections,
+  addCollection,
+  updateCollection,
+  deleteCollection,
   addProduct,
   updateProduct,
   deleteProduct,
@@ -426,6 +473,7 @@ export {
   updateOrder,
   incrementGoogleCounter,
   registerCustomStickerUpload,
+  registerRelatableStickerCreation,
   addContactMessage,
   auth,
 };

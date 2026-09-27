@@ -14,17 +14,43 @@ export function getStickerPriceBySize(size) {
   return Number(price) || 0;
 }
 
+export function getQuantityDiscount(quantity) {
+  const q = Math.max(0, Math.floor(Number(quantity) || 0));
+  if (q >= 20) return 0.5;
+  if (q >= 10) return 0.3;
+  if (q >= 5) return 0.2;
+  if (q >= 3) return 0.15;
+  return 0;
+}
+
+export function getDiscountedStickerUnitPrice(size, quantity) {
+  return getStickerPriceBySize(size) * (1 - getQuantityDiscount(quantity));
+}
+
 export function lineTotalPln(quantity, size = DEFAULT_STICKER_SIZE) {
   const q = Math.max(0, Math.floor(Number(quantity) || 0));
-  return q * getStickerPriceBySize(size);
+  return q * getDiscountedStickerUnitPrice(size, q);
+}
+
+export function cartItemPieceCount(item) {
+  const quantity = Math.max(0, Math.floor(Number(item?.quantity) || 0));
+  const piecesPerSet = item?.isCollectionBundle
+    ? Math.max(0, Math.floor(Number(item.collectionStickerCount) || 0))
+    : 1;
+  return quantity * piecesPerSet;
+}
+
+export function cartItemTotalPln(item) {
+  const size = item?.size || item?.stickerSize || DEFAULT_STICKER_SIZE;
+  const quantity = Math.max(0, Math.floor(Number(item?.quantity) || 0));
+  if (!item?.isCollectionBundle) return lineTotalPln(quantity, size);
+  const stickerCount = Math.max(0, Math.floor(Number(item.collectionStickerCount) || 0));
+  return stickerCount * lineTotalPln(quantity, size);
 }
 
 export function cartSubtotalPln(cart) {
   if (!Array.isArray(cart)) return 0;
-  return cart.reduce((acc, item) => {
-    const size = item?.size || item?.stickerSize || DEFAULT_STICKER_SIZE;
-    return acc + lineTotalPln(item.quantity, size);
-  }, 0);
+  return cart.reduce((acc, item) => acc + cartItemTotalPln(item), 0);
 }
 
 export function getLowestStickerPriceInCart(cart) {
@@ -33,7 +59,10 @@ export function getLowestStickerPriceInCart(cart) {
     .map((item) => {
       const quantity = Math.max(0, Math.floor(Number(item?.quantity) || 0));
       const size = item?.size || item?.stickerSize || DEFAULT_STICKER_SIZE;
-      return Array.from({ length: quantity }, () => getStickerPriceBySize(size));
+      const piecesPerSet = item?.isCollectionBundle
+        ? Math.max(0, Math.floor(Number(item.collectionStickerCount) || 0))
+        : 1;
+      return Array.from({ length: quantity * piecesPerSet }, () => getStickerPriceBySize(size));
     })
     .flat();
 

@@ -1,17 +1,14 @@
 "use client";
 
-import {
-  removeFromCart,
-  setPromotion,
-} from "@/redux/slices/shopSlice";
+import { removeFromCart, setPromotion } from "@/redux/slices/shopSlice";
 import Link from "next/link";
 import { FaShoppingCart } from "react-icons/fa";
-import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { polishToEnglish } from "@/lib/polishToEnglish";
 import { removeNumbersFromString } from "@/lib/removeNumbersFromString";
-import { lineTotalPln } from "@/lib/stickerPricing.js";
+import { cartItemTotalPln, lineTotalPln } from "@/lib/stickerPricing.js";
 import { getPolishCurrency } from "@/lib/getPolishCurrency";
+import CartLineImage from "./CartLineImage";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Countdown } from "../Countdown";
@@ -125,28 +122,28 @@ export default function Cart({
     <>
       {isCartOpen && (
         <div
-          className="fixed inset-0 z-cart flex items-end justify-center bg-black/45 p-0 backdrop-blur-sm sm:items-center sm:p-4 md:p-6"
+          className="cart-overlay fixed inset-0 z-cart flex items-end justify-center bg-black/45 p-0 backdrop-blur-sm sm:items-center sm:p-4 md:p-6"
           role="presentation"
           onClick={() => setCartOpen(false)}
         >
           <div
-            className="flex max-h-[min(92dvh,720px)] w-full max-w-lg flex-col rounded-t-3xl border border-chill-line bg-chill-cream shadow-2xl shadow-chill-ink/15 sm:max-h-[85vh] sm:rounded-3xl md:max-w-xl"
+            className="cart-dialog theme-surface theme-text flex max-h-[min(92dvh,720px)] w-full max-w-lg flex-col rounded-t-3xl border theme-border shadow-2xl shadow-black/15 sm:max-h-[85vh] sm:rounded-3xl md:max-w-xl"
             role="dialog"
             aria-modal="true"
             aria-labelledby="cart-dialog-title"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-chill-line px-5 pb-4 pt-5 sm:px-6 sm:pt-6">
+            <div className="flex shrink-0 items-start justify-between gap-4 border-b theme-border px-5 pb-4 pt-5 sm:px-6 sm:pt-6">
               <div>
                 <h2
                   id="cart-dialog-title"
-                  className="font-display text-xl font-semibold tracking-tight text-chill-ink sm:text-2xl"
+                  className="font-display text-xl font-semibold tracking-tight sm:text-2xl"
                 >
                   Twój koszyk
                 </h2>
                 {cart.length > 0 && (
-                  <p className="mt-1 text-sm text-chill-muted">
+                  <p className="theme-muted mt-1 text-sm">
                     {cartLinesLabel(cart.length)}
                     {" · "}
                     ceny zależne od rozmiaru
@@ -156,7 +153,7 @@ export default function Cart({
               <button
                 type="button"
                 onClick={() => setCartOpen(false)}
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-chill-line/80 bg-chill-sand/40 text-chill-ink transition-colors hover:bg-chill-sand hover:border-chill-mist"
+                className="theme-surface-muted theme-text flex h-11 w-11 shrink-0 items-center justify-center rounded-full border theme-border transition-colors hover:bg-[var(--theme-hover)]"
                 aria-label="Zamknij koszyk"
               >
                 <IoClose className="h-6 w-6" />
@@ -167,13 +164,10 @@ export default function Cart({
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4 sm:px-6 sm:py-5">
               {cart.length === 0 && (
                 <div className="flex flex-col items-center justify-center px-4 py-12 text-center sm:py-16">
-                  <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-chill-mist/50 text-chill-sage-dark">
+                  <div className="theme-surface-muted theme-text mb-5 flex h-20 w-20 items-center justify-center rounded-2xl border theme-border">
                     <FaShoppingCart className="h-9 w-9" aria-hidden />
                   </div>
-                  <p className="font-display text-lg font-medium text-chill-ink">
-                    Koszyk jest pusty
-                  </p>
-                  
+                  <p className="font-display text-lg font-medium">Koszyk jest pusty</p>
                 </div>
               )}
 
@@ -182,9 +176,7 @@ export default function Cart({
                   {cart.map((item: any, i: number) => {
                     const cat = item.categories?.[0];
                     const href =
-                      cat && item.title && !item.isCustomSticker
-                        ? "/#gallery"
-                        : "/#gallery";
+                      cat && item.title && !item.isCustomSticker ? "/#gallery" : "/#gallery";
                     return (
                       <li
                         key={
@@ -193,19 +185,18 @@ export default function Cart({
                             : `${item.title}-${item.paperType}-${i}`
                         }
                       >
-                        <article className="overflow-hidden rounded-2xl border border-chill-line bg-chill-sand/35 shadow-sm">
+                        <article className="theme-surface-muted overflow-hidden rounded-2xl border theme-border shadow-sm">
                           <div className="flex gap-3 p-3 sm:gap-4 sm:p-4">
-                            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-chill-sand sm:h-24 sm:w-24">
-                              {item?.image_source ? (
-                                <Image
+                            <div className="theme-surface relative h-20 w-20 shrink-0 overflow-hidden rounded-xl sm:h-24 sm:w-24">
+                              {item?.image_source || item?.image_thumbnail ? (
+                                <CartLineImage
+                                  item={item}
                                   width={96}
                                   height={96}
-                                  src={item.image_source}
-                                  alt=""
                                   className="h-full w-full object-cover"
                                 />
                               ) : (
-                                <span className="flex h-full items-center justify-center text-sm text-chill-muted">
+                                <span className="theme-muted flex h-full items-center justify-center text-sm">
                                   —
                                 </span>
                               )}
@@ -215,7 +206,7 @@ export default function Cart({
                                 <div className="min-w-0">
                                   {item.isCustomSticker ? (
                                     <>
-                                      <span className="font-semibold leading-snug text-chill-ink">
+                                      <span className="font-semibold leading-snug">
                                         {removeNumbersFromString(item.title)}
                                       </span>
                                       <span className="ml-2 inline-block rounded-full bg-chill-mist px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-chill-sage-dark">
@@ -226,51 +217,49 @@ export default function Cart({
                                     <Link
                                       href={href}
                                       onClick={() => setCartOpen(false)}
-                                      className="font-semibold leading-snug text-chill-ink transition-colors hover:text-chill-sage-dark"
+                                      className="font-semibold leading-snug transition-colors hover:text-chill-sage-dark"
                                     >
                                       {removeNumbersFromString(item.title)}
                                     </Link>
                                   )}
-                                  <p className="mt-1 text-sm text-chill-muted">
-                                    <span className="font-medium text-chill-ink">
-                                      {item.quantity}×
-                                    </span>{" "}
-                                    {item.isCustomSticker ? (
+                                  <p className="theme-muted mt-1 text-sm">
+                                    {item.isCollectionBundle ? (
                                       <>
+                                        <span className="font-medium theme-text">
+                                          {item.quantity}× zestaw
+                                        </span>
                                         <span className="text-chill-line"> · </span>
-                                        grafika klienta
-                                        <span className="text-chill-line"> · </span>
-                                        {polishToEnglish(item.size)==="sticker-l" && "14cm szer."} {polishToEnglish(item.size)==="sticker-m" && "10cm szer."} {polishToEnglish(item.size)==="sticker-s" && "6cm szer."}
-                                        <span className="text-chill-line"> · </span>
-                                        {polishToEnglish(item.size)==="sticker-l" && "12,99 zł"} {polishToEnglish(item.size)==="sticker-m" && "9,99 zł"} {polishToEnglish(item.size)==="sticker-s" && "6,99 zł"}
-                                        /szt.
+                                        {item.collectionStickerCount} wzorów
                                       </>
                                     ) : (
                                       <>
+                                        <span className="font-medium theme-text">
+                                          {item.quantity}×
+                                        </span>{" "}
                                         {/* Naklejka Rozmiar  */}
                                         <span className="text-chill-line"> · </span>
-                                        naklejka
+                                        {item.isCustomSticker ? "grafika klienta" : "naklejka"}
                                         <span className="text-chill-line"> · </span>
-                                         {polishToEnglish(item.size)==="sticker-l" && "14cm szer."} {polishToEnglish(item.size)==="sticker-m" && "10cm szer."} {polishToEnglish(item.size)==="sticker-s" && "6cm szer."}
-                                        <span className="text-chill-line"> · </span>
-                                        {getPolishCurrency(
-                                          lineTotalPln(
-                                            1,
-                                            item.size || item.stickerSize
-                                          )
+                                        {polishToEnglish(item.size) === "sticker-l"
+                                          ? "14cm szer."
+                                          : polishToEnglish(item.size) === "sticker-m"
+                                            ? "10cm szer."
+                                            : "6cm szer."}
+                                        {!item.isCustomSticker && (
+                                          <>
+                                            <span className="text-chill-line"> · </span>
+                                            {getPolishCurrency(
+                                              lineTotalPln(1, item.size || item.stickerSize)
+                                            )}
+                                            /szt.
+                                          </>
                                         )}
-                                        /szt.
                                       </>
                                     )}
                                   </p>
                                 </div>
-                                <p className="shrink-0 font-display text-base font-semibold tabular-nums text-chill-ink sm:text-lg">
-                                  {getPolishCurrency(
-                                    lineTotalPln(
-                                      item.quantity,
-                                      item.size || item.stickerSize
-                                    )
-                                  )}
+                                <p className="shrink-0 font-display text-base font-semibold tabular-nums sm:text-lg">
+                                  {getPolishCurrency(cartItemTotalPln(item))}
                                 </p>
                               </div>
                               <button
@@ -282,7 +271,7 @@ export default function Cart({
                                     closeOnClick: true,
                                   });
                                 }}
-                                className="mt-3 text-sm font-medium text-chill-muted underline decoration-chill-line/80 underline-offset-4 transition-colors hover:text-chill-sage-dark"
+                                className="theme-muted mt-3 text-sm font-medium underline decoration-chill-line/80 underline-offset-4 transition-colors hover:text-chill-sage-dark"
                               >
                                 Usuń
                               </button>
@@ -297,13 +286,13 @@ export default function Cart({
             </div>
 
             {/* Footer actions */}
-            <div className="shrink-0 border-t border-chill-line bg-chill-sand/60 px-5 py-5 sm:px-6">
+            <div className="sm:rounded-b-3xl theme-surface-muted shrink-0 border-t theme-border px-5 py-5 sm:px-6">
               {cart.length === 0 ? (
                 <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
                   <button
                     type="button"
                     onClick={() => setCartOpen(false)}
-                    className="w-full rounded-2xl border border-chill-line bg-chill-sand/40 px-5 py-3.5 text-sm font-semibold text-chill-ink transition-colors hover:bg-chill-sand sm:w-auto sm:min-w-[160px]"
+                    className="w-full rounded-2xl border border-zinc-300 bg-white px-5 py-3.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-600 sm:w-auto sm:min-w-[160px]"
                   >
                     Zamknij
                   </button>
@@ -320,7 +309,7 @@ export default function Cart({
                   <div>
                     <label
                       htmlFor="cart-promo"
-                      className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-chill-muted"
+                      className="theme-muted mb-1.5 block text-xs font-semibold uppercase tracking-wide"
                     >
                       Kod promocyjny
                     </label>
@@ -332,7 +321,7 @@ export default function Cart({
                       placeholder="np. 123-456"
                       value={promotionCode}
                       onChange={(e) => setPromotionCode(e.target.value)}
-                      className="w-full rounded-xl border border-chill-line bg-chill-sand/40 px-4 py-3 text-base text-chill-ink shadow-inner shadow-chill-ink/5 placeholder:text-chill-muted/70 focus:border-chill-sage focus:outline-none focus:ring-2 focus:ring-chill-sage/35"
+                      className="theme-surface-muted theme-text w-full rounded-xl border theme-border px-4 py-3 text-base shadow-inner shadow-black/5 placeholder:text-zinc-500 focus:border-chill-sage focus:outline-none focus:ring-2 focus:ring-chill-sage/35 dark:placeholder:text-zinc-400"
                     />
                     {promotionCodeError !== "" && (
                       <p
@@ -358,7 +347,7 @@ export default function Cart({
                   <button
                     type="button"
                     onClick={() => setCartOpen(false)}
-                    className="w-full py-2 text-center text-sm font-medium text-chill-muted transition-colors hover:text-chill-ink"
+                    className="theme-muted w-full py-2 text-center text-sm font-medium transition-colors hover:text-[var(--page-foreground)]"
                   >
                     Kontynuuj zakupy
                   </button>

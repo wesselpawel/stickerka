@@ -32,19 +32,19 @@ type HeroSlide = {
 const heroSlides: HeroSlide[] = [
   {
     id: 0,
-    eyebrow: "NAJWIĘKSZA KOLEKCJA W POLSCE",
-    title: "Znajdź wzór na wszystko. Od 1 sztuki!",
-    description: "Unikalne, gotowe naklejki na Twoje przedmioty. Bez minimum logistycznego.",
-    imageAlt: "Kolekcja naklejek Stickerka",
-    link: { href: "/", title: "Przeglądaj gotowe wzory" },
+    eyebrow: "NOWOŚĆ! ZAMAWIAJ ZE ZDJĘCIA",
+    title: "Zamień zdjęcie w naklejkę",
+    description: "Zrób zdjęcie, wgraj je i stwórz własny pakiet naklejek w 3 minuty.",
+    imageAlt: "Kreatywna ilustracja na naklejce",
+    link: { href: "/", title: "Zamów naklejki ze zdjęcia" },
   },
   {
     id: 1,
-    eyebrow: "NOWOŚĆ! ZAMAWIAJ ZE ZDJĘCIA",
-    title: "Zamień każde zdjęcie w naklejkę!",
-    description: "Zrób zdjęcie (kotu, psu, zachodowi słońca), wgraj je i stwórz własny, niepowtarzalny pakiet naklejek w 3 minuty.",
-    imageAlt: "Kreatywna ilustracja na naklejce",
-    link: { href: "/", title: "Zamów naklejki ze zdjęcia" },
+    eyebrow: "NAJWIĘKSZA KOLEKCJA W POLSCE",
+    title: "Znajdź wzór na wszystko",
+    description: "Unikalne, gotowe naklejki na Twoje przedmioty. Bez minimum logistycznego.",
+    imageAlt: "Kolekcja naklejek Stickerka",
+    link: { href: "/", title: "Przeglądaj gotowe wzory" },
   },
   {
     id: 2,
@@ -52,7 +52,7 @@ const heroSlides: HeroSlide[] = [
     title: "Mała, średnia czy duża?",
     description: "Wybierz format dopasowany do laptopa, telefonu, mebla albo ściany.",
     imageAlt: "Naklejka Stickerka w różnych rozmiarach",
-    sizes: ["Mała · 6 cm · 3,99zł", "Średnia · 10 cm · 6,99zł", "Duża · 14 cm · 9,99zł"],
+    sizes: ["6 cm · 6,99zł", "10 cm · 6,99zł", "14 cm · 9,99zł"],
     link: { href: "/", title: "Pokaż naklejki" },
   },
   // {
@@ -107,7 +107,7 @@ export default function HeroSlider() {
   const activeSlide = heroSlides[currentSlide];
 
   const handlePrimaryAction = () => {
-    if (activeSlide.id === 1) {
+    if (activeSlide.id === 0) {
       setCreateStickerOpen(true);
       return;
     }
@@ -120,35 +120,32 @@ export default function HeroSlider() {
 
   return (
     <>
-      <CreateStickerPopup
-        open={createStickerOpen}
-        onOpenChange={setCreateStickerOpen}
-      />
+      <CreateStickerPopup open={createStickerOpen} onOpenChange={setCreateStickerOpen} />
 
       <section
         aria-label="Najważniejsze informacje o Stickerka"
-        className="relative aspect-[4/5] min-h-[34rem] w-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-chill-sand shadow-2xl shadow-black/30 sm:aspect-[16/11] sm:min-h-0 lg:aspect-[16/8]"
+        className="rounded-xl relative aspect-[5/5] min-h-[34rem] h-full lg:min-h-[45vh] w-full overflow-hidden bg-chill-sand sm:aspect-[16/11] md:aspect-[16/8] sm:min-h-0 lg:aspect-[16/8]"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onFocus={() => setIsPaused(true)}
         onBlur={() => setIsPaused(false)}
       >
-      <Image
-        key={activeSlide.id}
-        src={sliderImages[activeSlide.id] ?? sliderImages[0]}
-        width={1600}
-        height={900}
-        priority={activeSlide.id === 0}
-        alt={activeSlide.imageAlt}
-        className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
-        sizes="(max-width: 640px) 100vw, (max-width: 1280px) 90vw, 1400px"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
-      <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4 sm:p-6">
-        {/* <span className="rounded-full border border-white/20 bg-black/25 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm">
+        <Image
+          key={activeSlide.id}
+          src={sliderImages[activeSlide.id] ?? sliderImages[0]}
+          width={1600}
+          height={900}
+          priority={activeSlide.id === 0}
+          alt={activeSlide.imageAlt}
+          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
+          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 90vw, 1400px"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+        <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4 sm:p-6">
+          {/* <span className="rounded-full border border-white/20 bg-black/25 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm">
           {String(activeSlide.id + 1).padStart(2, "0")} / {String(heroSlides.length).padStart(2, "0")}
         </span> */}
-        {/* <button
+          {/* <button
           type="button"
           onClick={() => setIsPaused((paused) => !paused)}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20"
@@ -156,45 +153,65 @@ export default function HeroSlider() {
         >
           {isPaused ? <FaPlay className="h-3 w-3" /> : <FaPause className="h-3 w-3" />}
         </button> */}
-      </div>
-      <div className="absolute inset-x-4 bottom-16 z-10 max-w-xl text-white sm:inset-x-8 sm:bottom-20 lg:inset-x-12 lg:bottom-24">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-chill-sage sm:text-sm">{activeSlide.eyebrow}</p>
-        <h1 className="mt-3 max-w-2xl font-display text-3xl font-semibold leading-[1.05] sm:text-5xl lg:text-6xl">{activeSlide.title}</h1>
-        <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/80 sm:text-base">{activeSlide.description}</p>
-        {activeSlide.sizes && (
-          <div className="mt-5 flex max-w-md divide-x divide-white/20 rounded-2xl border border-white/15 bg-black/25 backdrop-blur-sm">
-            {activeSlide.sizes.map((size) => <span key={size} className="flex-1 px-3 py-3 text-center text-xs font-semibold text-white/90 sm:text-sm">{size}</span>)}
+        </div>
+        <div className="absolute inset-x-4 bottom-16 z-10 max-w-xl text-white sm:inset-x-8 sm:bottom-20 lg:inset-x-12 lg:bottom-20">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-chill-sage">
+            {activeSlide.eyebrow}
+          </p>
+          <h2 className="mt-3 max-w-2xl font-display text-3xl font-semibold leading-[1.05]">
+            {activeSlide.title}
+          </h2>
+          <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/80">
+            {activeSlide.description}
+          </p>
+          {/* {activeSlide.sizes && (
+          <div className="mt-2 flex max-w-md divide-x divide-white/20 rounded-2xl border border-white/15 bg-black/25 backdrop-blur-sm">
+            {activeSlide.sizes.map((size) => <span key={size} className="flex-1  py-1 text-center text-xs font-semibold text-white/90">{size}</span>)}
           </div>
-        )}
-        {activeSlide.link && (
-          <button
-            type="button"
-            onClick={handlePrimaryAction}
-            className="mt-5 inline-flex items-center rounded-full bg-chill-sage px-5 py-3 text-sm font-bold text-chill-cream transition hover:bg-white hover:text-chill-cream sm:text-base"
-          >
-            {activeSlide.link.title}
-            <FaArrowRight className="ml-2 h-3 w-3" />
-          </button>
-        )}
-      </div>
-      <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between sm:bottom-6 sm:left-8 sm:right-8 lg:left-12 lg:right-12">
-        <div className="flex items-center gap-2" role="tablist" aria-label="Slajdy prezentacji">
-          {heroSlides.map((slide) => (
-          <button
-              key={slide.id}
+        )} */}
+          {activeSlide.link && (
+            <button
               type="button"
-              onClick={() => goToSlide(slide.id)}
-              className={`h-2 rounded-full transition-all ${currentSlide === slide.id ? "w-8 bg-chill-sage" : "w-2 bg-white/55 hover:bg-white"}`}
-              role="tab"
-              aria-selected={currentSlide === slide.id}
-              aria-label={`Slajd ${slide.id + 1}: ${slide.title}`}
-            />
-          ))}
+              onClick={handlePrimaryAction}
+              className="mt-5 inline-flex items-center px-5 py-2 text-sm rounded-full font-bold transition bg-white/20 hover:underline"
+            >
+              {activeSlide.link.title}
+              <FaArrowRight className="ml-2 h-3 w-3" />
+            </button>
+          )}
         </div>
-        <div className="flex gap-2">
-          <button type="button" onClick={goToPreviousSlide} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20" aria-label="Poprzedni slajd"><FaArrowLeft /></button>
-          <button type="button" onClick={goToNextSlide} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20" aria-label="Następny slajd"><FaArrowRight /></button>
-        </div>
+        <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between sm:bottom-6 sm:left-8 sm:right-8 lg:left-12 lg:right-12">
+          <div className="flex items-center gap-2" role="tablist" aria-label="Slajdy prezentacji">
+            {heroSlides.map((slide) => (
+              <button
+                key={slide.id}
+                type="button"
+                onClick={() => goToSlide(slide.id)}
+                className={`h-2 rounded-full transition-all ${currentSlide === slide.id ? "w-8 bg-chill-sage" : "w-2 bg-white/55 hover:bg-white"}`}
+                role="tab"
+                aria-selected={currentSlide === slide.id}
+                aria-label={`Slajd ${slide.id + 1}: ${slide.title}`}
+              />
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={goToPreviousSlide}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20"
+              aria-label="Poprzedni slajd"
+            >
+              <FaArrowLeft />
+            </button>
+            <button
+              type="button"
+              onClick={goToNextSlide}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-sm transition hover:bg-white/20"
+              aria-label="Następny slajd"
+            >
+              <FaArrowRight />
+            </button>
+          </div>
         </div>
       </section>
     </>

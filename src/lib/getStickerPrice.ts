@@ -1,8 +1,4 @@
-import {
-  STICKER_UNIT_PRICE_PLN,
-  getStickerPriceBySize,
-  lineTotalPln,
-} from "@/lib/stickerPricing.js";
+import { getStickerPriceBySize, lineTotalPln } from "@/lib/stickerPricing.js";
 
 export type Size = "sticker-s" | "sticker-m" | "sticker-l";
 
@@ -23,4 +19,11 @@ export function getStickerPriceNotification(quantity: number, size: Size = "stic
   return { notification };
 }
 
-export { STICKER_UNIT_PRICE_PLN, getStickerPriceBySize, lineTotalPln, cartSubtotalPln } from "@/lib/stickerPricing.js";
+export {
+  STICKER_UNIT_PRICE_PLN,
+  getDiscountedStickerUnitPrice,
+  getQuantityDiscount,
+  getStickerPriceBySize,
+  lineTotalPln,
+  cartSubtotalPln,
+} from "@/lib/stickerPricing.js";

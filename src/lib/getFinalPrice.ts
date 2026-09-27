@@ -1,6 +1,6 @@
 import { listOfPrizes } from "@/components/listOfPrizes";
 import {
-  STICKER_UNIT_PRICE_PLN,
+  cartItemPieceCount,
   cartSubtotalPln,
   getLowestStickerPriceInCart,
 } from "@/lib/stickerPricing.js";
@@ -8,10 +8,7 @@ import {
 /** Total number of sticker pieces in the cart (all lines). */
 function totalCartPieces(cart: any[]): number {
   if (!Array.isArray(cart)) return 0;
-  return cart.reduce(
-    (sum, line) => sum + Math.max(0, Math.floor(Number(line?.quantity) || 0)),
-    0
-  );
+  return cart.reduce((sum, line) => sum + cartItemPieceCount(line), 0);
 }
 
 /**
@@ -29,8 +26,7 @@ function resolvePrize(prizeId: unknown) {
   return listOfPrizes.find((prize) => {
     if (prizeId === null || prizeId === undefined) return false;
     if (typeof prizeId === "number" && prize.id === prizeId) return true;
-    if (typeof prizeId === "string" && String(prize.id) === prizeId.trim())
-      return true;
+    if (typeof prizeId === "string" && String(prize.id) === prizeId.trim()) return true;
     const n = Number(prizeId);
     if (!Number.isNaN(n) && prize.id === n) return true;
     return false;

@@ -1,12 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import HomeStickerGrid, {
-  type HomeSticker,
-} from "../HomeTopStickers/components/HomeStickerGrid";
+import HomeStickerGrid, { type HomeSticker } from "../HomeTopStickers/components/HomeStickerGrid";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
-import AnimatedNewestUsersPurchases from "../../AnimatedNewestUsersPurchases";
+import AvailablePaymentOptions from "../../AvailablePaymentOptions";
 
 function toStickerTileProps(p: Record<string, unknown>): HomeSticker {
   const categories = Array.isArray((p as any).categories)
@@ -18,19 +16,14 @@ function toStickerTileProps(p: Record<string, unknown>): HomeSticker {
     title: typeof (p as any).title === "string" ? (p as any).title : undefined,
     categories,
     image_thumbnail:
-      typeof (p as any).image_thumbnail === "string"
-        ? (p as any).image_thumbnail
-        : undefined,
-    image_source:
-      typeof (p as any).image_source === "string" ? (p as any).image_source : undefined,
+      typeof (p as any).image_thumbnail === "string" ? (p as any).image_thumbnail : undefined,
+    image_source: typeof (p as any).image_source === "string" ? (p as any).image_source : undefined,
   };
 }
 
 const tagButtonClass = (isActive: boolean) =>
-  `shrink-0 whitespace-nowrap px-6 py-1 text-xl font-semibold transition-colors ${
-    isActive
-      ? "bg-gray-700/80 text-white"
-      : "hover:bg-chill-line text-white hover:text-white/70"
+  `theme-text shrink-0 whitespace-nowrap px-6 py-1 text-xl font-semibold transition-colors ${
+    isActive ? "bg-chill-sage text-white" : "hover:bg-[var(--theme-hover)]"
   }`;
 
 export default function HomeTagFilters({
@@ -102,7 +95,7 @@ export default function HomeTagFilters({
     setActiveTag(tag);
     requestAnimationFrame(() => {
       const button = scrollRef.current?.querySelector<HTMLButtonElement>(
-        `[data-tag="${tag ?? "__all__"}"]`,
+        `[data-tag="${tag ?? "__all__"}"]`
       );
       button?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
       galleryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -126,21 +119,17 @@ export default function HomeTagFilters({
   }, [updateScrollButtons, visibleTags.length]);
 
   return (
-    <section className="w-full min-w-0 max-w-full overflow-x-clip text-neutral-100">
-      <h1 className="text-lg text-center px-3 pb-8">
-        Drukujemy i wysyłamy zamówione <br /> naklejki w 24 godziny
-      </h1>
-      <AnimatedNewestUsersPurchases />
+    <section className="theme-text w-full min-w-0 max-w-full overflow-x-clip">
+      <AvailablePaymentOptions />
       <div className="w-full min-w-0 max-w-full overflow-x-clip">
-        <div className="relative left-0 z-50 h-16 w-full min-w-0 max-w-full overflow-hidden bg-black sticky top-[52px] md:top-[77px]">
+        <div className="theme-surface relative left-0 z-50 h-16 w-full min-w-0 max-w-full overflow-hidden sticky top-[52px] md:top-[77px]">
           {canScrollLeft && (
             <>
-              
               <button
                 type="button"
                 aria-label="Poprzednie tagi"
                 onClick={() => scrollByPage(-1)}
-                className="flex justify-center absolute left-2 top-1/2 z-10 flex h-8 -translate-y-1/2 items-center bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea px-2 py-1 text-xl font-semibold transition-colors hover:bg-chill-sage/80 hover:text-white/70 rounded-xl"
+                className="absolute left-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea p-0 text-xl font-semibold transition-colors hover:bg-chill-sage/80 hover:text-white/70"
               >
                 <FaArrowLeft />
               </button>
@@ -149,12 +138,11 @@ export default function HomeTagFilters({
 
           {canScrollRight && (
             <>
-              
               <button
                 type="button"
                 aria-label="Następne tagi"
                 onClick={() => scrollByPage(1)}
-                className="flex justify-center absolute right-2 top-1/2 z-10 flex h-8 -translate-y-1/2 items-center bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea px-2 py-1 text-xl font-semibold transition-colors hover:bg-chill-sage/80 hover:text-white/70 rounded-xl"
+                className="absolute right-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-r from-chill-sage via-chill-mist to-chill-sea p-0 text-xl font-semibold transition-colors hover:bg-chill-sage/80 hover:text-white/70"
               >
                 <FaArrowRight />
               </button>
@@ -163,7 +151,7 @@ export default function HomeTagFilters({
 
           <div
             ref={scrollRef}
-            className="flex h-full w-full min-w-0 max-w-full overflow-x-auto overflow-y-hidden scroll-smooth bg-chill-cream [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            className="theme-surface flex h-full w-full min-w-0 max-w-full overflow-x-auto overflow-y-hidden scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             <button
               type="button"

@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import SessionHandler from "@/components/SessionHandler";
 import StoreProvider from "@/redux/Provider";
 import Toast from "@/components/Toast";
+import CartQuantityFlow from "@/components/Cart/CartQuantityFlow";
 import PrepareCart from "@/components/PrepareCart";
 import Footer from "@/components/Footer";
 import Script from "next/script";
@@ -43,21 +44,29 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="pl">
-      <body
-        className={`${jakarta.variable} ${fraunces.variable} font-sans`}
-      >
-        
-
-        {" "}
+      <body className={`${jakarta.variable} ${fraunces.variable} font-sans`}>
+        <Script
+          id="stickerka-theme"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (() => {
+                const savedTheme = localStorage.getItem("stickerka-theme");
+                const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                document.documentElement.classList.toggle("dark", savedTheme ? savedTheme === "dark" : prefersDark);
+              })();
+            `,
+          }}
+        />{" "}
         <StoreProvider>
-          <Toast />
-          <Header />
-          <PrepareCart />
-          <SessionHandler />
-         {children}
-          <Footer />
+          <CartQuantityFlow>
+            <Toast />
+            <Header />
+            <PrepareCart />
+            <SessionHandler />
+            {children}
+            <Footer />
+          </CartQuantityFlow>
         </StoreProvider>
-      
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-YY7NKD2K0W"

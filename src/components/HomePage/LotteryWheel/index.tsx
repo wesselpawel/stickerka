@@ -18,11 +18,7 @@ type Prize = {
   description: string;
 };
 
-export default function LotteryWheel({
-  listOfPrizes,
-}: {
-  listOfPrizes: Prize[];
-}) {
+export default function LotteryWheel({ listOfPrizes }: { listOfPrizes: Prize[] }) {
   const [prizeListOpen, setPrizeListOpen] = useState(false);
   const [lotteryWheelOpen, setLotteryWheelOpen] = useState(false);
   const [lotteryMessage, setLotteryMessage] = useState("");
@@ -91,8 +87,7 @@ export default function LotteryWheel({
             className="w-12 opacity-95"
           />
           <p className="text-center text-nowrap text-sm font-light leading-tight text-white/90 md:text-base">
-
-         KUPONY
+            KUPONY
           </p>
         </div>
       </button>
@@ -104,7 +99,7 @@ export default function LotteryWheel({
             onClick={() => setLotteryWheelOpen(!lotteryWheelOpen)}
             aria-label="Zamknij loterię"
           >
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-lg duration-300 hover:bg-chill-mist">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-lg duration-300 hover:bg-chill-mist">
               <IoClose className="h-6 w-6 text-zinc-800" />
             </div>
           </button>
@@ -114,24 +109,22 @@ export default function LotteryWheel({
             </div>
           )}
           <div className="flex min-h-full w-full items-center justify-center py-12 sm:py-8">
-            <div className="flex w-full max-w-[min(42rem,100%)] flex-col justify-center rounded-3xl border border-white/15 bg-slate-900/85 p-4 shadow-2xl shadow-black/40 backdrop-blur-md sm:p-6">
+            <div className="theme-surface theme-text flex w-full max-w-[min(42rem,100%)] flex-col justify-center rounded-3xl border theme-border p-4 shadow-2xl shadow-black/40 backdrop-blur-md sm:p-6">
               <div className="mb-3 flex w-full items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-chill-mist">Stickerka</p>
-                  <h2 className="mt-1 text-xl font-bold text-white sm:text-2xl">
-                  Wylosuj promocję
-                  </h2>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-chill-mist">
+                    Stickerka
+                  </p>
+                  <h2 className="mt-1 text-xl font-bold sm:text-2xl">Wylosuj promocję</h2>
                 </div>
                 <button
                   onClick={() => setPrizeListOpen(!prizeListOpen)}
-                  className="group hidden shrink-0 flex-row items-center justify-between overflow-hidden rounded-xl border border-white/15 bg-gray-800 duration-300 hover:bg-gray-900 sm:flex"
+                  className="theme-surface-muted theme-text group hidden shrink-0 flex-row items-center justify-between overflow-hidden rounded-xl border theme-border duration-300 hover:bg-[var(--theme-hover)] sm:flex"
                 >
                   <div className="flex h-12 w-12 items-center justify-center ">
-                    <FaGift className="w-6 h-6 text-white" />
+                    <FaGift className="w-6 h-6" />
                   </div>
-                  <span
-                    className={`relative z-10 pr-4 text-sm font-semibold duration-300`}
-                  >
+                  <span className={`relative z-10 pr-4 text-sm font-semibold duration-300`}>
                     Lista nagród
                   </span>
                 </button>
@@ -170,7 +163,7 @@ export default function LotteryWheel({
             )}
             {prize.title !== "" && (
               <div className="fixed left-1/2 top-1/2 z-[4950] flex h-max w-[90%] max-w-[400px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-3xl bg-white font-sans shadow-xl">
-                <h2 className="w-full rounded-t-3xl bg-gray-800 p-6 text-center font-display text-2xl font-semibold text-white">
+                <h2 className="theme-surface-muted theme-text w-full rounded-t-3xl p-6 text-center font-display text-2xl font-semibold">
                   Twoja promocja
                 </h2>
                 <Image
@@ -180,9 +173,7 @@ export default function LotteryWheel({
                   alt={`Nagroda ${prize.title}`}
                   className="w-3/5 sm:w-[300px] my-3"
                 />
-                <p className="text-sm text-center text-gray-500 p-3 ">
-                  {prize.description}
-                </p>
+                <p className="text-sm text-center text-gray-500 p-3 ">{prize.description}</p>
                 {!couponWindowOpen && (
                   <button
                     onClick={() => {
@@ -214,10 +205,7 @@ export default function LotteryWheel({
                     onClick={() => copyToClipboard(coupon, setCopied)}
                     className="bg-green-500 p-3 hover:bg-green-400 text-2xl flex items-center justify-center duration-200 w-full  text-white font-bold rounded-b-3xl relative group"
                   >
-                    <div className={!copied ? "animate-bounce" : ""}>
-
-                    {coupon}
-                    </div>
+                    <div className={!copied ? "animate-bounce" : ""}>{coupon}</div>
                     <div className="absolute left-1/2 -translate-x-1/2 -top-16 w-max bg-zinc-800 text-white rounded-xl p-3 text-sm">
                       <div className="relative w-full h-full">
                         {!copied ? (
@@ -237,8 +225,8 @@ export default function LotteryWheel({
             )}
             {prizeListOpen && (
               <div className="fixed left-1/2 top-1/2 z-[4950] flex h-max w-max max-w-[min(90vw,420px)] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-start rounded-xl bg-white font-sans shadow-xl">
-                <h2 className="w-full rounded-t-xl bg-gray-800 p-6 text-center font-display text-2xl font-semibold text-white">
-                 KUPONY
+                <h2 className="theme-surface-muted theme-text w-full rounded-t-xl p-6 text-center font-display text-2xl font-semibold">
+                  KUPONY
                 </h2>
                 <div className="flex flex-col w-full p-6">
                   {listOfPrizes.map((item, i) => (
