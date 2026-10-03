@@ -16,9 +16,7 @@ export default function FinalizeOrder({
   const ranRef = useRef(false);
 
   useEffect(() => {
-    const id =
-      orderId ||
-      (typeof order?.metadata?.id === "string" ? order.metadata.id : "");
+    const id = orderId || (typeof order?.metadata?.id === "string" ? order.metadata.id : "");
     if (!id || ranRef.current) return;
 
     if (typeof window === "undefined") return;
@@ -37,7 +35,7 @@ export default function FinalizeOrder({
 
     const sendMail = async () => {
       await updateOrder(["isPaid"], [true], id);
-      await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/mailer`, {
+      const mailResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/mailer`, {
         method: "POST",
         body: JSON.stringify({
           reciever: order.customer_details?.email,
@@ -48,6 +46,9 @@ export default function FinalizeOrder({
           Accept: "application/json",
         },
       });
+      if (!mailResponse.ok) {
+        throw new Error("Order confirmation email request failed");
+      }
     };
 
     sendMail()

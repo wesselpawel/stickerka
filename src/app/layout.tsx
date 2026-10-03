@@ -67,18 +67,18 @@ export default async function RootLayout({
             <Footer />
           </CartQuantityFlow>
         </StoreProvider>
-        <Script
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-YY7NKD2K0W"
-        />
-        <Script strategy="afterInteractive" id="google-analytics">
+        <Script strategy="beforeInteractive" id="google-analytics">
           {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-YY7NKD2K0W');
+              gtag('config', 'G-YY7NKD2K0W', { send_page_view: false });
           `}
         </Script>
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-YY7NKD2K0W"
+        />
       </body>
     </html>
   );

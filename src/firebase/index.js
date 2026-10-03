@@ -364,6 +364,24 @@ async function getSessionById(id) {
   const docSnapshot = await getDoc(docRef);
   return docSnapshot.data();
 }
+async function recordUniquePageView(id, data) {
+  const docRef = doc(db, "sessions", id);
+  const docSnapshot = await getDoc(docRef);
+  if (docSnapshot.exists()) {
+    return { created: false, data: docSnapshot.data() };
+  }
+
+  const pageView = {
+    ...data,
+    createdAt: serverTimestamp(),
+    notificationSent: false,
+  };
+  await setDoc(docRef, pageView);
+  return { created: true, data: pageView };
+}
+async function markPageViewNotified(id) {
+  await updateDoc(doc(db, "sessions", id), { notificationSent: true });
+}
 
 async function addCoupon(data) {
   await setDoc(doc(db, "coupons", data.id), data);
@@ -461,6 +479,8 @@ export {
   addSession,
   updateSession,
   getSessionById,
+  recordUniquePageView,
+  markPageViewNotified,
   addArrayOfProducts,
   getCouponById,
   getDocuments,
